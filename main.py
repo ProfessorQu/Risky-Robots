@@ -1,12 +1,20 @@
-gravity = 5
-jumpHeight = 10
-speed = 4
+import pygame
+from src.player import Player
+from src.object import Object
+pygame.init()
 
-print("Type a command to change variables!")
+running = True
 
-while True:
-    exec(input("Type a command: "))
+screen = pygame.display.set_mode((800, 600))
 
-    print(f"Gravity: {gravity}")
-    print(f"Jump height: {jumpHeight}")
-    print(f"Speed: {speed}")
+p = Player(pygame.Rect(100, 100, 50, 50), (255, 0, 0))
+o = Object(pygame.Rect(200, 200, 50, 50), (0, 255, 0))
+
+while running:
+    screen.fill((255, 255, 255))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    pygame.display.flip()
