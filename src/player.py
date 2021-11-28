@@ -1,15 +1,19 @@
 import pygame
 
+from src.constants import *
+
 
 # The 2D platformer player class.
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, scale, speed):
+    def __init__(self, x, y, scale, speed, jumpHeight, jumpTime):
         super().__init__()
 
         self.x = x
         self.y = y
 
         self.speed = speed
+        self.jumpHeight = jumpHeight
+
         self.velocity = pygame.math.Vector2(0, 0)
 
         self.facingRight = True
@@ -26,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-    def update(self):
+    def update(self, terrain):
         key = pygame.key.get_pressed()
         if key[pygame.K_a]:
             self.velocity.x = -self.speed
@@ -34,8 +38,16 @@ class Player(pygame.sprite.Sprite):
         elif key[pygame.K_d]:
             self.velocity.x = self.speed
             self.facingRight = True
+        elif key[pygame.K_w]:
+            self.velocity.y = -self.jumpHeight
         else:
             self.velocity.x = 0
+
+        if terrain.collide(self):
+            self.velocity.y = 0
+            self.rect.y = terrain.rect.y - self.rect.height
+        else:
+            self.velocity.y += GRAVITY
 
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
