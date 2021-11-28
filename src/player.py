@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-    def update(self, terrain):
+    def update(self, terrain: list):
         key = pygame.key.get_pressed()
         if key[pygame.K_a]:
             self.velocity.x = -self.speed
@@ -43,10 +43,15 @@ class Player(pygame.sprite.Sprite):
         else:
             self.velocity.x = 0
 
-        if terrain.collide(self):
-            self.velocity.y = 0
-            self.rect.y = terrain.rect.y - self.rect.height
-        else:
+        topCollision = False
+
+        for block in terrain:
+            if block.collide(self) and self.rect.bottom >= block.rect.top:
+                self.velocity.y = 0
+                self.rect.y = block.rect.y - self.rect.height
+                topCollision = True
+
+        if not topCollision:
             self.velocity.y += GRAVITY
 
         self.rect.x += self.velocity.x

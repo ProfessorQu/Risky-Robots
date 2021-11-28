@@ -16,8 +16,10 @@ running = True
 
 player = Player(200, 200, 0.05, 3, 5, 1)
 
-terrain = Solid(0, 500, WIDTH, HEIGHT)
-terrain2 = Solid(500, 0, WIDTH, HEIGHT)
+terrain = [
+    Solid(0, 500, WIDTH, HEIGHT),
+    Solid(700, 0, WIDTH, HEIGHT),
+]
 
 while running:
     CLOCK.tick(FPS)
@@ -30,8 +32,8 @@ while running:
     player.update(terrain)
     player.draw(SCREEN)
 
-    terrain.draw(SCREEN)
-    terrain2.draw(SCREEN)
+    for block in terrain:
+        block.draw(SCREEN)
 
     pygame.display.flip()
 
