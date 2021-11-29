@@ -17,8 +17,10 @@ running = True
 player = Player(200, 200, 0.05, 3, 5, 1)
 
 terrain = [
-    Solid(0, 500, WIDTH, HEIGHT),
-    Solid(700, 0, WIDTH, HEIGHT),
+    Solid(0, HEIGHT - 10,   WIDTH, 10),  # Ground
+    Solid(WIDTH - 10, 0,    10, HEIGHT),  # Right Wall
+    Solid(0, 0,             10, HEIGHT),  # Left Wall
+    Solid(0, 0,             WIDTH, 10),  # Ceiling
 ]
 
 while running:
