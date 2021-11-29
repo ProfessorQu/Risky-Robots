@@ -12,6 +12,3 @@ class Solid:
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, self.rect)
-
-    def collide(self, other):
-        return bool(self.rect.colliderect(other.rect))

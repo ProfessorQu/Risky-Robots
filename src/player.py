@@ -30,32 +30,51 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
+        self.collisionRect = pygame.Rect(
+            self.rect.x + 5,
+            self.rect.y + 5,
+            self.rect.width - 10,
+            self.rect.height - 10
+        )
+
     def update(self, terrain: list):
         key = pygame.key.get_pressed()
         if key[pygame.K_a]:
             self.velocity.x = -self.speed
             self.facingRight = False
-        elif key[pygame.K_d]:
+        if key[pygame.K_d]:
             self.velocity.x = self.speed
             self.facingRight = True
-        elif key[pygame.K_w]:
+        if key[pygame.K_w]:
             self.velocity.y = -self.jumpHeight
-        else:
+        if not key[pygame.K_a] and not key[pygame.K_d]:
             self.velocity.x = 0
 
-        topCollision = False
+        self.velocity.y += GRAVITY
 
-        for block in terrain:
-            if block.collide(self) and self.rect.bottom >= block.rect.top:
-                self.velocity.y = 0
-                self.rect.y = block.rect.y - self.rect.height
-                topCollision = True
-
-        if not topCollision:
-            self.velocity.y += GRAVITY
+        self.checkCollisions(terrain)
 
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
+
+    def checkCollisions(self, terrain: list):
+        for tile in terrain:
+            if self.rect.colliderect(tile.rect):
+                if self.rect.right > tile.rect.left and self.rect.left < tile.rect.right:
+                    if self.rect.bottom + self.velocity.y > tile.rect.top:
+                        self.velocity.y = 0
+                        self.rect.bottom = tile.rect.top
+                    elif self.rect.top + self.velocity.y < tile.rect.bottom:
+                        self.velocity.y = 0
+                        self.rect.top = tile.rect.bottom
+
+                # if self.rect.bottom > tile.rect.top and self.rect.top < tile.rect.bottom:
+                #     if self.rect.right + self.velocity.x > tile.rect.left:
+                #         self.velocity.x = 0
+                #         self.rect.right = tile.rect.left
+                #     elif self.rect.left + self.velocity.x < tile.rect.right:
+                #         self.velocity.x = 0
+                #         self.rect.left = tile.rect.right
 
     def draw(self, surface):
         image = pygame.transform.flip(self.image, not self.facingRight, False)
