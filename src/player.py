@@ -5,18 +5,21 @@ from src.constants import *
 
 # The 2D platformer player class.
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, scale, speed, jumpHeight, jumpTime):
+    def __init__(self, x, y, scale, speed, jump_height, max_jumps):
         super().__init__()
 
         self.x = x
         self.y = y
 
         self.speed = speed
-        self.jumpHeight = jumpHeight
+
+        self.jumps = max_jumps
+        self.max_jumps = max_jumps
+        self.jump_height = jump_height
 
         self.velocity = pygame.math.Vector2(0, 0)
 
-        self.facingRight = True
+        self.facing_right = True
 
         self.image = pygame.image.load("src/assets/player.png")
         self.image = pygame.transform.scale(
@@ -30,42 +33,44 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-    def update(self, terrain: list):
+    def update(self, dt, terrain):
         key = pygame.key.get_pressed()
+
         if key[pygame.K_a]:
-            self.velocity.x = -self.speed
-            self.facingRight = False
+            self.velocity.x = -self.speed * dt
+            self.facing_right = False
         if key[pygame.K_d]:
-            self.velocity.x = self.speed
-            self.facingRight = True
-        if key[pygame.K_w]:
-            self.velocity.y = -self.jumpHeight
+            self.velocity.x = self.speed * dt
+            self.facing_right = True
+        if key[pygame.K_w] and self.jumps > 0 and self.velocity.y > 0:
+            self.velocity.y = -self.jump_height * dt
+
+            self.jumps -= 1
         if not key[pygame.K_a] and not key[pygame.K_d]:
             self.velocity.x = 0
 
-        self.velocity.y += GRAVITY
+        self.velocity.y += GRAVITY * dt
 
-        self.checkCollisions(terrain)
+        self.handleCollisions(terrain)
 
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
 
-        print(self.rect.x, self.rect.y)
-
-    def checkCollisions(self, terrain: list):
+    def handleCollisions(self, terrain):
         """ A collision system for a 2D platformer"""
-        for tile in terrain:
-            if tile.rect.colliderect(self.rect.x, self.rect.y + self.velocity.y, self.rect.width, self.rect.height):
-                if self.velocity.y < 0:
-                    self.velocity.y = tile.rect.bottom - self.rect.top
-                elif self.velocity.y > 0:
-                    self.velocity.y = tile.rect.top - self.rect.bottom
-            elif tile.rect.colliderect(self.rect.x + self.velocity.x, self.rect.y, self.rect.width, self.rect.height):
-                if self.velocity.x < 0:
-                    self.velocity.x = tile.rect.right - self.rect.left
-                elif self.velocity.x > 0:
-                    self.velocity.x = tile.rect.left - self.rect.right
+        tile, direction = terrain.collide(self)
+        if tile is not None:
+            if direction == Direction.UP:
+                self.velocity.y = tile.rect.bottom - self.rect.top
+            elif direction == Direction.DOWN:
+                self.velocity.y = tile.rect.top - self.rect.bottom
+                self.jumps = self.max_jumps
+
+            if direction == Direction.LEFT:
+                self.velocity.x = tile.rect.right - self.rect.left
+            elif direction == Direction.RIGHT:
+                self.velocity.x = tile.rect.left - self.rect.right
 
     def draw(self, surface):
-        image = pygame.transform.flip(self.image, not self.facingRight, False)
+        image = pygame.transform.flip(self.image, not self.facing_right, False)
         surface.blit(image, self.rect)
