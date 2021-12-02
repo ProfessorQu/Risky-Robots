@@ -11,21 +11,22 @@ class Terrain(list):
         for tile in self:
             screen.blit(tile.image, (tile.x, tile.y))
 
-    def collide(self, other):
+    def collide(self, other) -> dict:
+        collisions = {}
         for tile in self:
             if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
                 if other.velocity.y < 0:
-                    return tile, Direction.UP
-                elif other.velocity.y > 0:
-                    return tile, Direction.DOWN
+                    collisions[Direction.UP] = tile
+                if other.velocity.y > 1:
+                    collisions[Direction.DOWN] = tile
 
             if tile.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
                 if other.velocity.x < 0:
-                    return tile, Direction.LEFT
-                elif other.velocity.x > 0:
-                    return tile, Direction.RIGHT
+                    collisions[Direction.LEFT] = tile
+                if other.velocity.x > 0:
+                    collisions[Direction.RIGHT] = tile
 
-        return None, None
+        return collisions
 
 
 class Solid:

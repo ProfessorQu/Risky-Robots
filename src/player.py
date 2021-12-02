@@ -1,32 +1,31 @@
 import pygame
 
 from src.constants import *
+from src.bullet import Bullet
 
 
 # The 2D platformer player class.
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, scale, speed, jump_height, max_jumps):
+    def __init__(self, x, y):
         super().__init__()
 
         self.x = x
         self.y = y
 
-        self.speed = speed
-
-        self.jumps = max_jumps
-        self.max_jumps = max_jumps
-        self.jump_height = jump_height
+        self.jumps = 0
 
         self.velocity = pygame.math.Vector2(0, 0)
 
         self.facing_right = True
 
+        self.bullets = []
+
         self.image = pygame.image.load("src/assets/player.png")
         self.image = pygame.transform.scale(
             self.image,
             (
-                self.image.get_width() * scale,
-                self.image.get_height() * scale
+                self.image.get_width() * PLAYER_SCALE,
+                self.image.get_height() * PLAYER_SCALE
             )
         )
 
@@ -37,17 +36,21 @@ class Player(pygame.sprite.Sprite):
         key = pygame.key.get_pressed()
 
         if key[pygame.K_a]:
-            self.velocity.x = -self.speed * dt
+            self.velocity.x = -PLAYER_SPEED * dt
             self.facing_right = False
         if key[pygame.K_d]:
-            self.velocity.x = self.speed * dt
+            self.velocity.x = PLAYER_SPEED * dt
             self.facing_right = True
         if key[pygame.K_w] and self.jumps > 0 and self.velocity.y > 0:
-            self.velocity.y = -self.jump_height * dt
+            self.velocity.y = PLAYER_JUMP_HEIGHT * dt
             self.jumps -= 1
 
         if not key[pygame.K_a] and not key[pygame.K_d]:
             self.velocity.x = 0
+
+        if key[pygame.K_s] and len(self.bullets) < 1:
+            bullet = self.fireBullet()
+            self.bullets.append(bullet)
 
         self.velocity.y += GRAVITY * dt
 
@@ -56,21 +59,33 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
 
+        for bullet in self.bullets:
+            remove = bullet.update(dt, terrain)
+            if remove:
+                pass
+
     def handleCollisions(self, terrain):
         """ A collision system for a 2D platformer"""
-        tile, direction = terrain.collide(self)
-        if tile is not None:
+        collisions = terrain.collide(self)
+        for (direction, tile) in collisions.items():
             if direction == Direction.UP:
                 self.velocity.y = tile.rect.bottom - self.rect.top
-            elif direction == Direction.DOWN:
+            if direction == Direction.DOWN:
                 self.velocity.y = tile.rect.top - self.rect.bottom
-                self.jumps = self.max_jumps
+                self.jumps = PLAYER_MAX_JUMPS
 
             if direction == Direction.LEFT:
                 self.velocity.x = tile.rect.right - self.rect.left
-            elif direction == Direction.RIGHT:
+            if direction == Direction.RIGHT:
                 self.velocity.x = tile.rect.left - self.rect.right
 
-    def draw(self, surface):
+    def fireBullet(self):
+        return (
+            Bullet(self.rect.right, self.rect.centery, 1)
+            if self.facing_right
+            else Bullet(self.rect.left, self.rect.centery, -1)
+        )
+
+    def draw(self, screen):
         image = pygame.transform.flip(self.image, not self.facing_right, False)
-        surface.blit(image, self.rect)
+        screen.blit(image, self.rect)

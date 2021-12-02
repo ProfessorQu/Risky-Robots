@@ -18,15 +18,13 @@ running = True
 
 player = Player(
     x=200, y=FLOOR - 100,
-    scale=0.05, speed=250,
-    jump_height=400, max_jumps=2
 )
 
 terrain = Terrain(
-    Solid(0, FLOOR,   WIDTH, 10),  # Ground
-    Solid(WIDTH - 10, 0,    10, HEIGHT),  # Right Wall
-    Solid(0, 0,             10, HEIGHT),  # Left Wall
-    Solid(0, 0,             WIDTH, 10),  # Ceiling
+    Solid(0, FLOOR - 10,         WIDTH, 200),  # Ground
+    Solid(WIDTH - 10, 0,    200, HEIGHT),  # Right Wall
+    Solid(-190, 0,             200, HEIGHT),  # Left Wall
+    Solid(0, -190,             WIDTH, 200),  # Ceiling
 )
 
 prev_time = time.time()
@@ -49,6 +47,9 @@ while running:
 
     for block in terrain:
         block.draw(SCREEN)
+
+    for bullet in player.bullets:
+        bullet.draw(SCREEN)
 
     pygame.display.flip()
 
