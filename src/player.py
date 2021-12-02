@@ -48,7 +48,7 @@ class Player(pygame.sprite.Sprite):
         if not key[pygame.K_a] and not key[pygame.K_d]:
             self.velocity.x = 0
 
-        if key[pygame.K_s] and len(self.bullets) < 1:
+        if key[pygame.K_s]:
             bullet = self.fireBullet()
             self.bullets.append(bullet)
 
@@ -62,7 +62,9 @@ class Player(pygame.sprite.Sprite):
         for bullet in self.bullets:
             remove = bullet.update(dt, terrain)
             if remove:
-                pass
+                self.bullets.remove(bullet)
+
+        print(f"Bullets: {len(self.bullets)}")
 
     def handleCollisions(self, terrain):
         """ A collision system for a 2D platformer"""
@@ -81,11 +83,14 @@ class Player(pygame.sprite.Sprite):
 
     def fireBullet(self):
         return (
-            Bullet(self.rect.right, self.rect.centery, 1)
+            Bullet(self.rect.right + 30, self.rect.centery, 1)
             if self.facing_right
-            else Bullet(self.rect.left, self.rect.centery, -1)
+            else Bullet(self.rect.left - 30, self.rect.centery, -1)
         )
 
     def draw(self, screen):
         image = pygame.transform.flip(self.image, not self.facing_right, False)
         screen.blit(image, self.rect)
+
+        for bullet in self.bullets:
+            bullet.draw(screen)

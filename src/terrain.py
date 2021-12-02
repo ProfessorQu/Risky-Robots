@@ -11,20 +11,34 @@ class Terrain(list):
         for tile in self:
             screen.blit(tile.image, (tile.x, tile.y))
 
-    def collide(self, other) -> dict:
+    def collide(self, other, mode="Predict") -> dict:
         collisions = {}
-        for tile in self:
-            if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
-                if other.velocity.y < 0:
-                    collisions[Direction.UP] = tile
-                if other.velocity.y > 1:
-                    collisions[Direction.DOWN] = tile
+        if mode == "Predict":
+            for tile in self:
+                if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
+                    if other.velocity.y < 0:
+                        collisions[Direction.UP] = tile
+                    if other.velocity.y > 1:
+                        collisions[Direction.DOWN] = tile
 
-            if tile.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
-                if other.velocity.x < 0:
-                    collisions[Direction.LEFT] = tile
-                if other.velocity.x > 0:
-                    collisions[Direction.RIGHT] = tile
+                if tile.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
+                    if other.velocity.x < 0:
+                        collisions[Direction.LEFT] = tile
+                    if other.velocity.x > 0:
+                        collisions[Direction.RIGHT] = tile
+        elif mode == "Current":
+            for tile in self:
+                if tile.rect.colliderect(other.rect.x, other.rect.y, other.rect.width, other.rect.height):
+                    if other.velocity.y < 0:
+                        collisions[Direction.UP] = tile
+                    if other.velocity.y > 1:
+                        collisions[Direction.DOWN] = tile
+
+                if tile.rect.colliderect(other.rect.x, other.rect.y, other.rect.width, other.rect.height):
+                    if other.velocity.x < 0:
+                        collisions[Direction.LEFT] = tile
+                    if other.velocity.x > 0:
+                        collisions[Direction.RIGHT] = tile
 
         return collisions
 

@@ -25,6 +25,7 @@ terrain = Terrain(
     Solid(WIDTH - 10, 0,    200, HEIGHT),  # Right Wall
     Solid(-190, 0,             200, HEIGHT),  # Left Wall
     Solid(0, -190,             WIDTH, 200),  # Ceiling
+    Solid(WIDTH / 2, FLOOR - 100, 100, 100),  # Box
 )
 
 prev_time = time.time()
@@ -47,9 +48,6 @@ while running:
 
     for block in terrain:
         block.draw(SCREEN)
-
-    for bullet in player.bullets:
-        bullet.draw(SCREEN)
 
     pygame.display.flip()
 

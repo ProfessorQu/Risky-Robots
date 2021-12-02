@@ -15,16 +15,24 @@ class Bullet(pygame.sprite.Sprite):
         )
 
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.center = (x, y)
 
-        self.velocity = pygame.math.Vector2(BULLET_SPEED, 0)
+        self.direction = direction
+
+        self.velocity = pygame.math.Vector2(direction * BULLET_SPEED, 0)
 
     def update(self, dt, terrain):
-        # self.rect.x += self.velocity.x * dt
+        self.rect.x += self.velocity.x * dt
 
-        if terrain.collide(self):
+        if self.rect.x < 0 or self.rect.x > WIDTH:
+            return True
+        if self.rect.y < 0 or self.rect.y > HEIGHT:
             return True
 
+        return terrain.collide(self, "Current")
+
+        return False
+
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
+        image = pygame.transform.flip(self.image, self.direction != 1, False)
+        screen.blit(image, self.rect)
