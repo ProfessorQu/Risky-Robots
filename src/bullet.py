@@ -1,4 +1,5 @@
 import pygame
+
 from src.constants import *
 
 
@@ -17,7 +18,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-        self.direction = direction
+        self.dir = direction
 
         self.velocity = pygame.math.Vector2(direction * BULLET_SPEED, 0)
 
@@ -34,5 +35,5 @@ class Bullet(pygame.sprite.Sprite):
         return False
 
     def draw(self, screen):
-        image = pygame.transform.flip(self.image, self.direction != 1, False)
+        image = pygame.transform.flip(self.image, self.dir != 1, False)
         screen.blit(image, self.rect)

@@ -17,15 +17,17 @@ CLOCK = pygame.time.Clock()
 running = True
 
 player = Player(
-    x=200, y=FLOOR - 100,
+    x=40, y=FLOOR - 40,
 )
 
 terrain = Terrain(
-    Solid(0, FLOOR - 10,         WIDTH, 200),  # Ground
-    Solid(WIDTH - 10, 0,    200, HEIGHT),  # Right Wall
-    Solid(-190, 0,             200, HEIGHT),  # Left Wall
-    Solid(0, -190,             WIDTH, 200),  # Ceiling
-    Solid(WIDTH / 2, FLOOR - 100, 100, 100),  # Box
+    Solid(WIDTH / 2, 0,         WIDTH, 20),  # Ceiling
+    Solid(WIDTH / 2, HEIGHT,    WIDTH, 20),  # Ground
+
+    Solid(0, HEIGHT / 2,        20, HEIGHT),    # Left wall
+    Solid(WIDTH, HEIGHT / 2,    20, HEIGHT),    # Right wall
+
+    Solid(WIDTH / 2, HEIGHT,   20, 20),     # Door
 )
 
 prev_time = time.time()

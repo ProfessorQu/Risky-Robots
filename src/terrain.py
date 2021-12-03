@@ -49,7 +49,8 @@ class Solid:
         self.y = y
         self.width = width
         self.height = height
-        self.rect = pygame.Rect(x, y, width, height)
+        self.rect = pygame.Rect(0, 0, width, height)
+        self.rect.center = (x, y)
         self.color = (0, 0, 0)
 
     def draw(self, screen):

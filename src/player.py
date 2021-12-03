@@ -1,7 +1,7 @@
 import pygame
 
-from src.constants import *
 from src.bullet import Bullet
+from src.constants import *
 
 
 # The 2D platformer player class.
@@ -52,7 +52,8 @@ class Player(pygame.sprite.Sprite):
             bullet = self.fireBullet()
             self.bullets.append(bullet)
 
-        self.velocity.y += GRAVITY * dt
+        gravity = GRAVITY * dt if self.velocity.y < 0 else GRAVITY_FALL * dt
+        self.velocity.y += gravity
 
         self.handleCollisions(terrain)
 
@@ -63,8 +64,6 @@ class Player(pygame.sprite.Sprite):
             remove = bullet.update(dt, terrain)
             if remove:
                 self.bullets.remove(bullet)
-
-        print(f"Bullets: {len(self.bullets)}")
 
     def handleCollisions(self, terrain):
         """ A collision system for a 2D platformer"""
