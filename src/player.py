@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
         if key[pygame.K_d]:
             self.velocity.x = PLAYER_SPEED * dt
             self.facing_right = True
-        if key[pygame.K_w] and self.jumps > 0 and self.velocity.y > 0:
+        if key[pygame.K_w] and self.jumps > 0 and self.velocity.y >= 0:
             self.velocity.y = PLAYER_JUMP_HEIGHT * dt
             self.jumps -= 1
 
