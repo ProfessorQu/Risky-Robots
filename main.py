@@ -16,10 +16,6 @@ CLOCK = pygame.time.Clock()
 
 running = True
 
-player = Player(
-    x=40, y=FLOOR - 40,
-)
-
 terrain = Terrain(
     Solid(WIDTH / 2, 0,         WIDTH, 20),  # Ceiling
     Solid(WIDTH / 2, HEIGHT,    WIDTH, 20),  # Ground
@@ -28,6 +24,10 @@ terrain = Terrain(
     Solid(WIDTH, HEIGHT / 2,    20, HEIGHT),    # Right wall
 
     Solid(WIDTH / 2, HEIGHT,   20, 20),     # Door
+)
+
+player = Player(
+    x=40, y=FLOOR - 40, terrain=terrain,
 )
 
 prev_time = time.time()
@@ -45,7 +45,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    player.update(dt, terrain)
+    player.update(dt)
     player.draw(SCREEN)
 
     for block in terrain:

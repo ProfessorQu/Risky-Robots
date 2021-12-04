@@ -11,13 +11,22 @@ GRAVITY_FALL = 20
 FLOOR_HEIGHT = 10
 FLOOR = HEIGHT - FLOOR_HEIGHT
 
-BULLET_SPEED = 300
-BULLET_SCALE = 0.02
 
-PLAYER_SPEED = 200
-PLAYER_JUMP_HEIGHT = -450
-PLAYER_MAX_JUMPS = 2
-PLAYER_SCALE = 0.02
+class WeaponVars:
+    FIRE_RATE = 20
+    SCALE = 0.05
+
+
+class BulletVars:
+    SPEED = 300
+    SCALE = 0.02
+
+
+class PlayerVars:
+    SPEED = 200
+    JUMP_HEIGHT = -450
+    MAX_JUMPS = 2
+    SCALE = 0.02
 
 
 class Direction(Enum):

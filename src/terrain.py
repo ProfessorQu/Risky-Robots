@@ -12,33 +12,32 @@ class Terrain(list):
             screen.blit(tile.image, (tile.x, tile.y))
 
     def collide(self, other, mode="Predict") -> dict:
-        collisions = {}
+        collisions = []
         if mode == "Predict":
             for tile in self:
                 if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
                     if other.velocity.y < 0:
-                        collisions[Direction.UP] = tile
+                        collisions.append((tile, Direction.UP))
                     if other.velocity.y > 1:
-                        collisions[Direction.DOWN] = tile
+                        collisions.append((tile, Direction.DOWN))
 
                 if tile.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
                     if other.velocity.x < 0:
-                        collisions[Direction.LEFT] = tile
+                        collisions.append((tile, Direction.LEFT))
                     if other.velocity.x > 0:
-                        collisions[Direction.RIGHT] = tile
+                        collisions.append((tile, Direction.RIGHT))
         elif mode == "Current":
             for tile in self:
                 if tile.rect.colliderect(other.rect.x, other.rect.y, other.rect.width, other.rect.height):
                     if other.velocity.y < 0:
-                        collisions[Direction.UP] = tile
+                        collisions.append((tile, Direction.UP))
                     if other.velocity.y > 1:
-                        collisions[Direction.DOWN] = tile
+                        collisions.append((tile, Direction.DOWN))
 
-                if tile.rect.colliderect(other.rect.x, other.rect.y, other.rect.width, other.rect.height):
                     if other.velocity.x < 0:
-                        collisions[Direction.LEFT] = tile
+                        collisions.append((tile, Direction.LEFT))
                     if other.velocity.x > 0:
-                        collisions[Direction.RIGHT] = tile
+                        collisions.append((tile, Direction.RIGHT))
 
         return collisions
 
