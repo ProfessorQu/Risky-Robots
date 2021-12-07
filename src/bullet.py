@@ -4,8 +4,11 @@ from src.constants import *
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, direction, terrain):
+    def __init__(self, player_id, pos, direction, terrain):
         pygame.sprite.Sprite.__init__(self)
+
+        self.player_id = player_id
+
         self.image = pygame.image.load("src/assets/bullet.png")
         self.image = pygame.transform.scale(
             self.image,
@@ -16,7 +19,7 @@ class Bullet(pygame.sprite.Sprite):
         )
 
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.center = pos
 
         self.dir = direction
 
@@ -26,15 +29,16 @@ class Bullet(pygame.sprite.Sprite):
 
         self.terrain = terrain
 
-    def update(self, dt):
+    def update(self, dt, screen):
         self.rect.x += self.velocity.x * dt
 
-        if self.rect.x < 0 or self.rect.x > WIDTH:
-            return True
-        if self.rect.y < 0 or self.rect.y > HEIGHT:
-            return True
+        self.draw(screen)
 
-        return self.terrain.collide(self, "Current")
+        return (
+            (self.rect.x < 0 or self.rect.x > WIDTH) or
+            (self.rect.y < 0 or self.rect.y > HEIGHT) or
+            (self.terrain.collide(self, "Current"))
+        )
 
     def draw(self, screen):
         image = pygame.transform.flip(self.image, self.dir != 1, False)

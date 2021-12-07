@@ -5,7 +5,7 @@ from src.bullet import Bullet
 
 
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, x, y, direction, terrain):
+    def __init__(self, pos, terrain):
         self.image = pygame.image.load("src/assets/weapon.png")
         self.image = pygame.transform.scale(
             self.image,
@@ -16,34 +16,30 @@ class Weapon(pygame.sprite.Sprite):
         )
 
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.center = pos
 
-        self.bullets = []
+        self.bullets = None
         self.fireRate = 0
 
-        self.dir = direction
+        self.dir = 1
 
         self.terrain = terrain
 
-    def shoot(self):
+    def shoot(self, player_id):
         if self.fireRate <= 0:
-            self.bullets.append(
-                Bullet(self.rect.centerx, self.rect.centery, self.dir, self.terrain))
+            bullet = Bullet(player_id, self.rect.center,
+                            self.dir, self.terrain)
+            self.bullets.append(bullet)
             self.fireRate = WeaponVars.FIRE_RATE
+
+            return bullet
 
     def update(self, dt, pos, direction):
         self.rect.center = pos
         self.dir = direction
 
         self.fireRate -= 1
-        for bullet in self.bullets:
-            remove = bullet.update(dt)
-            if remove:
-                self.bullets.remove(bullet)
 
     def draw(self, screen):
         image = pygame.transform.flip(self.image, self.dir != 1, False)
         screen.blit(image, self.rect)
-
-        for bullet in self.bullets:
-            bullet.draw(screen)

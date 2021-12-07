@@ -1,25 +1,14 @@
 import pygame
 
 from src.constants import *
-from src.weapon import Weapon
+from src.player.weapon import Weapon
 
 
 # The 2D platformer player class.
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, terrain):
+    def __init__(self, player_id, pos, inputs, terrain):
         super().__init__()
-
-        self.jumps = 0
-
-        self.speed = PlayerVars.SPEED
-        self.jump_height = PlayerVars.JUMP_HEIGHT
-        self.max_jumps = PlayerVars.MAX_JUMPS
-
-        self.velocity = pygame.math.Vector2(0, 0)
-
-        self.facing_right = True
-
-        self.terrain = terrain
+        self.player_id = player_id
 
         self.image = pygame.image.load("src/assets/player.png")
         self.image = pygame.transform.scale(
@@ -31,43 +20,59 @@ class Player(pygame.sprite.Sprite):
         )
 
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.center = pos
 
-        self.weapon = Weapon(x, y, 1, self.terrain)
+        self.inputs = inputs
 
-    def update(self, dt):
-        key = pygame.key.get_pressed()
+        self.terrain = terrain
 
-        if key[pygame.K_a]:
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.facing_right = True
+        self.jumps = 0
+
+        self.weapon = Weapon(pos, terrain)
+
+        self.speed = PlayerVars.SPEED
+        self.jump_height = PlayerVars.JUMP_HEIGHT
+        self.max_jumps = PlayerVars.MAX_JUMPS
+
+    def update(self, dt, screen):
+        inputs = self.inputs.get_inputs()
+
+        if "left" in inputs:
             self.velocity.x = -self.speed * dt
             self.facing_right = False
 
-        if key[pygame.K_d]:
+        if "right" in inputs:
             self.velocity.x = self.speed * dt
             self.facing_right = True
 
-        if key[pygame.K_w] and self.jumps > 0 and self.velocity.y >= 0:
+        if "jump" in inputs and self.jumps > 0 and self.velocity.y >= 0:
             self.velocity.y = self.jump_height * dt
             self.jumps -= 1
 
-        if not key[pygame.K_a] and not key[pygame.K_d]:
+        if not "left" in inputs and not "right" in inputs:
             self.velocity.x = 0
 
-        if key[pygame.K_s]:
-            self.weapon.shoot()
+        if "shoot" in inputs:
+            self.weapon.shoot(self.player_id)
 
         gravity = GRAVITY * dt if self.velocity.y < 0 else GRAVITY_FALL * dt
         self.velocity.y += gravity
 
-        self.handleCollisions()
+        self.handle_collisions()
 
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
 
-        self.weapon.update(dt, self.rect.center,
-                           1 if self.facing_right else -1)
+        self.draw(screen)
 
-    def handleCollisions(self):
+        self.weapon.update(
+            0, self.rect.center,
+            1 if self.facing_right else -1
+        )
+
+    def handle_collisions(self):
         """ A collision system for a 2D platformer"""
         collisions = self.terrain.collide(self)
         for (tile, direction) in collisions:
