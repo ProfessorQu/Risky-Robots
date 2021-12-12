@@ -29,10 +29,15 @@ class Bullet(pygame.sprite.Sprite):
 
         self.terrain = terrain
 
-    def update(self, dt, screen):
+    def update(self, dt, players):
         self.rect.x += self.velocity.x * dt
 
-        self.draw(screen)
+        for i, player in enumerate(players):
+            if player.player_id == self.player_id:
+                continue
+
+            if self.rect.colliderect(player.rect):
+                return True
 
         if (self.rect.x < 0 or self.rect.x > WIDTH):
             return True

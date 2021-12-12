@@ -18,15 +18,16 @@ CLOCK = pygame.time.Clock()
 running = True
 
 terrain = Terrain(
-    Solid(WIDTH / 2, 0,         WIDTH, 20),  # Ceiling
-    Solid(WIDTH / 2, HEIGHT,    WIDTH, 20),  # Ground
+    Solid(WIDTH / 2, 0, WIDTH, 20), # Ceiling
+    Solid(WIDTH / 2, HEIGHT, WIDTH, 20), # Floor
 
-    Solid(0, HEIGHT / 2,        20, HEIGHT),    # Left wall
-    Solid(WIDTH, HEIGHT / 2,    20, HEIGHT),    # Right wall
+    Solid(0, HEIGHT / 2, 20, HEIGHT), # Left wall
+    Solid(WIDTH, HEIGHT / 2, 20, HEIGHT), # Right wall
 
-    Solid(WIDTH / 2, HEIGHT / 2, 20, 100),       # Center
+    Solid(WIDTH / 2, HEIGHT / 2, 20, 100), # Middle
 )
 
+players = []
 bullets = []
 
 inputs1 = Inputs(
@@ -58,6 +59,9 @@ player2 = Player(
     terrain,
 )
 
+players.append(player1)
+players.append(player2)
+
 prev_time = time.time()
 
 while running:
@@ -73,22 +77,17 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    new_bullet1 = player1.update(dt)
-    new_bullet2 = player2.update(dt)
 
-    player1.draw(SCREEN)
-    player2.draw(SCREEN)
+    for player in players:
+        new_bullet = player.update(dt)
 
-    if new_bullet1:
-        bullets.append(new_bullet1)
-    if new_bullet2:
-        bullets.append(new_bullet2)
+        if new_bullet:
+            bullets.append(new_bullet)
 
-    for block in terrain:
-        block.draw(SCREEN)
+        player.draw(SCREEN)
 
     for bullet in bullets:
-        remove = bullet.update(dt, SCREEN)
+        remove = bullet.update(dt, players)
 
         if remove:
             bullets.remove(bullet)
@@ -96,6 +95,10 @@ while running:
             bullets.remove(bullet)
         elif bullet.player_id == 2 and player1.rect.colliderect(bullet.rect):
             bullets.remove(bullet)
+
+        bullet.draw(SCREEN)
+
+    terrain.draw(SCREEN)
 
     pygame.display.flip()
 

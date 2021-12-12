@@ -25,6 +25,7 @@ class BulletVars:
 class PlayerVars:
     SPEED = 200
     JUMP_HEIGHT = -450
+    BASE_HEALTH = 100
     MAX_JUMPS = 2
     SCALE = 5
 

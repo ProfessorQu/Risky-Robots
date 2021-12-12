@@ -6,6 +6,8 @@ from src.bullet import Bullet
 
 class Weapon(pygame.sprite.Sprite):
     def __init__(self, pos, terrain):
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = pygame.image.load("src/assets/weapon.png")
         self.image = pygame.transform.scale(
             self.image,

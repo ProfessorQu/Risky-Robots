@@ -7,7 +7,7 @@ from src.player.weapon import Weapon
 # The 2D platformer player class.
 class Player(pygame.sprite.Sprite):
     def __init__(self, player_id, pos, inputs, terrain):
-        super().__init__()
+        pygame.sprite.Sprite.__init__(self)
         self.player_id = player_id
 
         self.image = pygame.image.load(f"src/assets/player{player_id}.png")
@@ -35,6 +35,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = PlayerVars.SPEED
         self.jump_height = PlayerVars.JUMP_HEIGHT
         self.max_jumps = PlayerVars.MAX_JUMPS
+        self.health = PlayerVars.BASE_HEALTH
 
     def update(self, dt):
         inputs = self.inputs.get_inputs()
@@ -84,6 +85,7 @@ class Player(pygame.sprite.Sprite):
         screen.blit(image, self.rect)
 
         self.weapon.draw(screen)
+
 
     def handle_collisions(self):
         """ A collision system for a 2D platformer"""

@@ -9,7 +9,7 @@ class Terrain(list):
 
     def draw(self, screen):
         for tile in self:
-            screen.blit(tile.image, (tile.x, tile.y))
+            tile.draw(screen)
 
     def collide(self, other, mode="Predict") -> dict:
         collisions = []
