@@ -4,10 +4,9 @@ from src.constants import *
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, player_id, pos, direction, terrain):
+    def __init__(self, pos, direction, terrain):
         pygame.sprite.Sprite.__init__(self)
 
-        self.player_id = player_id
 
         self.image = pygame.image.load("src/assets/bullet.png")
         self.image = pygame.transform.scale(
@@ -32,10 +31,7 @@ class Bullet(pygame.sprite.Sprite):
     def update(self, dt, players):
         self.rect.x += self.velocity.x * dt
 
-        for i, player in enumerate(players):
-            if player.player_id == self.player_id:
-                continue
-
+        for player in players:
             if self.rect.colliderect(player.rect):
                 return True
 

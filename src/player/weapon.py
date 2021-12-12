@@ -26,13 +26,13 @@ class Weapon(pygame.sprite.Sprite):
 
         self.terrain = terrain
 
-    def shoot(self, player_id):
+    def shoot(self):
         if self.fireRate <= 0:
             bullet_pos = (
                 self.rect.centerx + (self.dir * self.image.get_width() / 2),
                 self.rect.centery - self.image.get_height() / 4
             )
-            bullet = Bullet(player_id, bullet_pos, self.dir, self.terrain)
+            bullet = Bullet(bullet_pos, self.dir, self.terrain)
             self.fireRate = WeaponVars.FIRE_RATE
 
             return bullet

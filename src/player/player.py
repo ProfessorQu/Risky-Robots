@@ -2,11 +2,12 @@ import pygame
 
 from src.constants import *
 from src.player.weapon import Weapon
+from src.player.healthbar import HealthBar
 
 
 # The 2D platformer player class.
 class Player(pygame.sprite.Sprite):
-    def __init__(self, player_id, pos, inputs, terrain):
+    def __init__(self, player_id, pos, facing_right, inputs, terrain):
         pygame.sprite.Sprite.__init__(self)
         self.player_id = player_id
 
@@ -27,7 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.terrain = terrain
 
         self.velocity = pygame.math.Vector2(0, 0)
-        self.facing_right = True
+        self.facing_right = facing_right
         self.jumps = 0
 
         self.weapon = Weapon(pos, terrain)
@@ -35,7 +36,12 @@ class Player(pygame.sprite.Sprite):
         self.speed = PlayerVars.SPEED
         self.jump_height = PlayerVars.JUMP_HEIGHT
         self.max_jumps = PlayerVars.MAX_JUMPS
-        self.health = PlayerVars.BASE_HEALTH
+        self.health = PlayerVars.MAX_HEALTH
+
+        color = (255, 0, 0) if player_id == 1 else (0, 0, 255)
+        rect = pygame.Rect(self.rect.x - self.rect.width * 5, self.rect.height, self.rect.width * 5, self.rect.height)
+        self.healthbar = HealthBar(rect, color)
+
 
     def update(self, dt):
         inputs = self.inputs.get_inputs()
@@ -58,7 +64,7 @@ class Player(pygame.sprite.Sprite):
             self.velocity.x = 0
 
         if Direction.DOWN in inputs:
-            new_bullet = self.weapon.shoot(self.player_id)
+            new_bullet = self.weapon.shoot()
 
         gravity = GRAVITY * dt if self.velocity.y < 0 else GRAVITY_FALL * dt
         self.velocity.y += gravity
@@ -85,6 +91,8 @@ class Player(pygame.sprite.Sprite):
         screen.blit(image, self.rect)
 
         self.weapon.draw(screen)
+
+        self.healthbar.draw(screen, self.health)
 
 
     def handle_collisions(self):

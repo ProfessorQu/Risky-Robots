@@ -4,6 +4,7 @@ from pygame.locals import *
 import time
 
 from src.player.player import Player
+from src.player.healthbar import HealthBar
 from src.terrain.terrain import Terrain, Solid
 from src.player.inputs import Inputs
 from src.constants import *
@@ -47,20 +48,23 @@ inputs2 = Inputs(
 
 player1 = Player(
     1,
-    (40, FLOOR - 40),
+    (50, FLOOR - 40),
+    True,
     inputs1,
     terrain,
 )
 
 player2 = Player(
     2,
-    (200, FLOOR - 40),
+    (WIDTH - 50, FLOOR - 40),
+    False,
     inputs2,
     terrain,
 )
 
 players.append(player1)
 players.append(player2)
+
 
 prev_time = time.time()
 
@@ -78,6 +82,8 @@ while running:
             running = False
 
 
+    terrain.draw(SCREEN)
+
     for player in players:
         new_bullet = player.update(dt)
 
@@ -91,14 +97,8 @@ while running:
 
         if remove:
             bullets.remove(bullet)
-        elif bullet.player_id == 1 and player2.rect.colliderect(bullet.rect):
-            bullets.remove(bullet)
-        elif bullet.player_id == 2 and player1.rect.colliderect(bullet.rect):
-            bullets.remove(bullet)
 
         bullet.draw(SCREEN)
-
-    terrain.draw(SCREEN)
 
     pygame.display.flip()
 
