@@ -35,11 +35,12 @@ class Weapon(pygame.sprite.Sprite):
 
             return bullet
 
-    def update(self, pos, direction, screen):
+    def update(self, pos, direction):
         self.rect.center = pos
         self.dir = direction
 
         self.fireRate -= 1
 
+    def draw(self, screen):
         image = pygame.transform.flip(self.image, self.dir != 1, False)
         screen.blit(image, self.rect)

@@ -36,27 +36,27 @@ class Player(pygame.sprite.Sprite):
         self.jump_height = PlayerVars.JUMP_HEIGHT
         self.max_jumps = PlayerVars.MAX_JUMPS
 
-    def update(self, dt, screen):
+    def update(self, dt):
         inputs = self.inputs.get_inputs()
 
         new_bullet = None
 
-        if "left" in inputs:
+        if Direction.LEFT in inputs:
             self.velocity.x = -self.speed * dt
             self.facing_right = False
 
-        if "right" in inputs:
+        if Direction.RIGHT in inputs:
             self.velocity.x = self.speed * dt
             self.facing_right = True
 
-        if "jump" in inputs and self.jumps > 0 and self.velocity.y >= 0:
+        if Direction.UP in inputs and self.jumps > 0 and self.velocity.y >= 0:
             self.velocity.y = self.jump_height * dt
             self.jumps -= 1
 
-        if not "left" in inputs and not "right" in inputs:
+        if not Direction.LEFT in inputs and not Direction.RIGHT in inputs:
             self.velocity.x = 0
 
-        if "shoot" in inputs:
+        if Direction.DOWN in inputs:
             new_bullet = self.weapon.shoot(self.player_id)
 
         gravity = GRAVITY * dt if self.velocity.y < 0 else GRAVITY_FALL * dt
@@ -67,9 +67,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
 
-        image = pygame.transform.flip(self.image, not self.facing_right, False)
-        screen.blit(image, self.rect)
-
         direction = 1 if self.facing_right else -1
         weapon_x = self.rect.centerx + (
             direction * self.image.get_width() * 0.5
@@ -77,11 +74,16 @@ class Player(pygame.sprite.Sprite):
 
         self.weapon.update(
             (weapon_x, self.rect.centery),
-            direction,
-            screen
+            direction
         )
 
         return new_bullet
+
+    def draw(self, screen):
+        image = pygame.transform.flip(self.image, not self.facing_right, False)
+        screen.blit(image, self.rect)
+
+        self.weapon.draw(screen)
 
     def handle_collisions(self):
         """ A collision system for a 2D platformer"""

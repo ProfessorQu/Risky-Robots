@@ -1,4 +1,5 @@
 import pygame
+from src.constants import *
 
 
 class Inputs:
@@ -14,12 +15,12 @@ class Inputs:
         keys = pygame.key.get_pressed()
 
         if keys[self.left]:
-            inputs.append("left")
+            inputs.append(Direction.LEFT)
         if keys[self.right]:
-            inputs.append("right")
+            inputs.append(Direction.RIGHT)
         if keys[self.jump]:
-            inputs.append("jump")
+            inputs.append(Direction.UP)
         if keys[self.shoot]:
-            inputs.append("shoot")
+            inputs.append(Direction.DOWN)
 
         return inputs

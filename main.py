@@ -73,8 +73,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    new_bullet1 = player1.update(dt, SCREEN)
-    new_bullet2 = player2.update(dt, SCREEN)
+    new_bullet1 = player1.update(dt)
+    new_bullet2 = player2.update(dt)
+
+    player1.draw(SCREEN)
+    player2.draw(SCREEN)
 
     if new_bullet1:
         bullets.append(new_bullet1)
