@@ -39,8 +39,7 @@ class Player(pygame.sprite.Sprite):
         self.health = PlayerVars.MAX_HEALTH
 
         color = (255, 0, 0) if player_id == 1 else (0, 0, 255)
-        rect = pygame.Rect(self.rect.x - self.rect.width * 5, self.rect.height, self.rect.width * 5, self.rect.height)
-        self.healthbar = HealthBar(rect, color)
+        self.healthbar = HealthBar(self.rect)
 
 
     def update(self, dt):
@@ -84,6 +83,8 @@ class Player(pygame.sprite.Sprite):
             direction
         )
 
+        self.healthbar.update(self.rect)
+
         return new_bullet
 
     def draw(self, screen):
@@ -94,9 +95,14 @@ class Player(pygame.sprite.Sprite):
 
         self.healthbar.draw(screen, self.health)
 
+    def hit(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            print(f"Player {self.player_id} died!")
+            print(f"Player {1 if self.player_id == 2 else 2} won!")
+            pygame.event.post(pygame.event.Event(pygame.QUIT))
 
     def handle_collisions(self):
-        """ A collision system for a 2D platformer"""
         collisions = self.terrain.collide(self)
         for (tile, direction) in collisions:
             if direction == Direction.UP:

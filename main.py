@@ -24,8 +24,6 @@ terrain = Terrain(
 
     Solid(0, HEIGHT / 2, 20, HEIGHT), # Left wall
     Solid(WIDTH, HEIGHT / 2, 20, HEIGHT), # Right wall
-
-    Solid(WIDTH / 2, HEIGHT / 2, 20, 100), # Middle
 )
 
 players = []
@@ -75,7 +73,7 @@ while running:
     dt = now - prev_time
     prev_time = now
 
-    SCREEN.fill((0, 255, 128))
+    SCREEN.fill((0, 128, 128))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

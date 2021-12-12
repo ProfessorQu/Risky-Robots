@@ -13,7 +13,7 @@ FLOOR = HEIGHT - FLOOR_HEIGHT
 
 
 class WeaponVars:
-    FIRE_RATE = 20
+    FIRE_RATE = 75
     SCALE = 4
 
 
@@ -29,6 +29,11 @@ class PlayerVars:
     MAX_JUMPS = 2
     SCALE = 5
 
+class HealthBarVars:
+    WIDTH = 50
+    HEIGHT = 10
+
+    HOVER = 50
 
 class Direction(Enum):
     LEFT = 1

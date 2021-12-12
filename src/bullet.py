@@ -33,7 +33,10 @@ class Bullet(pygame.sprite.Sprite):
 
         for player in players:
             if self.rect.colliderect(player.rect):
+                player.hit(10)
+
                 return True
+            
 
         if (self.rect.x < 0 or self.rect.x > WIDTH):
             return True
