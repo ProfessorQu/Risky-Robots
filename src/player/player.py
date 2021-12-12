@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.player_id = player_id
 
-        self.image = pygame.image.load("src/assets/player.png")
+        self.image = pygame.image.load(f"src/assets/player{player_id}.png")
         self.image = pygame.transform.scale(
             self.image,
             (
@@ -39,6 +39,8 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt, screen):
         inputs = self.inputs.get_inputs()
 
+        new_bullet = None
+
         if "left" in inputs:
             self.velocity.x = -self.speed * dt
             self.facing_right = False
@@ -55,7 +57,7 @@ class Player(pygame.sprite.Sprite):
             self.velocity.x = 0
 
         if "shoot" in inputs:
-            self.weapon.shoot(self.player_id)
+            new_bullet = self.weapon.shoot(self.player_id)
 
         gravity = GRAVITY * dt if self.velocity.y < 0 else GRAVITY_FALL * dt
         self.velocity.y += gravity
@@ -65,12 +67,21 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velocity.x
         self.rect.y += self.velocity.y
 
-        self.draw(screen)
+        image = pygame.transform.flip(self.image, not self.facing_right, False)
+        screen.blit(image, self.rect)
+
+        direction = 1 if self.facing_right else -1
+        weapon_x = self.rect.centerx + (
+            direction * self.image.get_width() * 0.5
+        )
 
         self.weapon.update(
-            0, self.rect.center,
-            1 if self.facing_right else -1
+            (weapon_x, self.rect.centery),
+            direction,
+            screen
         )
+
+        return new_bullet
 
     def handle_collisions(self):
         """ A collision system for a 2D platformer"""
@@ -87,8 +98,3 @@ class Player(pygame.sprite.Sprite):
             if direction == Direction.RIGHT:
                 self.velocity.x = tile.rect.left - self.rect.right
 
-    def draw(self, screen):
-        image = pygame.transform.flip(self.image, not self.facing_right, False)
-        screen.blit(image, self.rect)
-
-        self.weapon.draw(screen)

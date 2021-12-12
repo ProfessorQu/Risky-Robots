@@ -14,19 +14,19 @@ FLOOR = HEIGHT - FLOOR_HEIGHT
 
 class WeaponVars:
     FIRE_RATE = 20
-    SCALE = 0.05
+    SCALE = 4
 
 
 class BulletVars:
     SPEED = 300
-    SCALE = 0.02
+    SCALE = 1.5
 
 
 class PlayerVars:
     SPEED = 200
     JUMP_HEIGHT = -450
     MAX_JUMPS = 2
-    SCALE = 0.02
+    SCALE = 5
 
 
 class Direction(Enum):

@@ -18,7 +18,6 @@ class Weapon(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = pos
 
-        self.bullets = None
         self.fireRate = 0
 
         self.dir = 1
@@ -27,19 +26,20 @@ class Weapon(pygame.sprite.Sprite):
 
     def shoot(self, player_id):
         if self.fireRate <= 0:
-            bullet = Bullet(player_id, self.rect.center,
-                            self.dir, self.terrain)
-            self.bullets.append(bullet)
+            bullet_pos = (
+                self.rect.centerx + (self.dir * self.image.get_width() / 2),
+                self.rect.centery - self.image.get_height() / 4
+            )
+            bullet = Bullet(player_id, bullet_pos, self.dir, self.terrain)
             self.fireRate = WeaponVars.FIRE_RATE
 
             return bullet
 
-    def update(self, dt, pos, direction):
+    def update(self, pos, direction, screen):
         self.rect.center = pos
         self.dir = direction
 
         self.fireRate -= 1
 
-    def draw(self, screen):
         image = pygame.transform.flip(self.image, self.dir != 1, False)
         screen.blit(image, self.rect)

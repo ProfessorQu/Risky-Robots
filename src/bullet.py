@@ -34,11 +34,14 @@ class Bullet(pygame.sprite.Sprite):
 
         self.draw(screen)
 
-        return (
-            (self.rect.x < 0 or self.rect.x > WIDTH) or
-            (self.rect.y < 0 or self.rect.y > HEIGHT) or
-            (self.terrain.collide(self, "Current"))
-        )
+        if (self.rect.x < 0 or self.rect.x > WIDTH):
+            return True
+        if self.rect.y < 0 or self.rect.y > HEIGHT:
+            return True
+        if self.terrain.collide(self, "Current"):
+            return True
+        
+        return False
 
     def draw(self, screen):
         image = pygame.transform.flip(self.image, self.dir != 1, False)
