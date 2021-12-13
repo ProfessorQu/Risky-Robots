@@ -8,6 +8,8 @@ from src.player.inputs import Inputs
 from src.terrain.terrain import Terrain
 
 from typing import Tuple
+import os
+import random
 
 class Player(pygame.sprite.Sprite):
     def __init__(
@@ -27,15 +29,27 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.player_id = player_id
 
+        self.idle_frames = []
+        self.walking_frames = []
         # Get the image for the player
-        self.image = pygame.image.load(f"src/assets/player{player_id}.png")
-        self.image = pygame.transform.scale(
-            self.image,
-            (
-                self.image.get_width() * player.SCALE,
-                self.image.get_height() * player.SCALE
-            )
-        )
+        for image in os.listdir(f"src/assets/player{player_id}/idle"):
+            image = pygame.image.load(f"src/assets/player{player_id}/idle/{image}")
+            image = pygame.transform.scale(image, (image.get_width() * player.SCALE, image.get_height() * player.SCALE))
+
+            self.idle_frames.append(image)
+        
+        for image in os.listdir(f"src/assets/player{player_id}/walking"):
+            image = pygame.image.load(f"src/assets/player{player_id}/walking/{image}")
+            image = pygame.transform.scale(image, (image.get_width() * player.SCALE, image.get_height() * player.SCALE))
+
+            self.walking_frames.append(image)
+
+        self.animation_speed = random.uniform(player.ANIMATION_SPEED_MIN, player.ANIMATION_SPEED_MAX)
+        self.update_time = 0
+        
+        self.image = self.idle_frames[0]
+
+        self.state = "idle"
 
         # Set the rect of the player
         self.rect = self.image.get_rect()
@@ -61,6 +75,8 @@ class Player(pygame.sprite.Sprite):
 
         # Create the healthbar
         self.healthbar = HealthBar(self.rect)
+
+        self.frame = 0
 
     def hit(self, damage: int):
         """Hit the player for damage
@@ -101,9 +117,12 @@ class Player(pygame.sprite.Sprite):
             self.velocity.x = -self.speed * dt
             self.facing_right = False
 
-        if Direction.RIGHT in inputs:
+            self.state = "walking"
+        elif Direction.RIGHT in inputs:
             self.velocity.x = self.speed * dt
             self.facing_right = True
+
+            self.state = "walking"
 
         jump_input = Direction.UP in inputs
         jump_left = self.jumps > 0
@@ -115,6 +134,7 @@ class Player(pygame.sprite.Sprite):
 
         if Direction.LEFT not in inputs and Direction.RIGHT not in inputs:
             self.velocity.x = 0
+            self.state = "idle"
 
     def update(self, dt: float) -> Bullet:
         """Update the player
@@ -154,6 +174,7 @@ class Player(pygame.sprite.Sprite):
 
         # Update the healthbar
         self.healthbar.update(self.rect.center)
+        self.update_animation(dt)
 
         return new_bullet
 
@@ -172,5 +193,24 @@ class Player(pygame.sprite.Sprite):
 
         # Draw the healthbar
         self.healthbar.draw(screen, self.health)
+
+    def update_animation(self, dt: float):
+        """Update the animation of the player
+
+        Args:
+            dt (float): the time since the last update
+        """
+        self.update_time += dt
+        if self.update_time >= self.animation_speed:
+            if self.state == "walking":
+                self.frame = (self.frame + 1) % len(self.walking_frames)
+                self.image = self.walking_frames[self.frame]
+            elif self.state == "idle":
+                self.frame = (self.frame + 1) % len(self.idle_frames)
+                self.image = self.idle_frames[self.frame]
+
+            self.update_time = 0
+            self.animation_speed = random.uniform(player.ANIMATION_SPEED_MIN, player.ANIMATION_SPEED_MAX)
+
 
 
