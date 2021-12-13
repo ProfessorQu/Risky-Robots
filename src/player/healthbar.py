@@ -1,24 +1,25 @@
 import pygame
-from src.constants import *
+
+from src.constants import healthbar, player
 
 
 class HealthBar:
-    def __init__(self, player_rect):
+    def __init__(self, player_rect: pygame.Rect):
         self.rect = player_rect.copy()
-        self.rect.width = HealthBarVars.WIDTH
-        self.rect.height = HealthBarVars.HEIGHT
-        self.rect.y = player_rect.centery - HealthBarVars.HOVER
+        self.rect.width = healthbar.WIDTH
+        self.rect.height = healthbar.HEIGHT
+        self.rect.y = player_rect.centery - healthbar.HOVER
         self.rect.x = player_rect.centerx - self.rect.width / 2
 
-    def update(self, player_rect):
+    def update(self, player_rect: pygame.Rect):
         self.rect = player_rect.copy()
-        self.rect.width = HealthBarVars.WIDTH
-        self.rect.height = HealthBarVars.HEIGHT
-        self.rect.y = player_rect.centery - HealthBarVars.HOVER
+        self.rect.width = healthbar.WIDTH
+        self.rect.height = healthbar.HEIGHT
+        self.rect.y = player_rect.centery - healthbar.HOVER
         self.rect.x = player_rect.centerx - self.rect.width / 2
 
-    def draw(self, surface, health):
-        percent = health / PlayerVars.MAX_HEALTH
+    def draw(self, surface: pygame.Surface, health: int):
+        percent = health / player.MAX_HEALTH
         if percent > 0.5:
             color = (0, 255, 0)
         elif percent > 0.25:

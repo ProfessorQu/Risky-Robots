@@ -1,9 +1,9 @@
 import pygame
-from src.constants import *
+from src.constants import Direction
 
 
 class Inputs:
-    def __init__(self, left, right, jump, shoot):
+    def __init__(self, left: int, right: int, jump: int, shoot: int):
         self.left = left
         self.right = right
         self.jump = jump

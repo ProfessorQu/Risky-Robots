@@ -7,11 +7,10 @@ from src.player.player import Player
 from src.player.healthbar import HealthBar
 from src.terrain.terrain import Terrain, Solid
 from src.player.inputs import Inputs
-from src.constants import *
+from src.constants.game import *
 
 pygame.init()
 pygame.display.set_caption("Game")
-
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 CLOCK = pygame.time.Clock()
@@ -29,59 +28,47 @@ terrain = Terrain(
 players = []
 bullets = []
 
-inputs1 = Inputs(
-    pygame.K_a,
-    pygame.K_d,
-    pygame.K_w,
-    pygame.K_s,
+players.append(
+    Player(
+        1,
+        (50, FLOOR - 40),
+        True,
+        Inputs(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s),
+        terrain
+    )
 )
-
-inputs2 = Inputs(
-    pygame.K_LEFT,
-    pygame.K_RIGHT,
-    pygame.K_UP,
-    pygame.K_DOWN,
+players.append(
+    Player(
+        2,
+        (WIDTH - 50, FLOOR - 40),
+        False,
+        Inputs(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN),
+        terrain
+    )
 )
-
-
-player1 = Player(
-    1,
-    (50, FLOOR - 40),
-    True,
-    inputs1,
-    terrain,
-)
-
-player2 = Player(
-    2,
-    (WIDTH - 50, FLOOR - 40),
-    False,
-    inputs2,
-    terrain,
-)
-
-players.append(player1)
-players.append(player2)
-
 
 prev_time = time.time()
 
 while running:
     CLOCK.tick(FPS)
 
+    # Calculate delta time
     now = time.time()
     dt = now - prev_time
     prev_time = now
 
+    # Set background color
     SCREEN.fill((0, 128, 128))
 
+    # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-
+    # Draw terrain
     terrain.draw(SCREEN)
 
+    # Update players
     for player in players:
         new_bullet = player.update(dt)
 
@@ -90,6 +77,7 @@ while running:
 
         player.draw(SCREEN)
 
+    # Update bullets
     for bullet in bullets:
         remove = bullet.update(dt, players)
 

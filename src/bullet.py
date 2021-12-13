@@ -1,10 +1,13 @@
 import pygame
 
-from src.constants import *
+from src.constants import bullet, game
+from src.terrain.terrain import Terrain
+
+from typing import Tuple, List
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, pos, direction, terrain):
+    def __init__(self, pos: Tuple[int, int], direction: int, terrain: Terrain):
         pygame.sprite.Sprite.__init__(self)
 
 
@@ -12,8 +15,8 @@ class Bullet(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(
             self.image,
             (
-                self.image.get_width() * BulletVars.SCALE,
-                self.image.get_height() * BulletVars.SCALE,
+                self.image.get_width() * bullet.SCALE,
+                self.image.get_height() * bullet.SCALE,
             )
         )
 
@@ -23,12 +26,12 @@ class Bullet(pygame.sprite.Sprite):
         self.dir = direction
 
         self.velocity = pygame.math.Vector2(
-            direction * BulletVars.SPEED, 0
+            direction * bullet.SPEED, 0
         )
 
         self.terrain = terrain
 
-    def update(self, dt, players):
+    def update(self, dt: float, players: List[pygame.sprite.Sprite]):
         self.rect.x += self.velocity.x * dt
 
         for player in players:
@@ -38,15 +41,15 @@ class Bullet(pygame.sprite.Sprite):
                 return True
             
 
-        if (self.rect.x < 0 or self.rect.x > WIDTH):
+        if (self.rect.x < 0 or self.rect.x > game.WIDTH):
             return True
-        if self.rect.y < 0 or self.rect.y > HEIGHT:
+        if self.rect.y < 0 or self.rect.y > game.HEIGHT:
             return True
         if self.terrain.collide(self, "Current"):
             return True
         
         return False
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface):
         image = pygame.transform.flip(self.image, self.dir != 1, False)
         screen.blit(image, self.rect)

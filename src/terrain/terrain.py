@@ -1,17 +1,17 @@
 import pygame
 
-from src.constants import *
+from src.constants import Direction
 
 
 class Terrain(list):
     def __init__(self, *args):
         list.__init__(self, args)
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface):
         for tile in self:
             tile.draw(screen)
 
-    def collide(self, other, mode="Predict") -> dict:
+    def collide(self, other: pygame.sprite.Sprite, mode: str="Predict") -> dict:
         collisions = []
         if mode == "Predict":
             for tile in self:
@@ -43,7 +43,7 @@ class Terrain(list):
 
 
 class Solid:
-    def __init__(self, x, y, width, height):
+    def __init__(self, x: int, y: int, width: int, height: int):
         self.x = x
         self.y = y
         self.width = width
@@ -52,5 +52,5 @@ class Solid:
         self.rect.center = (x, y)
         self.color = (0, 0, 0)
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface):
         pygame.draw.rect(screen, self.color, self.rect)

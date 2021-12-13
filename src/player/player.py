@@ -1,13 +1,16 @@
 import pygame
 
-from src.constants import *
+from src.constants import player, Direction
 from src.player.weapon import Weapon
 from src.player.healthbar import HealthBar
+from src.player.inputs import Inputs
+from src.terrain.terrain import Terrain
 
+from typing import Tuple
 
 # The 2D platformer player class.
 class Player(pygame.sprite.Sprite):
-    def __init__(self, player_id, pos, facing_right, inputs, terrain):
+    def __init__(self, player_id: int, pos: Tuple[int, int], facing_right: bool, inputs: Inputs, terrain: Terrain):
         pygame.sprite.Sprite.__init__(self)
         self.player_id = player_id
 
@@ -15,8 +18,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(
             self.image,
             (
-                self.image.get_width() * PlayerVars.SCALE,
-                self.image.get_height() * PlayerVars.SCALE
+                self.image.get_width() * player.SCALE,
+                self.image.get_height() * player.SCALE
             )
         )
 
@@ -33,16 +36,35 @@ class Player(pygame.sprite.Sprite):
 
         self.weapon = Weapon(pos, terrain)
 
-        self.speed = PlayerVars.SPEED
-        self.jump_height = PlayerVars.JUMP_HEIGHT
-        self.max_jumps = PlayerVars.MAX_JUMPS
-        self.health = PlayerVars.MAX_HEALTH
+        self.speed = player.SPEED
+        self.jump_height = player.JUMP_HEIGHT
+        self.max_jumps = player.MAX_JUMPS
+        self.health = player.MAX_HEALTH
 
-        color = (255, 0, 0) if player_id == 1 else (0, 0, 255)
         self.healthbar = HealthBar(self.rect)
 
+    def hit(self, damage: int):
+        self.health -= damage
+        if self.health <= 0:
+            print(f"Player {self.player_id} died!")
+            print(f"Player {1 if self.player_id == 2 else 2} won!")
+            pygame.event.post(pygame.event.Event(pygame.QUIT))
 
-    def update(self, dt):
+    def handle_collisions(self):
+        collisions = self.terrain.collide(self)
+        for (tile, direction) in collisions:
+            if direction == Direction.UP:
+                self.velocity.y = tile.rect.bottom - self.rect.top
+            if direction == Direction.DOWN:
+                self.velocity.y = tile.rect.top - self.rect.bottom
+                self.jumps = self.max_jumps
+
+            if direction == Direction.LEFT:
+                self.velocity.x = tile.rect.right - self.rect.left
+            if direction == Direction.RIGHT:
+                self.velocity.x = tile.rect.left - self.rect.right
+
+    def update(self, dt: float):
         inputs = self.inputs.get_inputs()
 
         new_bullet = None
@@ -65,7 +87,7 @@ class Player(pygame.sprite.Sprite):
         if Direction.DOWN in inputs:
             new_bullet = self.weapon.shoot()
 
-        gravity = GRAVITY * dt if self.velocity.y < 0 else GRAVITY_FALL * dt
+        gravity = player.GRAVITY * dt if self.velocity.y < 0 else player.GRAVITY_FALL * dt
         self.velocity.y += gravity
 
         self.handle_collisions()
@@ -87,7 +109,7 @@ class Player(pygame.sprite.Sprite):
 
         return new_bullet
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface):
         image = pygame.transform.flip(self.image, not self.facing_right, False)
         screen.blit(image, self.rect)
 
@@ -95,24 +117,4 @@ class Player(pygame.sprite.Sprite):
 
         self.healthbar.draw(screen, self.health)
 
-    def hit(self, damage):
-        self.health -= damage
-        if self.health <= 0:
-            print(f"Player {self.player_id} died!")
-            print(f"Player {1 if self.player_id == 2 else 2} won!")
-            pygame.event.post(pygame.event.Event(pygame.QUIT))
-
-    def handle_collisions(self):
-        collisions = self.terrain.collide(self)
-        for (tile, direction) in collisions:
-            if direction == Direction.UP:
-                self.velocity.y = tile.rect.bottom - self.rect.top
-            if direction == Direction.DOWN:
-                self.velocity.y = tile.rect.top - self.rect.bottom
-                self.jumps = self.max_jumps
-
-            if direction == Direction.LEFT:
-                self.velocity.x = tile.rect.right - self.rect.left
-            if direction == Direction.RIGHT:
-                self.velocity.x = tile.rect.left - self.rect.right
 

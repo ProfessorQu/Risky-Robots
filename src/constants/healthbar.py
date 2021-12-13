@@ -1,0 +1,4 @@
+WIDTH = 50
+HEIGHT = 10
+
+HOVER = 50
