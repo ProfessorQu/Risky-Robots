@@ -5,7 +5,7 @@ import time
 
 from src.player.player import Player
 from src.player.healthbar import HealthBar
-from src.terrain.terrain import Terrain, Solid
+from src.terrain import Terrain, Solid
 from src.player.inputs import Inputs
 from src.constants.game import *
 
