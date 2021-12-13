@@ -4,12 +4,26 @@ from src.constants import Direction
 
 class Inputs:
     def __init__(self, left: int, right: int, jump: int, shoot: int):
+        """Initialize the inputs
+
+        Args:
+            left (int): the keycode to move left
+            right (int): the keycode to move right
+            jump (int): the keycode to jump
+            shoot (int): the keycode to shoot
+        """
         self.left = left
         self.right = right
         self.jump = jump
         self.shoot = shoot
 
     def get_inputs(self):
+        """Get the inputs from the keyboard
+        
+        Returns:
+            List: a list of the pressed keys
+        """
+        
         inputs = []
 
         keys = pygame.key.get_pressed()
