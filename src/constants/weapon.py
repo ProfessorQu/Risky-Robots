@@ -1,2 +1,2 @@
 FIRE_RATE = 75
-SCALE = 4
+SCALE = 3

@@ -1,2 +1,2 @@
 SPEED = 300
-SCALE = 1.5
+SCALE = 2
