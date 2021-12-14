@@ -31,25 +31,36 @@ class Player(pygame.sprite.Sprite):
 
         self.idle_frames = []
         self.walking_frames = []
-        # Get the image for the player
+        
+        # Get idle frames
         for image in os.listdir(f"src/assets/player{player_id}/idle"):
             image = pygame.image.load(f"src/assets/player{player_id}/idle/{image}")
             image = pygame.transform.scale(image, (image.get_width() * player.SCALE, image.get_height() * player.SCALE))
 
             self.idle_frames.append(image)
         
+        # Get walking frames
         for image in os.listdir(f"src/assets/player{player_id}/walking"):
             image = pygame.image.load(f"src/assets/player{player_id}/walking/{image}")
             image = pygame.transform.scale(image, (image.get_width() * player.SCALE, image.get_height() * player.SCALE))
 
             self.walking_frames.append(image)
 
+        # Get falling frame
+        self.falling = pygame.image.load(f"src/assets/player{player_id}/falling.png")
+        self.falling = pygame.transform.scale(self.falling, (self.falling.get_width() * player.SCALE, self.falling.get_height() * player.SCALE))
+
+        # Get jumping frame
+        self.jumping = pygame.image.load(f"src/assets/player{player_id}/jumping.png")
+        self.jumping = pygame.transform.scale(self.jumping, (self.jumping.get_width() * player.SCALE, self.jumping.get_height() * player.SCALE))
+
+        # Animation variables
         self.animation_speed = random.uniform(player.ANIMATION_SPEED_MIN, player.ANIMATION_SPEED_MAX)
         self.update_time = 0
         
-        self.image = self.idle_frames[0]
-
+        # Set the player's state to idle and the frame to 0
         self.state = "idle"
+        self.image = self.idle_frames[0]
 
         # Set the rect of the player
         self.rect = self.image.get_rect()
@@ -91,21 +102,6 @@ class Player(pygame.sprite.Sprite):
             print(f"Player {1 if self.player_id == 2 else 2} won!")
             pygame.event.post(pygame.event.Event(pygame.QUIT))
 
-    def handle_collisions(self):
-        """Handle the collisions of the player and update the velocity"""
-        collisions = self.terrain.collide(self)
-        for (tile, direction) in collisions:
-            if direction == Direction.UP:
-                self.velocity.y = tile.rect.bottom - self.rect.top
-            if direction == Direction.DOWN:
-                self.velocity.y = tile.rect.top - self.rect.bottom
-                self.jumps = self.max_jumps
-
-            if direction == Direction.LEFT:
-                self.velocity.x = tile.rect.right - self.rect.left
-            if direction == Direction.RIGHT:
-                self.velocity.x = tile.rect.left - self.rect.right
-
     def handle_movement(self, dt: float, inputs: list):
         """Handle the movement of the player
 
@@ -125,9 +121,10 @@ class Player(pygame.sprite.Sprite):
             self.state = "walking"
 
         jump_input = Direction.UP in inputs
-        jump_left = self.jumps > 0
-        peak_jump = self.velocity.y >= 0
-        jump = jump_input and jump_left and peak_jump
+        jumps_left = self.jumps > 0
+        falling = self.velocity.y >= 0
+
+        jump = jump_input and jumps_left and falling
         if jump:
             self.velocity.y = self.jump_height * dt
             self.jumps -= 1
@@ -135,6 +132,53 @@ class Player(pygame.sprite.Sprite):
         if Direction.LEFT not in inputs and Direction.RIGHT not in inputs:
             self.velocity.x = 0
             self.state = "idle"
+        
+        if self.velocity.y >= 1:
+            self.state = "falling"
+        elif self.velocity.y <= -1:
+            self.state = "jumping"
+
+    def handle_collisions(self):
+        """Handle the collisions of the player and update the velocity"""
+        collisions = self.terrain.collide(self)
+
+        on_ground = False
+
+        for (tile, direction) in collisions:
+            if direction == Direction.UP:
+                self.velocity.y = tile.rect.bottom - self.rect.top
+            if direction == Direction.DOWN:
+                self.velocity.y = tile.rect.top - self.rect.bottom
+                self.jumps = self.max_jumps
+                on_ground = True
+
+            if direction == Direction.LEFT:
+                self.velocity.x = tile.rect.right - self.rect.left
+            if direction == Direction.RIGHT:
+                self.velocity.x = tile.rect.left - self.rect.right
+
+    def update_animation(self, dt: float):
+        """Update the animation of the player
+
+        Args:
+            dt (float): the time since the last update
+        """
+        self.update_time += dt
+        if self.update_time >= self.animation_speed:
+            if self.state == "idle":
+                self.frame = (self.frame + 1) % len(self.idle_frames)
+                self.image = self.idle_frames[self.frame]
+            elif self.state == "walking":
+                self.frame = (self.frame + 1) % len(self.walking_frames)
+                self.image = self.walking_frames[self.frame]
+
+            self.update_time = 0
+            self.animation_speed = random.uniform(player.ANIMATION_SPEED_MIN, player.ANIMATION_SPEED_MAX)
+        
+        if self.state == "falling":
+            self.image = self.falling
+        elif self.state == "jumping":
+            self.image = self.jumping
 
     def update(self, dt: float) -> Bullet:
         """Update the player
@@ -194,23 +238,6 @@ class Player(pygame.sprite.Sprite):
         # Draw the healthbar
         self.healthbar.draw(screen, self.health)
 
-    def update_animation(self, dt: float):
-        """Update the animation of the player
-
-        Args:
-            dt (float): the time since the last update
-        """
-        self.update_time += dt
-        if self.update_time >= self.animation_speed:
-            if self.state == "walking":
-                self.frame = (self.frame + 1) % len(self.walking_frames)
-                self.image = self.walking_frames[self.frame]
-            elif self.state == "idle":
-                self.frame = (self.frame + 1) % len(self.idle_frames)
-                self.image = self.idle_frames[self.frame]
-
-            self.update_time = 0
-            self.animation_speed = random.uniform(player.ANIMATION_SPEED_MIN, player.ANIMATION_SPEED_MAX)
 
 
 
