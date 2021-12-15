@@ -1,7 +1,7 @@
 import pygame
 
 from src.constants import weapon
-from src.bullet import Bullet
+from src.player.bullet import Bullet
 
 from typing import Tuple
 
@@ -31,7 +31,7 @@ class Weapon(pygame.sprite.Sprite):
         self.rect.center = pos
         self.dir = 1
 
-        self.fireRate = 0
+        self.cooldown = 0
 
         self.terrain = terrain
 
@@ -42,7 +42,7 @@ class Weapon(pygame.sprite.Sprite):
             Bullet: the bullet that was shot
         """
         # Check if the player can shoot
-        if self.fireRate <= 0:
+        if self.cooldown <= 0:
             # Create a bullet
             bullet_pos = (
                 self.rect.centerx + (self.dir * self.image.get_width() / 2),
@@ -50,7 +50,7 @@ class Weapon(pygame.sprite.Sprite):
             )
             bullet = Bullet(bullet_pos, self.dir, self.terrain)
             # Reset fire rate
-            self.fireRate = weapon.FIRE_RATE
+            self.cooldown = weapon.COOLDOWN
 
             return bullet
 
@@ -61,10 +61,12 @@ class Weapon(pygame.sprite.Sprite):
             pos (Tuple[int, int]): the new position of the weapon
             direction (int): the direction of the weapon
         """
+        # Update the position of the weapon
         self.rect.center = pos
         self.dir = direction
 
-        self.fireRate -= 1
+        # Update the cooldown
+        self.cooldown -= 1
 
     def draw(self, screen: pygame.Surface):
         """Draw the weapon
@@ -72,5 +74,6 @@ class Weapon(pygame.sprite.Sprite):
         Args:
             screen (pygame.Surface): the screen to draw the weapon on
         """
+        # Draw the weapon
         image = pygame.transform.flip(self.image, self.dir != 1, False)
         screen.blit(image, self.rect)
