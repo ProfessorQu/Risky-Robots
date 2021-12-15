@@ -82,7 +82,9 @@ class Player(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(0, 0)
         self.facing_right = facing_right
         self.grounded = False
-        self.jumps = 0
+
+        self.jump_time_counter = 0
+        self.is_jumping = False
         
         # Knockback direction
         self.knockback_dir = 0
@@ -135,14 +137,22 @@ class Player(pygame.sprite.Sprite):
 
         # Check if can jump
         jump_input = Direction.UP in inputs
-        jumps_left = self.jumps > 0
-        falling = self.velocity.y >= 0
 
         # Jump
-        jump = jump_input and jumps_left and falling
-        if jump:
+        if jump_input and self.grounded:
+            self.is_jumping = True
+            self.jump_time_counter = player.JUMP_TIME
             self.velocity.y = player.JUMP_HEIGHT * dt
-            self.jumps -= 1
+
+        if jump_input and self.is_jumping:
+            if self.jump_time_counter > 0:
+                self.velocity.y = player.JUMP_HEIGHT * dt
+                self.jump_time_counter -= dt
+            else:
+                self.is_jumping = False
+        
+        if not jump_input:
+            self.is_jumping = False
 
         # If no movement, decelerate
         if Direction.LEFT not in inputs and Direction.RIGHT not in inputs:
@@ -186,9 +196,6 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.x = tile.rect.right - self.rect.left
             if direction == Direction.RIGHT:
                 self.velocity.x = tile.rect.left - self.rect.right
-
-        # Set jumps to 0 if not grounded
-        self.jumps = player.MAX_JUMPS if self.grounded else 0
 
     def update_animation(self, dt: float):
         """Update the animation of the player
