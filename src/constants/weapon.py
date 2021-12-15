@@ -1,2 +1,3 @@
 FIRE_RATE = 100
+
 SCALE = 3

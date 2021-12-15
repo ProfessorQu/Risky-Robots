@@ -22,10 +22,22 @@ class HealthBar:
         self.update(player_pos)
 
     def update(self, player_pos: Tuple[int, int]):
+        """Update the health bar's position
+
+        Args:
+            player_pos (Tuple[int, int]): the player's position
+        """
         self.rect.x = player_pos[0] - healthbar.WIDTH // 2
         self.rect.y = player_pos[1] - healthbar.HEIGHT - healthbar.HOVER
     
     def draw(self, surface: pygame.Surface, health: int):
+        """Draw the health bar
+
+        Args:
+            surface (pygame.Surface): the surface to draw the health bar on
+            health (int): the player's health
+        """
+        # Set the color of the health bar
         percent = health / player.MAX_HEALTH
         if percent > 0.5:
             color = (0, 255, 0)
