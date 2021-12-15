@@ -34,24 +34,24 @@ class Player(pygame.sprite.Sprite):
         
         # Get idle frames
         for image in os.listdir(f"src/assets/player{player_id}/idle"):
-            image = pygame.image.load(f"src/assets/player{player_id}/idle/{image}")
+            image = pygame.image.load(f"src/assets/player{player_id}/idle/{image}").convert_alpha()
             image = pygame.transform.scale(image, (image.get_width() * player.SCALE, image.get_height() * player.SCALE))
 
             self.idle_frames.append(image)
         
         # Get walking frames
         for image in os.listdir(f"src/assets/player{player_id}/walking"):
-            image = pygame.image.load(f"src/assets/player{player_id}/walking/{image}")
+            image = pygame.image.load(f"src/assets/player{player_id}/walking/{image}").convert_alpha()
             image = pygame.transform.scale(image, (image.get_width() * player.SCALE, image.get_height() * player.SCALE))
 
             self.walking_frames.append(image)
 
         # Get falling frame
-        self.falling = pygame.image.load(f"src/assets/player{player_id}/falling.png")
+        self.falling = pygame.image.load(f"src/assets/player{player_id}/falling.png").convert_alpha()
         self.falling = pygame.transform.scale(self.falling, (self.falling.get_width() * player.SCALE, self.falling.get_height() * player.SCALE))
 
         # Get jumping frame
-        self.jumping = pygame.image.load(f"src/assets/player{player_id}/jumping.png")
+        self.jumping = pygame.image.load(f"src/assets/player{player_id}/jumping.png").convert_alpha()
         self.jumping = pygame.transform.scale(self.jumping, (self.jumping.get_width() * player.SCALE, self.jumping.get_height() * player.SCALE))
 
         # Animation variables
@@ -84,12 +84,16 @@ class Player(pygame.sprite.Sprite):
         self.max_jumps = player.MAX_JUMPS
         self.health = player.MAX_HEALTH
 
+        self.knockback_dir = 0
+
+        self.grounded = False
+
         # Create the healthbar
         self.healthbar = HealthBar(self.rect)
 
         self.frame = 0
 
-    def hit(self, damage: int):
+    def hit(self, damage: int, direction: int):
         """Hit the player for damage
 
         Args:
@@ -101,6 +105,8 @@ class Player(pygame.sprite.Sprite):
             print(f"Player {self.player_id} died!")
             print(f"Player {1 if self.player_id == 2 else 2} won!")
             pygame.event.post(pygame.event.Event(pygame.QUIT))
+        
+        self.knockback_dir = direction
 
     def handle_movement(self, dt: float, inputs: list):
         """Handle the movement of the player
@@ -130,19 +136,22 @@ class Player(pygame.sprite.Sprite):
             self.jumps -= 1
 
         if Direction.LEFT not in inputs and Direction.RIGHT not in inputs:
-            self.velocity.x = 0
+            self.velocity.x -= self.velocity.x * player.FRICTION * dt
+            if abs(self.velocity.x) < 1:
+                self.velocity.x = 0
+                
             self.state = "idle"
         
         if self.velocity.y >= 1:
             self.state = "falling"
-        elif self.velocity.y <= -1:
+        elif self.velocity.y < 0:
             self.state = "jumping"
 
     def handle_collisions(self):
         """Handle the collisions of the player and update the velocity"""
         collisions = self.terrain.collide(self)
 
-        on_ground = False
+        self.grounded = False
 
         for (tile, direction) in collisions:
             if direction == Direction.UP:
@@ -150,12 +159,14 @@ class Player(pygame.sprite.Sprite):
             if direction == Direction.DOWN:
                 self.velocity.y = tile.rect.top - self.rect.bottom
                 self.jumps = self.max_jumps
-                on_ground = True
+                self.grounded = True
 
             if direction == Direction.LEFT:
                 self.velocity.x = tile.rect.right - self.rect.left
             if direction == Direction.RIGHT:
                 self.velocity.x = tile.rect.left - self.rect.right
+
+        self.jumps = self.max_jumps if self.grounded else 0
 
     def update_animation(self, dt: float):
         """Update the animation of the player
@@ -195,6 +206,11 @@ class Player(pygame.sprite.Sprite):
         # Handle inputs
         self.handle_movement(dt, inputs)
         new_bullet = self.weapon.shoot() if Direction.DOWN in inputs else None
+
+        if self.knockback_dir != 0:
+            self.velocity.x = self.knockback_dir * player.HORIZONTAL_KNOCKBACK * dt
+            self.velocity.y = player.VERTICAL_KNOCKBACK * dt
+            self.knockback_dir = 0
 
         # Gravity
         gravity = player.GRAVITY * dt if self.velocity.y < 0 else player.GRAVITY_FALL * dt

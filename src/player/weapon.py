@@ -17,7 +17,7 @@ class Weapon(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # Get the image of the weapon
-        self.image = pygame.image.load("src/assets/weapon.png")
+        self.image = pygame.image.load("src/assets/weapon.png").convert_alpha()
         self.image = pygame.transform.scale(
             self.image,
             (

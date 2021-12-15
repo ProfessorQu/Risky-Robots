@@ -11,7 +11,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
 
-        self.image = pygame.image.load("src/assets/bullet.png")
+        self.image = pygame.image.load("src/assets/bullet.png").convert_alpha()
         self.image = pygame.transform.scale(
             self.image,
             (
@@ -36,7 +36,7 @@ class Bullet(pygame.sprite.Sprite):
 
         for player in players:
             if self.rect.colliderect(player.rect):
-                player.hit(bullet.DAMAGE)
+                player.hit(bullet.DAMAGE, self.dir)
 
                 return True
             
