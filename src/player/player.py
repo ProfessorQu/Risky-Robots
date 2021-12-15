@@ -122,21 +122,23 @@ class Player(pygame.sprite.Sprite):
             dt (float): the time since the last update
             inputs (list): the inputs of the player
         """
+        # Set variables
+        jump_input = Direction.UP in inputs
+        left_input = Direction.LEFT in inputs
+        right_input = Direction.RIGHT in inputs
+
         # Move left
-        if Direction.LEFT in inputs:
+        if left_input:
             self.velocity.x -= player.ACCELERATION * dt
             self.facing_right = False
 
             self.state = "walking"
         # Move right
-        elif Direction.RIGHT in inputs:
+        elif right_input:
             self.velocity.x += player.ACCELERATION * dt
             self.facing_right = True
 
             self.state = "walking"
-
-        # Check if can jump
-        jump_input = Direction.UP in inputs
 
         # Jump
         if jump_input and self.grounded:
@@ -155,7 +157,7 @@ class Player(pygame.sprite.Sprite):
             self.is_jumping = False
 
         # If no movement, decelerate
-        if Direction.LEFT not in inputs and Direction.RIGHT not in inputs:
+        if not left_input and not right_input:
             self.velocity.x -= self.velocity.x * player.FRICTION * dt
 
             if abs(self.velocity.x) < 1:
