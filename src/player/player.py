@@ -55,9 +55,16 @@ class Player(pygame.sprite.Sprite):
         self.jumping = pygame.image.load(f"src/assets/player{player_id}/jumping.png").convert_alpha()
         self.jumping = pygame.transform.scale(self.jumping, (self.jumping.get_width() * player.SCALE, self.jumping.get_height() * player.SCALE))
 
+        # Get hurt frame
+        self.hurt = pygame.image.load(f"src/assets/player{player_id}/hurt.png").convert_alpha()
+        self.hurt = pygame.transform.scale(self.hurt, (self.hurt.get_width() * player.SCALE, self.hurt.get_height() * player.SCALE))
+
+        self.hurt_time = 0
+
         # Animation variables
         self.animation_speed = random.uniform(player.ANIMATION_SPEED_MIN, player.ANIMATION_SPEED_MAX)
         self.update_time = 0
+        self.frame = 0
         
         # Set the player's state to idle and the frame to 0
         self.state = "idle"
@@ -87,7 +94,6 @@ class Player(pygame.sprite.Sprite):
         self.healthbar = HealthBar(self.rect)
         self.health = player.MAX_HEALTH
 
-        self.frame = 0
 
     def hit(self, damage: int, direction: int):
         """Hit the player for damage
@@ -102,6 +108,9 @@ class Player(pygame.sprite.Sprite):
             print(f"Player {1 if self.player_id == 2 else 2} won!")
             pygame.event.post(pygame.event.Event(pygame.QUIT))
         
+        # Set the hurt time
+        self.hurt_time = player.HURT_TIME
+
         self.knockback_dir = direction
 
     def handle_movement(self, dt: float, inputs: list):
@@ -205,6 +214,10 @@ class Player(pygame.sprite.Sprite):
             self.image = self.falling
         elif self.state == "jumping":
             self.image = self.jumping
+        
+        if self.hurt_time > 0:
+            self.image = self.hurt
+            self.hurt_time -= dt
 
     def update(self, dt: float) -> Bullet:
         """Update the player
