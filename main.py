@@ -23,6 +23,10 @@ terrain = Terrain(
 
     Solid(0, HEIGHT / 2, 20, HEIGHT), # Left wall
     Solid(WIDTH, HEIGHT / 2, 20, HEIGHT), # Right wall
+
+    Solid(WIDTH / 2, HEIGHT / 1.5, 200, 50),
+    Solid(0, HEIGHT / 2, 300, 50),
+    Solid(WIDTH, HEIGHT / 2, 300, 50),
 )
 
 players = []

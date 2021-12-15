@@ -36,7 +36,7 @@ class Bullet(pygame.sprite.Sprite):
 
         for player in players:
             if self.rect.colliderect(player.rect):
-                player.hit(10)
+                player.hit(bullet.DAMAGE)
 
                 return True
             
