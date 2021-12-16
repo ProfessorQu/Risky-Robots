@@ -54,6 +54,12 @@ players.append(
 prev_time = time.time()
 
 while running:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Tick
     CLOCK.tick(FPS)
 
     # Calculate delta time
@@ -63,11 +69,6 @@ while running:
 
     # Set background color
     SCREEN.fill((0, 128, 128))
-
-    # Handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
     # Draw terrain
     terrain.draw(SCREEN)
