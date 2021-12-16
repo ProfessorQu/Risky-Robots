@@ -1,7 +1,7 @@
 import pygame
 
 class Solid:
-    def __init__(self, x: int, y: int, width: int, height: int):
+    def __init__(self, rect: pygame.Rect, color: pygame.Color):
         """Initialize the solid object
 
         Args:
@@ -10,13 +10,8 @@ class Solid:
             width (int): the width of the solid
             height (int): the height of the solid
         """
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.rect = pygame.Rect(0, 0, width, height)
-        self.rect.center = (x, y)
-        self.color = (0, 0, 0)
+        self.rect = pygame.Rect(rect)
+        self.color = color
 
     def draw(self, surface: pygame.Surface):
         """Draw the solid object
