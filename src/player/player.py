@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
         # Movement
         self.velocity = pygame.math.Vector2(0, 0)
         self.facing_right = facing_right
-        self.grounded = False
+        self.ground_timer = 0
 
         self.jump_time_counter = 0
         self.is_jumping = False
@@ -95,6 +95,7 @@ class Player(pygame.sprite.Sprite):
         # Create the healthbar
         self.healthbar = HealthBar(self.rect)
         self.health = player.MAX_HEALTH
+
 
 
     def hit(self, damage: int, direction: int):
@@ -141,7 +142,7 @@ class Player(pygame.sprite.Sprite):
             self.state = "walking"
 
         # Jump
-        if jump_input and self.grounded:
+        if jump_input and self.ground_timer > 0:
             self.is_jumping = True
             self.jump_time_counter = player.JUMP_TIME
             self.velocity.y = player.JUMP_HEIGHT * dt
@@ -166,16 +167,16 @@ class Player(pygame.sprite.Sprite):
             self.state = "idle"
         
         # Limit the speed
-        if self.velocity.x > player.MAX_SPEED:
-            self.velocity.x = player.MAX_SPEED
-        elif self.velocity.x < -player.MAX_SPEED:
-            self.velocity.x = -player.MAX_SPEED
+        self.velocity.x = min(self.velocity.x, player.MAX_SPEED)
+        self.velocity.x = max(self.velocity.x, -player.MAX_SPEED)
 
         # Check if the player is on the ground
         if self.velocity.y >= 1:
             self.state = "falling"
         elif self.velocity.y < 0:
             self.state = "jumping"
+        
+        self.ground_timer -= dt
 
     def handle_collisions(self):
         """Handle the collisions of the player
@@ -184,7 +185,7 @@ class Player(pygame.sprite.Sprite):
         collisions = self.terrain.collide(self)
 
         # Check if grounded
-        self.grounded = False
+        grounded = False
 
         for (tile, direction) in collisions:
             if direction == Direction.UP:
@@ -192,12 +193,15 @@ class Player(pygame.sprite.Sprite):
             if direction == Direction.DOWN:
                 self.velocity.y = tile.rect.top - self.rect.bottom
 
-                self.grounded = True
+                grounded = True
 
             if direction == Direction.LEFT:
                 self.velocity.x = tile.rect.right - self.rect.left
             if direction == Direction.RIGHT:
                 self.velocity.x = tile.rect.left - self.rect.right
+        
+        if grounded:
+            self.ground_timer = player.HANG_TIME
 
     def update_animation(self, dt: float):
         """Update the animation of the player
@@ -262,7 +266,7 @@ class Player(pygame.sprite.Sprite):
 
         # Update the weapon
         direction = 1 if self.facing_right else -1
-        weapon_x = self.rect.centerx + ( direction * self.image.get_width() * 0.5)
+        weapon_x = self.rect.centerx + (direction * self.image.get_width() * 0.5)
 
         self.weapon.update(
             (weapon_x, self.rect.centery),
