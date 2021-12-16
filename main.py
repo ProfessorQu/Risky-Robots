@@ -3,6 +3,9 @@ from pygame.locals import *
 
 from src.constants.game import *
 from src.menu.button import Button
+from src.terrain import Terrain, Solid
+from src.player.healthbar import HealthBar
+import game
 
 import time
 
@@ -25,8 +28,10 @@ for i in range(3):
         rect.center = (WIDTH / 4 * 3, HEIGHT / 4)
     elif i == 2:
         rect.center = (WIDTH / 4, HEIGHT / 4 * 3)
+    elif i == 3:
+        rect.center = (WIDTH / 4 * 3, HEIGHT / 4 * 3)
     
-    buttons.append(Button(rect, (0, 0, 0), (100, 100, 100), (255, 0, 0), f"Map {i + 1}", (255, 255, 255)))
+    buttons.append(Button(i, rect, (0, 0, 0), (100, 100, 100), (255, 0, 0), f"Map {i + 1}", (255, 255, 255)))
     
 prev_time = time.time()
 
@@ -45,6 +50,14 @@ while running:
 
     for button in buttons:
         button.draw(SCREEN)
+
+        if button.pressed:
+            if button.id == 0:
+                game.game(game.MAP1_TERRAIN, game.MAP1_PLAYERS_POS)
+            elif button.id == 1:
+                game.game(game.MAP2_TERRAIN, game.MAP2_PLAYERS_POS)
+            elif button.id == 2:
+                game.game(game.MAP3_TERRAIN, game.MAP3_PLAYERS_POS)
 
     pygame.display.update()
 

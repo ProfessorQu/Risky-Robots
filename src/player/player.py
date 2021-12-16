@@ -1,7 +1,7 @@
 import pygame
 from src.player.bullet import Bullet
 
-from src.constants import player, Direction
+from src.constants import game, player, Direction
 from src.player.weapon import Weapon
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
@@ -105,11 +105,6 @@ class Player(pygame.sprite.Sprite):
             damage (int): the amount of damage to deal
         """
         self.health -= damage
-        # Check if the player is dead
-        if self.health <= 0:
-            print(f"Player {self.player_id} died!")
-            print(f"Player {1 if self.player_id == 2 else 2} won!")
-            pygame.event.post(pygame.event.Event(pygame.QUIT))
         
         # Set the hurt time
         self.hurt_time = player.HURT_TIME
@@ -192,7 +187,6 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.y = tile.rect.bottom - self.rect.top
             if direction == Direction.DOWN:
                 self.velocity.y = tile.rect.top - self.rect.bottom
-
                 grounded = True
 
             if direction == Direction.LEFT:
@@ -243,11 +237,12 @@ class Player(pygame.sprite.Sprite):
         """
         # Get inputs
         inputs = self.inputs.get_inputs()
-        
+
         # Handle inputs
         self.handle_movement(dt, inputs)
         new_bullet = self.weapon.shoot() if Direction.DOWN in inputs else None
 
+        # Apply knockback
         if self.knockback_dir != 0:
             self.velocity.x = self.knockback_dir * player.HORIZONTAL_KNOCKBACK * dt
             self.velocity.y = player.VERTICAL_KNOCKBACK * dt
@@ -276,6 +271,18 @@ class Player(pygame.sprite.Sprite):
         # Update the healthbar
         self.healthbar.update(self.rect.center)
         self.update_animation(dt)
+
+        # Do damage if out of bounds
+        if self.rect.x < 0 or self.rect.right > game.WIDTH:
+            self.health -= 1
+        if self.rect.y < 0 or self.rect.bottom > game.HEIGHT:
+            self.health  -= 1
+
+        # Check if the player is dead
+        if self.health <= 0:
+            print(f"Player {self.player_id} died!")
+            print(f"Player {1 if self.player_id == 2 else 2} won!")
+            pygame.event.post(pygame.event.Event(pygame.QUIT))
 
         return new_bullet
 
