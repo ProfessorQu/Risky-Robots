@@ -22,9 +22,9 @@ MAP1_TERRAIN = Terrain(
 MAP1_PLAYERS_POS = ((100, 540), (700, 540))
 
 MAP2_TERRAIN = Terrain(
-    Solid((0, 200, 250, 40), PLATFORM_COLOR), # Left platform
+    Solid((-150, 200, 400, 40), PLATFORM_COLOR), # Left platform
     Solid((275, 400, 250, 40), PLATFORM_COLOR), # Middle platform
-    Solid((550, 200, 250, 40), PLATFORM_COLOR), # Right platform
+    Solid((550, 200, 400, 40), PLATFORM_COLOR), # Right platform
 )
 MAP2_PLAYERS_POS = ((100, 35), (700, 35))
 
