@@ -2,12 +2,13 @@ import pygame
 
 from src.constants import weapon
 from src.player.bullet import Bullet
+from src.weapons.data import *
 
 from typing import Tuple
 
 
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, pos: Tuple[int, int], terrain):
+    def __init__(self, weapon: WeaponData, pos: Tuple[int, int], terrain):
         """Initialize the weapon
 
         Args:
@@ -16,22 +17,11 @@ class Weapon(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
 
-        # Get the image of the weapon
-        self.image = pygame.image.load("src/assets/weapon.png").convert_alpha()
-        self.image = pygame.transform.scale(
-            self.image,
-            (
-                self.image.get_width() * weapon.SCALE,
-                self.image.get_height() * weapon.SCALE
-            )
-        )
+        self.weapon = weapon
 
         # Set the position of the weapon
         self.rect = self.image.get_rect()
         self.rect.center = pos
-        self.dir = 1
-
-        self.cooldown = 0
 
         self.terrain = terrain
 

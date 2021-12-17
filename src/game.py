@@ -1,13 +1,13 @@
 import pygame
 from pygame.locals import *
 
-import time
-import sys
-
 from src.player.player import Player
 from src.player.inputs import Inputs
 from src.constants.game import *
 from src.maps import Map
+
+import time
+import sys
 
 def game(game_map: Map):
     pygame.init()

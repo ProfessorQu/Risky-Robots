@@ -3,8 +3,6 @@ from pygame.locals import *
 
 from src.constants.game import *
 from src.menu.button import Button
-from src.terrain import Terrain, Solid
-from src.player.healthbar import HealthBar
 import src.game as game
 from src.maps import MAP1, MAP2, MAP3
 
