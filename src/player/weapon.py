@@ -17,17 +17,20 @@ class Weapon(pygame.sprite.Sprite):
             terrain ([type]): the terrain of the map
         """
         pygame.sprite.Sprite.__init__(self)
-
         self.weapon = weapon
 
         # Set the position of the weapon
         self.rect = pygame.Rect((0, 0), self.weapon.size)
         self.rect.center = pos
         
+        # Set the image
         self.image = self.weapon.image
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
+        # Set the cooldown
         self.cooldown = 0
+
+        # Set the terrain
         self.terrain = terrain
 
     def shoot(self):

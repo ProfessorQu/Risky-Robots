@@ -30,6 +30,7 @@ class Terrain(list):
         """
         collisions = []
         for tile in self:
+            # Check for collisions with the current x and y
             if mode == "Current":
                 if tile.rect.colliderect(other.rect.x, other.rect.y, other.rect.width, other.rect.height):
                     if other.velocity.y < 0:
@@ -42,6 +43,7 @@ class Terrain(list):
                     if other.velocity.x > 0:
                         collisions.append((tile, Direction.RIGHT))
 
+            # Check for collisions with the predicted x and y
             elif mode == "Predict":
                 if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
                     if other.velocity.y < 0:
@@ -54,4 +56,5 @@ class Terrain(list):
                         collisions.append((tile, Direction.LEFT))
                     if other.velocity.x > 0:
                         collisions.append((tile, Direction.RIGHT))
+                        
         return collisions

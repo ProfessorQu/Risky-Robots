@@ -6,6 +6,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Map:
+    """A map of the game.
+    """
     terrain: Terrain
     players_pos: list
 

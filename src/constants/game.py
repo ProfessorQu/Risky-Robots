@@ -1,5 +1,3 @@
-from src.terrain import Terrain, Solid
-
 WIDTH = 800
 HEIGHT = 600
 

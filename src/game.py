@@ -10,25 +10,43 @@ import time
 import sys
 
 def game(game_map: Map):
+    # Initialize the game
     pygame.init()
     pygame.display.set_caption("Game")
 
+    # Create the screen and the clock
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
     CLOCK = pygame.time.Clock()
 
+    # Get information from the map
     terrain = game_map.terrain
     players_pos = game_map.players_pos
 
     running = True
 
-    players = []
-    bullets = []
+    # Create the players
+    players = [
+        Player(
+            1,
+            players_pos[0],
+            True,
+            Inputs(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s),
+            terrain,
+        ),
+        Player(
+            2,
+            players_pos[1],
+            False,
+            Inputs(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN),
+            terrain,
+        ),
+    ]
 
-    players.append(Player(1, players_pos[0], True, Inputs(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s), terrain))
-    players.append(Player(2, players_pos[1], False, Inputs(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN), terrain))
+    bullets = []
 
     prev_time = time.time()
 
+    # Main loop
     while running:
         # Handle events
         for event in pygame.event.get():
@@ -67,7 +85,8 @@ def game(game_map: Map):
                 bullets.remove(bullet)
 
             bullet.draw(SCREEN)
-        
+
+        # Update the screen
         pygame.display.update()
 
     pygame.quit()

@@ -46,8 +46,10 @@ class HealthBar:
         else:
             color = (255, 0, 0)
 
+        # Update the health bar
         rect = self.rect.copy()
         rect.width = rect.width * percent
 
+        # Draw the health bar
         pygame.draw.rect(surface, color, rect)
         pygame.draw.rect(surface, (0, 0, 0), self.rect, 2)

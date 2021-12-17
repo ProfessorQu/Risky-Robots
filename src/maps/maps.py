@@ -4,6 +4,7 @@ from src.terrain import Terrain, Solid
 from src.maps.map import Map
 from src.game import *
 
+# Map 1
 MAP1 = Map(
     Terrain(
         Solid((0, 200, 250, 40), PLATFORM_COLOR), # Left platform
@@ -19,6 +20,7 @@ MAP1 = Map(
     ((100, 540), (700, 540))
 )
 
+# Map 2
 MAP2 = Map(
     Terrain(
         Solid((-150, 200, 400, 40), PLATFORM_COLOR), # Left platform
@@ -28,6 +30,7 @@ MAP2 = Map(
     ((100, 35), (700, 35))
 )
 
+# Map 3
 MAP3 = Map(
     Terrain(
         Solid((0, 0, WIDTH, 20), WALL_COLOR), # Ceiling

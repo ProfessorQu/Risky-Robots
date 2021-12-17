@@ -23,11 +23,12 @@ class Inputs:
         Returns:
             List: a list of the pressed keys
         """
-        
         inputs = []
 
+        # Get the inputs
         keys = pygame.key.get_pressed()
 
+        # Add the inputs
         if keys[self.left]:
             inputs.append(Direction.LEFT)
         if keys[self.right]:

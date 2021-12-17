@@ -1,4 +1,0 @@
-SPEED = 500
-DAMAGE = 10
-
-SCALE = 2
