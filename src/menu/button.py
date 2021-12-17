@@ -10,7 +10,7 @@ class Button(pygame.sprite.Sprite):
         self.color = color
         self.highlight_color = highlight_color
 
-        self.image = pygame.image.load(f"src/assets/maps/map{self.id + 1}.png").convert_alpha()
+        self.image = pygame.image.load(f"src/assets/buttons/button{self.id + 1}.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
         self.text = text

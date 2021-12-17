@@ -6,6 +6,7 @@ from src.menu.button import Button
 from src.terrain import Terrain, Solid
 from src.player.healthbar import HealthBar
 import src.game as game
+from src.maps import MAP1, MAP2, MAP3
 
 import time
 
@@ -52,11 +53,11 @@ while running:
 
         if button.pressed:
             if button.id == 0:
-                game.game(MAP1_TERRAIN, MAP1_PLAYERS_POS)
+                game.game(MAP1)
             elif button.id == 1:
-                game.game(MAP2_TERRAIN, MAP2_PLAYERS_POS)
+                game.game(MAP2)
             elif button.id == 2:
-                game.game(MAP3_TERRAIN, MAP3_PLAYERS_POS)
+                game.game(MAP3)
 
     pygame.display.update()
 

@@ -7,13 +7,17 @@ import sys
 from src.player.player import Player
 from src.player.inputs import Inputs
 from src.constants.game import *
+from src.maps import Map
 
-def game(terrain, players_pos):
+def game(game_map: Map):
     pygame.init()
     pygame.display.set_caption("Game")
 
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
     CLOCK = pygame.time.Clock()
+
+    terrain = game_map.terrain
+    players_pos = game_map.players_pos
 
     running = True
 

@@ -272,12 +272,6 @@ class Player(pygame.sprite.Sprite):
         self.healthbar.update(self.rect.center)
         self.update_animation(dt)
 
-        # Do damage if out of bounds
-        if self.rect.right < player.OUT_OF_BOUNDS_DISTANCE or self.rect.left > game.WIDTH - player.OUT_OF_BOUNDS_DISTANCE:
-            self.health = 0
-        elif self.rect.top > game.HEIGHT - player.OUT_OF_BOUNDS_DISTANCE or self.rect.bottom < player.OUT_OF_BOUNDS_DISTANCE:
-            self.health = 0
-
         # Check if the player is dead
         if self.health <= 0:
             print(f"Player {self.player_id} died!")
