@@ -1,14 +1,15 @@
 import pygame
 
-from src.constants import weapon
 from src.player.bullet import Bullet
 from src.weapons.data import *
+from src.terrain import Terrain
 
 from typing import Tuple
 
 
+
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, weapon: WeaponData, pos: Tuple[int, int], terrain):
+    def __init__(self, weapon: WeaponData, pos: Tuple[int, int], terrain: Terrain):
         """Initialize the weapon
 
         Args:
@@ -20,9 +21,13 @@ class Weapon(pygame.sprite.Sprite):
         self.weapon = weapon
 
         # Set the position of the weapon
-        self.rect = self.image.get_rect()
+        self.rect = pygame.Rect((0, 0), self.weapon.size)
         self.rect.center = pos
+        
+        self.image = self.weapon.image
+        self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
+        self.cooldown = 0
         self.terrain = terrain
 
     def shoot(self):
@@ -38,9 +43,9 @@ class Weapon(pygame.sprite.Sprite):
                 self.rect.centerx + (self.dir * self.image.get_width() / 2),
                 self.rect.centery - self.image.get_height() / 4
             )
-            bullet = Bullet(bullet_pos, self.dir, self.terrain)
+            bullet = Bullet(self.weapon.bullet, bullet_pos, self.dir, self.terrain)
             # Reset fire rate
-            self.cooldown = weapon.COOLDOWN
+            self.cooldown = self.weapon.cooldown
 
             return bullet
 

@@ -2,15 +2,17 @@ import pygame
 
 from src.weapons.data import *
 
-WEAPON = WeaponData(
-    image = pygame.image.load("src/assets/weapons/revolver.png"),
-    rect = pygame.Rect(0, 0, 10, 10),
-    cooldown = 100
-)
 
 BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/bullet.png"),
-    rect = pygame.Rect(0, 0, 10, 10),
+    size = (25, 25),
     speed = 500,
     damage = 10
+)
+
+WEAPON = WeaponData(
+    image = pygame.image.load("src/assets/weapons/revolver.png"),
+    size = (50, 50),
+    cooldown = 100,
+    bullet = BULLET
 )

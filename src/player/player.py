@@ -1,11 +1,12 @@
 import pygame
 from src.player.bullet import Bullet
 
-from src.constants import game, player, Direction
+from src.constants import player, Direction
 from src.player.weapon import Weapon
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
-from src.terrain.terrain import Terrain
+from src.terrain import Terrain
+from src.weapons import revolver
 
 from typing import Tuple
 import os
@@ -90,13 +91,11 @@ class Player(pygame.sprite.Sprite):
         self.knockback_dir = 0
 
         # Create the weapon
-        self.weapon = Weapon(pos, terrain)
+        self.weapon = Weapon(revolver.WEAPON, pos, terrain)
 
         # Create the healthbar
         self.healthbar = HealthBar(self.rect)
         self.health = player.MAX_HEALTH
-
-
 
     def hit(self, damage: int, direction: int):
         """Hit the player for damage

@@ -1,13 +1,14 @@
 import pygame
 
 from src.constants import bullet, game
-from src.terrain.terrain import Terrain
+from src.terrain import Terrain
+from src.weapons.data import BulletData
 
 from typing import Tuple, List
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, pos: Tuple[int, int], direction: int, terrain: Terrain):
+    def __init__(self, bullet: BulletData, pos: Tuple[int, int], direction: int, terrain: Terrain):
         """Initialize the bullet
 
         Args:
@@ -17,22 +18,17 @@ class Bullet(pygame.sprite.Sprite):
         """        """"""
         pygame.sprite.Sprite.__init__(self)
 
+        self.bullet = bullet
 
-        self.image = pygame.image.load("src/assets/bullet.png").convert_alpha()
-        self.image = pygame.transform.scale(
-            self.image,
-            (
-                self.image.get_width() * bullet.SCALE,
-                self.image.get_height() * bullet.SCALE,
-            )
-        )
-
-        self.rect = self.image.get_rect()
+        self.rect = pygame.Rect((0, 0), self.bullet.size)
         self.rect.center = pos
+        
+        self.image = self.bullet.image
+        self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
         self.dir = direction
 
-        self.velocity = pygame.math.Vector2(direction * bullet.SPEED, 0)
+        self.velocity = pygame.math.Vector2(direction * self.bullet.speed, 0)
 
         self.terrain = terrain
 
@@ -50,7 +46,7 @@ class Bullet(pygame.sprite.Sprite):
 
         for player in players:
             if self.rect.colliderect(player.rect):
-                player.hit(bullet.DAMAGE, self.dir)
+                player.hit(self.bullet.damage, self.dir)
 
                 return True
             
