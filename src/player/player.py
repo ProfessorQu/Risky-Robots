@@ -16,7 +16,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(
         self, player_id: int,
         pos: Tuple[int, int], facing_right: bool,
-        inputs: Inputs, terrain: Terrain
+        inputs: Inputs,
+        bounds: pygame.Rect, terrain: Terrain
     ):
         """Initialize the player
 
@@ -75,17 +76,21 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = pos
 
-        # Inputs and terrain
-        self.inputs = inputs
+        # Terrain and bounds
         self.terrain = terrain
+        self.bounds = bounds
 
         # Movement
         self.velocity = pygame.math.Vector2(0, 0)
         self.facing_right = facing_right
         self.grounded_timer = 0
 
+        # Jumping
         self.jump_time_counter = 0
         self.is_jumping = False
+
+        # Inputs
+        self.inputs = inputs
         
         # Knockback direction
         self.knockback_dir = 0
@@ -130,6 +135,9 @@ class Player(pygame.sprite.Sprite):
 
         # Limit the velocity
         self.limit_speed()
+
+        # Bound the player
+        self.out_of_bounds()
 
         # Check if the player shot a bullet
         return self.check_shot(inputs)
@@ -207,6 +215,12 @@ class Player(pygame.sprite.Sprite):
             self.state = "falling"
         elif self.velocity.y < 0:
             self.state = "jumping"
+
+    def out_of_bounds(self):
+        if self.rect.x < self.bounds.left or self.rect.x > self.bounds.right:
+            self.health = 0
+        if self.rect.y < self.bounds.top or self.rect.y > self.bounds.bottom:
+            self.health = 0
 
     def check_shot(self, inputs: List) -> Bullet:
         """Check if the player shot a bullet

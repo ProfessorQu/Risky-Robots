@@ -21,6 +21,7 @@ def game(game_map: Map):
     # Get information from the map
     terrain = game_map.terrain
     players_pos = game_map.players_pos
+    bounds = game_map.bounds
 
     running = True
 
@@ -31,14 +32,16 @@ def game(game_map: Map):
             players_pos[0],
             True,
             Inputs(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s),
-            terrain,
+            bounds,
+            terrain
         ),
         Player(
             2,
             players_pos[1],
             False,
             Inputs(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN),
-            terrain,
+            bounds,
+            terrain
         ),
     ]
 

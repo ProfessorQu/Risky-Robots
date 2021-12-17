@@ -17,6 +17,7 @@ MAP1 = Map(
         Solid((0, 0, 20, 600), WALL_COLOR), # Left wall
         Solid((780, 0, 20, 600), WALL_COLOR), # Right wall
     ),
+    pygame.Rect(0, 0, WIDTH, HEIGHT),
     ((100, 540), (700, 540))
 )
 
@@ -27,6 +28,7 @@ MAP2 = Map(
         Solid((275, 400, 250, 40), PLATFORM_COLOR), # Middle platform
         Solid((550, 200, 400, 40), PLATFORM_COLOR), # Right platform
     ),
+    pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
     ((100, 35), (700, 35))
 )
 
@@ -42,5 +44,6 @@ MAP3 = Map(
         Solid((0, 400, 200, 200), WALL_COLOR), # Left column
         Solid((600, 400, 200, 200), WALL_COLOR), # Right column
     ),
+    pygame.Rect(0, 0, WIDTH, HEIGHT),
     ((100, 100), (100, 100))
 )

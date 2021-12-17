@@ -9,5 +9,6 @@ class Map:
     """A map of the game.
     """
     terrain: Terrain
+    bounds: pygame.Rect
     players_pos: list
 
