@@ -31,7 +31,7 @@ for i in range(3):
     elif i == 3:
         rect.center = (WIDTH / 4 * 3, HEIGHT / 4 * 3)
     
-    buttons.append(Button(i, rect, (0, 0, 0), (100, 100, 100), (255, 0, 0), f"Map {i + 1}", (255, 255, 255)))
+    buttons.append(Button(i, rect, (200, 200, 200), (100, 100, 100), f"Map {i + 1}", (255, 255, 255)))
     
 prev_time = time.time()
 
