@@ -37,7 +37,9 @@ class WeaponPickUp(pygame.sprite.Sprite):
         Args:
             player (Player): the player who picked up the weapon
         """
+        # Add the weapon to the player
         player.weapon.weapon_type = self.weapon_type
+        player.weapon.cooldown = self.weapon_type.cooldown
         self.kill()
 
     def collide(self):
@@ -59,8 +61,14 @@ class WeaponPickUp(pygame.sprite.Sprite):
                 self.velocity.x = tile.rect.left - self.rect.right
 
     def update(self, dt: float):
-        self.rect.y += self.velocity.y * dt
+        """Update the weapon's position
 
+        Args:
+            dt (float): the time since the last frame
+        """
+        # Apply gravity
+        self.rect.y += self.velocity.y * dt
+        # Check for collision with terrain
         self.collide()
 
     def draw(self, surface):

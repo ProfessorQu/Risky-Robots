@@ -48,6 +48,7 @@ def game(game_map: Map):
         ),
     ]
 
+    # Create list of bullets and pickups
     bullets = sprite.Group()
     weapon_pickups = sprite.Group()
 

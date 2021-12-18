@@ -68,6 +68,7 @@ class Weapon(pygame.sprite.Sprite):
         Args:
             screen (pygame.Surface): the screen to draw the weapon on
         """
+        # Set the image
         self.image = self.weapon_type.image
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 

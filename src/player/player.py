@@ -142,11 +142,10 @@ class Player(pygame.sprite.Sprite):
         self.out_of_bounds()
 
         # Check if the player picked up a weapon
-        changed_weapon = self.check_pickup(inputs, weapon_pickups)
+        self.check_pickup(inputs, weapon_pickups)
 
         # Check if the player shot a bullet
-        if not changed_weapon:
-            return self.check_shot(inputs)
+        return self.check_shot(inputs)
 
     def horizontal_move(self, dt: float, inputs: List[Direction]):
         """Move the player horizontally
