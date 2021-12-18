@@ -54,7 +54,7 @@ def game(game_map: Map):
 
     weapon_pickups.add(
         WeaponPickUp(
-            assaultrifle.WEAPON,
+            goldenrevolver.WEAPON,
             (100, 100),
             terrain
         )

@@ -7,7 +7,8 @@ BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/bullet.png"),
     size = (25, 25),
     speed = 500,
-    damage = 10
+    damage = 10,
+    knockback = pygame.math.Vector2(1_000, -400)
 )
 
 WEAPON = WeaponData(

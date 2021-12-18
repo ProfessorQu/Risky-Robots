@@ -95,7 +95,7 @@ class Player(pygame.sprite.Sprite):
         self.inputs = inputs
         
         # Knockback direction
-        self.knockback_dir = 0
+        self.knockback_force = pygame.math.Vector2(0, 0)
 
         # Create the weapon
         self.weapon = Weapon(revolver.WEAPON, pos, terrain)
@@ -104,7 +104,7 @@ class Player(pygame.sprite.Sprite):
         self.healthbar = HealthBar(self.rect)
         self.health = player.MAX_HEALTH
 
-    def hit(self, damage: int, direction: int):
+    def hit(self, damage: int, knockback_force: int):
         """Hit the player for damage
 
         Args:
@@ -115,7 +115,7 @@ class Player(pygame.sprite.Sprite):
         # Set the hurt time
         self.hurt_image_time = player.HURT_TIME
 
-        self.knockback_dir = direction
+        self.knockback_force = knockback_force
 
     def update_inputs(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the inputs of the player
@@ -256,10 +256,10 @@ class Player(pygame.sprite.Sprite):
             dt (float): the time since the last frame
         """
         # Apply knockback
-        if self.knockback_dir != 0:
-            self.velocity.x = self.knockback_dir * player.HORIZONTAL_KNOCKBACK * dt
-            self.velocity.y = player.VERTICAL_KNOCKBACK * dt
-            self.knockback_dir = 0
+        if self.knockback_force != pygame.math.Vector2(0, 0):
+            self.velocity.x = self.knockback_force.x * dt
+            self.velocity.y = self.knockback_force.y * dt
+            self.knockback_force = pygame.math.Vector2(0, 0)
     
     def gravity(self, dt: float):
         """Apply gravity to the player
