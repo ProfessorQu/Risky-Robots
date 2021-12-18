@@ -21,14 +21,11 @@ class Solid:
         for x in range(self.rect.x, self.rect.x + self.rect.width, scale):
             for y in range(self.rect.y, self.rect.y + self.rect.height, scale):
                 if x + scale > self.rect.x + self.rect.width or y + scale > self.rect.y + self.rect.height:
-                    rect = pygame.Rect(x, y, scale, scale)
-                    rect.right = self.rect.right
-                    rect.bottom = self.rect.bottom
-                    rect.left = self.rect.x
-                    rect.top = self.rect.y
-                    self.tiles.append(rect)
+                    rect = pygame.Rect(x, y, (self.rect.x + self.rect.width) - x, (self.rect.y + self.rect.height) - y)
                 else:
-                    self.tiles.append(pygame.Rect((x, y), (scale, scale)))
+                    rect = pygame.Rect((x, y), (scale, scale))
+                
+                self.tiles.append(rect)
 
     def draw(self, surface: pygame.Surface):
         """Draw the solid object

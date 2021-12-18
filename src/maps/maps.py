@@ -33,7 +33,7 @@ MAP3 = Map(
     Terrain(
         Solid((0, 580, WIDTH, 40)), # Floor
 
-        Solid((-100, 400, 300, 200)), # Left column
+        Solid((0, 400, 200, 200)), # Left column
         Solid((600, 400, 200, 200)), # Right column
     ),
     pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
