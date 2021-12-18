@@ -1,10 +1,13 @@
 import pygame
+from pygame import sprite
 from pygame.locals import *
 
 from src.player.player import Player
 from src.player.inputs import Inputs
 from src.constants.game import *
+from src.weapons.data import WeaponPickUp
 from src.maps import Map
+from src.weapons import revolver, goldenrevolver
 
 import time
 import sys
@@ -45,7 +48,16 @@ def game(game_map: Map):
         ),
     ]
 
-    bullets = []
+    bullets = sprite.Group()
+    weapon_pickups = sprite.Group()
+
+    weapon_pickups.add(
+        WeaponPickUp(
+            goldenrevolver.WEAPON,
+            (100, 100),
+            terrain
+        )
+    )
 
     prev_time = time.time()
 
@@ -73,10 +85,10 @@ def game(game_map: Map):
 
         # Update players
         for player in players:
-            new_bullet = player.update(dt)
+            new_bullet = player.update(weapon_pickups, dt)
 
             if new_bullet:
-                bullets.append(new_bullet)
+                bullets.add(new_bullet)
 
             player.draw(SCREEN)
 
@@ -88,6 +100,10 @@ def game(game_map: Map):
                 bullets.remove(bullet)
 
             bullet.draw(SCREEN)
+        
+        for weapon_pickup in weapon_pickups:
+            weapon_pickup.update(dt)
+            weapon_pickup.draw(SCREEN)
 
         # Update the screen
         pygame.display.update()

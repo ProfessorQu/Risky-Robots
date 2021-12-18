@@ -9,7 +9,7 @@ from typing import Tuple
 
 
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, weapon: WeaponData, pos: Tuple[int, int], terrain: Terrain):
+    def __init__(self, weapon_type: WeaponData, pos: Tuple[int, int], terrain: Terrain):
         """Initialize the weapon
 
         Args:
@@ -17,15 +17,11 @@ class Weapon(pygame.sprite.Sprite):
             terrain ([type]): the terrain of the map
         """
         pygame.sprite.Sprite.__init__(self)
-        self.weapon = weapon
+        self.weapon_type = weapon_type
 
         # Set the position of the weapon
-        self.rect = pygame.Rect((0, 0), self.weapon.size)
+        self.rect = pygame.Rect((0, 0), self.weapon_type.size)
         self.rect.center = pos
-        
-        # Set the image
-        self.image = self.weapon.image
-        self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
         # Set the cooldown
         self.cooldown = 0
@@ -46,9 +42,9 @@ class Weapon(pygame.sprite.Sprite):
                 self.rect.centerx + (self.dir * self.image.get_width() / 2),
                 self.rect.centery - self.image.get_height() / 4
             )
-            bullet = Bullet(self.weapon.bullet, bullet_pos, self.dir, self.terrain)
+            bullet = Bullet(self.weapon_type.bullet, bullet_pos, self.dir, self.terrain)
             # Reset fire rate
-            self.cooldown = self.weapon.cooldown
+            self.cooldown = self.weapon_type.cooldown
 
             return bullet
 
@@ -72,6 +68,9 @@ class Weapon(pygame.sprite.Sprite):
         Args:
             screen (pygame.Surface): the screen to draw the weapon on
         """
+        self.image = self.weapon_type.image
+        self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
+
         # Draw the weapon
         image = pygame.transform.flip(self.image, self.dir != 1, False)
         screen.blit(image, self.rect)

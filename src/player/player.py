@@ -3,6 +3,7 @@ from src.player.bullet import Bullet
 
 from src.constants import player, Direction
 from src.player.weapon import Weapon
+from src.weapons.data import WeaponPickUp
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
 from src.terrain import Terrain
@@ -11,6 +12,7 @@ from src.weapons import revolver
 from typing import List, Tuple
 import os
 import random
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(
@@ -115,7 +117,7 @@ class Player(pygame.sprite.Sprite):
 
         self.knockback_dir = direction
 
-    def update_inputs(self, dt: float) -> Bullet:
+    def update_inputs(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the inputs of the player
 
         Args:
@@ -139,10 +141,14 @@ class Player(pygame.sprite.Sprite):
         # Bound the player
         self.out_of_bounds()
 
-        # Check if the player shot a bullet
-        return self.check_shot(inputs)
+        # Check if the player picked up a weapon
+        changed_weapon = self.check_pickup(inputs, weapon_pickups)
 
-    def horizontal_move(self, dt: float, inputs: List):
+        # Check if the player shot a bullet
+        if not changed_weapon:
+            return self.check_shot(inputs)
+
+    def horizontal_move(self, dt: float, inputs: List[Direction]):
         """Move the player horizontally
 
         Args:
@@ -173,7 +179,7 @@ class Player(pygame.sprite.Sprite):
 
             self.state = "idle"
 
-    def jump(self, dt: float, inputs: List):
+    def jump(self, dt: float, inputs: List[Direction]):
         """Check if the player should jump
 
         Args:
@@ -217,12 +223,23 @@ class Player(pygame.sprite.Sprite):
             self.state = "jumping"
 
     def out_of_bounds(self):
+        """Check if the player is out of bounds
+        """
         if self.rect.x < self.bounds.left or self.rect.x > self.bounds.right:
             self.health = 0
         if self.rect.y < self.bounds.top or self.rect.y > self.bounds.bottom:
             self.health = 0
+    
+    def check_pickup(self, inputs: List[Direction], weapon_pickups: List[WeaponPickUp]):
+        if Direction.DOWN in inputs:
+            for pickup in weapon_pickups:
+                if self.rect.colliderect(pickup.rect):
+                    pickup.pickup(self)
+                    return True
+        
+        return False
 
-    def check_shot(self, inputs: List) -> Bullet:
+    def check_shot(self, inputs: List[Direction]) -> Bullet:
         """Check if the player shot a bullet
 
         Args:
@@ -334,7 +351,7 @@ class Player(pygame.sprite.Sprite):
             print(f"Player {1 if self.player_id == 2 else 2} won!")
             pygame.event.post(pygame.event.Event(pygame.QUIT))
 
-    def update(self, dt: float) -> Bullet:
+    def update(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the player
 
         Args:
@@ -343,7 +360,7 @@ class Player(pygame.sprite.Sprite):
         Returns:
             Bullet: the new bullet
         """
-        new_bullet = self.update_inputs(dt)
+        new_bullet = self.update_inputs(weapon_pickups, dt)
 
         # Apply knockback
         self.knockback(dt)

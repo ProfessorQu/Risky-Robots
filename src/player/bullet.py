@@ -8,7 +8,7 @@ from typing import Tuple, List
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, bullet: BulletData, pos: Tuple[int, int], direction: int, terrain: Terrain):
+    def __init__(self, bullet_type: BulletData, pos: Tuple[int, int], direction: int, terrain: Terrain):
         """Initialize the bullet
 
         Args:
@@ -17,19 +17,19 @@ class Bullet(pygame.sprite.Sprite):
             terrain (Terrain): the terrain of the map
         """        """"""
         pygame.sprite.Sprite.__init__(self)
-        self.bullet = bullet
+        self.bullet_type = bullet_type
 
         # Create the rect
-        self.rect = pygame.Rect((0, 0), self.bullet.size)
+        self.rect = pygame.Rect((0, 0), self.bullet_type.size)
         self.rect.center = pos
         
         # Set the image
-        self.image = self.bullet.image
+        self.image = self.bullet_type.image
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
         # Set the direction and velocity
         self.dir = direction
-        self.velocity = pygame.math.Vector2(direction * self.bullet.speed, 0)
+        self.velocity = pygame.math.Vector2(direction * self.bullet_type.speed, 0)
 
         # Set the terrain
         self.terrain = terrain
@@ -50,19 +50,18 @@ class Bullet(pygame.sprite.Sprite):
         # Check for hit with players
         for player in players:
             if self.rect.colliderect(player.rect):
-                player.hit(self.bullet.damage, self.dir)
+                player.hit(self.bullet_type.damage, self.dir)
 
-                return True
+                self.kill()
         
         # Check for hit with terrain or out of bounds
         if (self.rect.x < 0 or self.rect.x > game.WIDTH):
-            return True
+            self.kill()
         if self.rect.y < 0 or self.rect.y > game.HEIGHT:
-            return True
+            self.kill()
         if self.terrain.collide(self, "Current"):
-            return True
-        
-        return False
+            self.kill()
+
 
     def draw(self, surface: pygame.Surface):
         """Draw the bullet
