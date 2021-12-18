@@ -14,8 +14,6 @@ class Solid:
 
         self.rect = pygame.Rect(rect)
         scale = min(self.rect.width, self.rect.height)
-        
-        self.image = pygame.transform.scale(self.image, (scale, scale))
 
         self.tiles = []
         for x in range(self.rect.x, self.rect.x + self.rect.width, scale):
