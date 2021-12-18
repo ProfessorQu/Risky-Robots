@@ -7,7 +7,7 @@ from src.player.inputs import Inputs
 from src.constants.game import *
 from src.weapons.data import WeaponPickUp
 from src.maps import Map
-from src.weapons import revolver, goldenrevolver
+from src.weapons import revolver, sniperrifle, assaultrifle, goldenrevolver
 
 import time
 import sys
@@ -54,7 +54,7 @@ def game(game_map: Map):
 
     weapon_pickups.add(
         WeaponPickUp(
-            goldenrevolver.WEAPON,
+            assaultrifle.WEAPON,
             (100, 100),
             terrain
         )

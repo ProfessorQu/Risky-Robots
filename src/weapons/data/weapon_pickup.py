@@ -26,6 +26,7 @@ class WeaponPickUp(pygame.sprite.Sprite):
         self.image = self.weapon_type.image
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
+        # Create the velocity
         self.velocity = pygame.math.Vector2(0, GRAVITY)
 
         # Set the terrain
