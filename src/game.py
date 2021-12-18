@@ -5,12 +5,12 @@ from pygame.locals import *
 from src.player.player import Player
 from src.player.inputs import Inputs
 from src.constants.game import *
-from src.weapons.data import WeaponPickUp
+from src.weapons.data.weapon_pickups import WeaponPickUps
 from src.maps import Map
-from src.weapons import revolver, sniperrifle, assaultrifle, goldenrevolver
 
 import time
 import sys
+
 
 def game(game_map: Map):
     # Initialize the game
@@ -50,15 +50,7 @@ def game(game_map: Map):
 
     # Create list of bullets and pickups
     bullets = sprite.Group()
-    weapon_pickups = sprite.Group()
-
-    weapon_pickups.add(
-        WeaponPickUp(
-            goldenrevolver.WEAPON,
-            (100, 100),
-            terrain
-        )
-    )
+    weapon_pickups = WeaponPickUps(terrain)
 
     prev_time = time.time()
 
@@ -105,6 +97,8 @@ def game(game_map: Map):
         for weapon_pickup in weapon_pickups:
             weapon_pickup.update(dt)
             weapon_pickup.draw(SCREEN)
+        
+        weapon_pickups.update(dt)
 
         # Update the screen
         pygame.display.update()

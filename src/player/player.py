@@ -3,7 +3,7 @@ from src.player.bullet import Bullet
 
 from src.constants import player, Direction
 from src.player.weapon import Weapon
-from src.weapons.data import WeaponPickUp
+from src.weapons.data.weapon_pickup import WeaponPickUp
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
 from src.terrain import Terrain

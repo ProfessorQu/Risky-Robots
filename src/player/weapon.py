@@ -1,7 +1,7 @@
 import pygame
 
 from src.player.bullet import Bullet
-from src.weapons.data import *
+from src.weapons.data.weapon import WeaponData
 from src.terrain import Terrain
 
 from typing import Tuple

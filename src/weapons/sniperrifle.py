@@ -1,6 +1,7 @@
 import pygame
 
-from src.weapons.data import *
+from src.weapons.data.bullet import BulletData
+from src.weapons.data.weapon import WeaponData
 
 
 BULLET = BulletData(
@@ -14,6 +15,8 @@ BULLET = BulletData(
 WEAPON = WeaponData(
     image = pygame.image.load("src/assets/weapons/sniperrifle.png"),
     size = (50, 50),
-    cooldown = 200,
+    cooldown = 150,
     bullet = BULLET
 )
+
+WEAPON_SPAWN_RATE = 0.5

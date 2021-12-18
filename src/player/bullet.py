@@ -2,7 +2,7 @@ import pygame
 
 from src.constants import game
 from src.terrain import Terrain
-from src.weapons.data import BulletData
+from src.weapons.data.bullet import BulletData
 
 from typing import Tuple, List
 

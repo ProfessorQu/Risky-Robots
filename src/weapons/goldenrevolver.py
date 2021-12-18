@@ -1,6 +1,7 @@
 import pygame
 
-from src.weapons.data import *
+from src.weapons.data.bullet import BulletData
+from src.weapons.data.weapon import WeaponData
 
 
 BULLET = BulletData(
@@ -17,3 +18,5 @@ WEAPON = WeaponData(
     cooldown = 100,
     bullet = BULLET
 )
+
+WEAPON_SPAWN_RATE = 0.05

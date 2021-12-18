@@ -1,8 +1,9 @@
 import pygame
 
 from src.terrain import Terrain
-from src.weapons.data import WeaponData
+from src.weapons.data.weapon import WeaponData
 from src.constants.weapon_pickup import *
+from src.constants import game
 from src.constants import Direction
 
 from typing import Tuple
@@ -60,6 +61,11 @@ class WeaponPickUp(pygame.sprite.Sprite):
                 self.velocity.x = tile.rect.right - self.rect.left
             if direction == Direction.RIGHT:
                 self.velocity.x = tile.rect.left - self.rect.right
+        
+        if self.rect.x < 0 or self.rect.x > game.WIDTH:
+            self.kill()
+        if self.rect.y > game.HEIGHT:
+            self.kill()
 
     def update(self, dt: float):
         """Update the weapon's position

@@ -1,13 +1,14 @@
 import pygame
 
-from src.weapons.data import *
+from src.weapons.data.bullet import BulletData
+from src.weapons.data.weapon import WeaponData
 
 
 BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/bullet.png"),
     size = (25, 25),
     speed = 500,
-    damage = 1,
+    damage = 0.5,
     knockback = pygame.math.Vector2(200, -100)
 )
 
@@ -17,3 +18,5 @@ WEAPON = WeaponData(
     cooldown = 10,
     bullet = BULLET
 )
+
+WEAPON_SPAWN_RATE = 0.25
