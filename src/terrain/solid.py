@@ -30,8 +30,19 @@ class Solid:
     def convert(self):
         self.image = self.image.convert_alpha()
 
-    def handle_collision(self, player: pygame.Rect, direction: Direction):
-        return True
+    def collide(self, other: pygame.sprite.Sprite):
+        if abs(other.rect.bottom - self.rect.top) < 10:
+            other.rect.bottom = self.rect.top + 1
+            other.velocity.y = 0
+        elif abs(other.rect.top - self.rect.bottom) < 10:
+            other.rect.top = self.rect.bottom - 1
+            other.velocity.y = 0
+        elif abs(other.rect.right - self.rect.left) < 10:
+            other.rect.right = self.rect.left + 1
+            other.velocity.x = 0
+        elif abs(other.rect.left - self.rect.right) < 10:
+            other.rect.left = self.rect.right - 1
+            other.velocity.x = 0
 
     def draw(self, surface: pygame.Surface):
         """Draw the solid object

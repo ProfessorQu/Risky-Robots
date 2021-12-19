@@ -282,6 +282,8 @@ class Player(pygame.sprite.Sprite):
         """
         # Check if grounded
         grounded = False
+
+        self.terrain.collide(self)
         
         # Set the grounded timer if the player is grounded
         if grounded:

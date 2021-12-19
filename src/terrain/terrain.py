@@ -15,18 +15,11 @@ class Terrain(list):
         for tile in self:
             tile.convert()
 
-    def collide(self, other: pygame.sprite.Sprite) -> dict:
-        """Check if the sprite collides with any of the tiles in the terrain
-
-        Args:
-            other (pygame.sprite.Sprite): the sprite to check for collisions
-
-        Returns:
-            dict: a dictionary containing the collision tile and direction
-        """
+    def collide(self, other: pygame.sprite.Sprite):
         for tile in self:
             if tile.rect.colliderect(other.rect):
-                return tile
+                tile.collide(other)
+                
 
     def draw(self, surface: pygame.Surface):
         """Draw each tile in the terrain

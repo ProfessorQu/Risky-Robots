@@ -1,6 +1,6 @@
 # Gravity
-GRAVITY = 0
-GRAVITY_FALL = 0
+GRAVITY = 20
+GRAVITY_FALL = 25
 
 # Horizontal movement
 ACCELERATION = 60
