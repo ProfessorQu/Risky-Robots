@@ -116,6 +116,8 @@ class Player(pygame.sprite.Sprite):
         # Set the hurt time
         self.hurt_image_time = player.HURT_TIME
 
+        print(knockback_force)
+        
         # Copy knockback force
         self.knockback_force = pygame.math.Vector2(knockback_force)
 
