@@ -11,7 +11,7 @@ MAP1 = Map(
         Solid((260, 400, 280, 40)), # Middle platform
         Solid((550, 250, 200, 40)), # Right platform
 
-        Solid((50, 580, WIDTH - 100, 40)), # Floor
+        Solid((0, 580, WIDTH, 40)), # Floor
     ),
     pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
     ((100, 540), (700, 540))

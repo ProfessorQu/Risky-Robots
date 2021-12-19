@@ -115,8 +115,6 @@ class Player(pygame.sprite.Sprite):
         
         # Set the hurt time
         self.hurt_image_time = player.HURT_TIME
-
-        print(knockback_force)
         
         # Copy knockback force
         self.knockback_force = pygame.math.Vector2(knockback_force)
@@ -174,7 +172,7 @@ class Player(pygame.sprite.Sprite):
             self.state = "walking"
             
         # If no movement, decelerate
-        if not left_input and not right_input:
+        if not left_input and not right_input and self.knockback_force == pygame.math.Vector2(0, 0):
             self.velocity.x -= self.velocity.x * player.FRICTION * dt
 
             if abs(self.velocity.x) < 1:
@@ -361,7 +359,7 @@ class Player(pygame.sprite.Sprite):
             Bullet: the new bullet
         """
         new_bullet = self.update_inputs(weapon_pickups, dt)
-
+        
         # Apply knockback
         self.knockback(dt)
 

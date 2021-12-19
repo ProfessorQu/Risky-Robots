@@ -9,7 +9,7 @@ BULLET = BulletData(
     size = (25, 25),
     speed = 500,
     damage = 10,
-    knockback = pygame.math.Vector2(10, 0)
+    knockback = pygame.math.Vector2(500, -100)
 )
 
 WEAPON = WeaponData(
