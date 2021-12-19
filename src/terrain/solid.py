@@ -31,19 +31,7 @@ class Solid:
         self.image = self.image.convert_alpha()
 
     def handle_collision(self, player: pygame.Rect, direction: Direction):
-        if direction == Direction.LEFT:
-            player.velocity.x = self.rect.right - player.rect.left
-        if direction == Direction.RIGHT:
-            player.velocity.x = self.rect.left - player.rect.right
-
-        if direction == Direction.UP:
-            player.velocity.y = self.rect.bottom - player.rect.top
-        if direction == Direction.DOWN:
-            player.velocity.y = self.rect.top - player.rect.bottom
-
-            return True
-        
-        return False
+        return True
 
     def draw(self, surface: pygame.Surface):
         """Draw the solid object

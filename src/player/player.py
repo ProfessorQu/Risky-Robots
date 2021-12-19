@@ -280,16 +280,8 @@ class Player(pygame.sprite.Sprite):
     def collide(self):
         """Check if the player collided with the terrain
         """
-        # Get all collisions
-        collisions = self.terrain.collide(self)
-
         # Check if grounded
         grounded = False
-
-        # Go through all collisions
-        for (tile, direction) in collisions:
-            if not grounded:
-                grounded = tile.handle_collision(self, direction)
         
         # Set the grounded timer if the player is grounded
         if grounded:

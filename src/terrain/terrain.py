@@ -15,46 +15,18 @@ class Terrain(list):
         for tile in self:
             tile.convert()
 
-    def collide(self, other: pygame.sprite.Sprite, mode: str="Predict") -> dict:
+    def collide(self, other: pygame.sprite.Sprite) -> dict:
         """Check if the sprite collides with any of the tiles in the terrain
 
         Args:
             other (pygame.sprite.Sprite): the sprite to check for collisions
-            mode (str, optional): the mode to use for checking collisions. Defaults to "Predict".
 
         Returns:
-            dict: a dictionary containing the collision information
+            dict: a dictionary containing the collision tile and direction
         """
-        collisions = []
         for tile in self:
-            # Check for collisions with the current x and y
-            if mode == "Current":
-                if tile.rect.colliderect(other.rect.x, other.rect.y, other.rect.width, other.rect.height):
-                    if other.velocity.y < 0:
-                        collisions.append((tile, Direction.UP))
-                    if other.velocity.y > 1:
-                        collisions.append((tile, Direction.DOWN))
-
-                    if other.velocity.x < 0:
-                        collisions.append((tile, Direction.LEFT))
-                    if other.velocity.x > 0:
-                        collisions.append((tile, Direction.RIGHT))
-
-            # Check for collisions with the predicted x and y
-            elif mode == "Predict":
-                if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
-                    if other.velocity.y < 0:
-                        collisions.append((tile, Direction.UP))
-                    if other.velocity.y > 1:
-                        collisions.append((tile, Direction.DOWN))
-
-                if tile.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
-                    if other.velocity.x < 0:
-                        collisions.append((tile, Direction.LEFT))
-                    if other.velocity.x > 0:
-                        collisions.append((tile, Direction.RIGHT))
-                        
-        return collisions
+            if tile.rect.colliderect(other.rect):
+                return tile
 
     def draw(self, surface: pygame.Surface):
         """Draw each tile in the terrain

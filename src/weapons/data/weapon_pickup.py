@@ -47,21 +47,6 @@ class WeaponPickUp(pygame.sprite.Sprite):
     def collide(self):
         """Check if the player collided with the terrain
         """
-        # Get all collisions
-        collisions = self.terrain.collide(self, "Current")
-
-        # Go through all collisions
-        for (tile, direction) in collisions:
-            if direction == Direction.UP:
-                self.velocity.y = 0
-            if direction == Direction.DOWN:
-                self.velocity.y = 0
-
-            if direction == Direction.LEFT:
-                self.velocity.x = tile.rect.right - self.rect.left
-            if direction == Direction.RIGHT:
-                self.velocity.x = tile.rect.left - self.rect.right
-        
         if self.rect.x < 0 or self.rect.x > game.WIDTH:
             self.kill()
         if self.rect.y > game.HEIGHT:
