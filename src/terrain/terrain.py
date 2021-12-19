@@ -16,9 +16,17 @@ class Terrain(list):
             tile.convert()
 
     def collide(self, other: pygame.sprite.Sprite):
+        grounded = False
         for tile in self:
-            if tile.rect.colliderect(other.rect):
-                tile.collide(other)
+            if tile.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
+                tile.collide(other, horizontal=True)
+            if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
+                new = tile.collide(other, horizontal=False)
+
+                if new:
+                    grounded = True
+        
+        return grounded
                 
 
     def draw(self, surface: pygame.Surface):

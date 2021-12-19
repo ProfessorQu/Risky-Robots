@@ -35,9 +35,6 @@ MAP3 = Map(
 
         Solid((0, 400, 200, 200)), # Left column
         Solid((600, 400, 200, 200)), # Right column
-
-        Solid((0, 0, WIDTH, 200)), # Top platform
-        Solid((0, 200, 100, 200)), # Top left platform
     ),
     pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
     ((200, 350), (700, 350))
