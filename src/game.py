@@ -8,52 +8,15 @@ from src.constants.game import *
 from src.weapons.data.weapon_pickups import WeaponPickUps
 from src.weapons.data.weapon_pickup import WeaponPickUp
 from src.weapons import assaultrifle, revolver, goldenrevolver, sniperrifle
+from src.terrain import Terrain
 from src.maps import Map
 
 import time
 import sys
 
 
-def game(game_map: Map):
-    # Initialize the game
-    pygame.init()
-    pygame.display.set_caption("Game")
 
-    # Create the screen and the clock
-    SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
-    CLOCK = pygame.time.Clock()
-
-    # Get information from the map
-    terrain = game_map.terrain
-    players_pos = game_map.players_pos
-    bounds = game_map.bounds
-
-    running = True
-
-    # Create the players
-    players = [
-        Player(
-            1,
-            players_pos[0],
-            True,
-            Inputs(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s),
-            bounds,
-            terrain
-        ),
-        Player(
-            2,
-            players_pos[1],
-            False,
-            Inputs(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN),
-            bounds,
-            terrain
-        ),
-    ]
-
-    # Create list of bullets and pickups
-    bullets = sprite.Group()
-    weapon_pickups = WeaponPickUps(terrain)
-
+def add_pickups(weapon_pickups: WeaponPickUps, terrain: Terrain):
     weapon_pickups.add(
         WeaponPickUp(
             sniperrifle.WEAPON,
@@ -84,6 +47,49 @@ def game(game_map: Map):
             terrain
         )
     )
+
+def game(game_map: Map):
+    # Initialize the game
+    pygame.init()
+    pygame.display.set_caption("Game")
+
+    # Create the screen and the clock
+    SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+    CLOCK = pygame.time.Clock()
+
+    # Get information from the map
+    players_pos = game_map.players_pos
+    bounds = game_map.bounds
+    terrain = game_map.terrain
+    terrain.convert()
+
+    running = True
+
+    # Create the players
+    players = [
+        Player(
+            1,
+            players_pos[0],
+            True,
+            Inputs(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s),
+            bounds,
+            terrain
+        ),
+        Player(
+            2,
+            players_pos[1],
+            False,
+            Inputs(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN),
+            bounds,
+            terrain
+        ),
+    ]
+
+    # Create list of bullets and pickups
+    bullets = sprite.Group()
+    weapon_pickups = WeaponPickUps(terrain)
+
+    add_pickups(weapon_pickups, terrain)
 
     prev_time = time.time()
 

@@ -1,5 +1,4 @@
 import pygame
-from pygame.version import rev
 from src.player.bullet import Bullet
 
 from src.constants import player, Direction

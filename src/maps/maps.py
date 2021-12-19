@@ -11,7 +11,7 @@ MAP1 = Map(
         Solid((260, 400, 280, 40)), # Middle platform
         Solid((550, 250, 200, 40)), # Right platform
 
-        Solid((0, 580, WIDTH, 40)), # Floor
+        Solid((0, 560, WIDTH, 40)), # Floor
     ),
     pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
     ((100, 540), (700, 540))
@@ -31,11 +31,14 @@ MAP2 = Map(
 # Map 3
 MAP3 = Map(
     Terrain(
-        Solid((0, 580, WIDTH, 40)), # Floor
+        Solid((0, 560, WIDTH, 40)), # Floor
 
         Solid((0, 400, 200, 200)), # Left column
         Solid((600, 400, 200, 200)), # Right column
+
+        Solid((0, 0, WIDTH, 200)), # Top platform
+        Solid((0, 200, 100, 200)), # Top left platform
     ),
     pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
-    ((100, 350), (700, 350))
+    ((200, 350), (700, 350))
 )

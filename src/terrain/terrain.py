@@ -9,14 +9,11 @@ class Terrain(list):
         """
         list.__init__(self, args)
 
-    def draw(self, surface: pygame.Surface):
-        """Draw each tile in the terrain
-
-        Args:
-            surface (pygame.Surface): the surface to draw the terrain on
+    def convert(self):
+        """Convert each tile in the terrain to a surface
         """
         for tile in self:
-            tile.draw(surface)
+            tile.convert()
 
     def collide(self, other: pygame.sprite.Sprite, mode: str="Predict") -> dict:
         """Check if the sprite collides with any of the tiles in the terrain
@@ -58,3 +55,12 @@ class Terrain(list):
                         collisions.append((tile, Direction.RIGHT))
                         
         return collisions
+
+    def draw(self, surface: pygame.Surface):
+        """Draw each tile in the terrain
+
+        Args:
+            surface (pygame.Surface): the surface to draw the terrain on
+        """
+        for tile in self:
+            tile.draw(surface)

@@ -26,6 +26,9 @@ class Solid:
                     rect = pygame.Rect((x, y), (scale, scale))
                 
                 self.tiles.append(rect)
+    
+    def convert(self):
+        self.image = self.image.convert_alpha()
 
     def handle_collision(self, player: pygame.Rect, direction: Direction):
         if direction == Direction.LEFT:
@@ -35,7 +38,6 @@ class Solid:
 
         if direction == Direction.UP:
             player.velocity.y = self.rect.bottom - player.rect.top
-            player.knockback_force.y = 0
         if direction == Direction.DOWN:
             player.velocity.y = self.rect.top - player.rect.bottom
 
