@@ -5,6 +5,8 @@ GRAVITY_FALL = 25
 # Horizontal movement
 ACCELERATION = 60
 MAX_SPEED = 6
+
+KNOCKBACK_FRICTION = 1
 FRICTION = 50
 
 # Jumping

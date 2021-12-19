@@ -6,6 +6,8 @@ from src.player.player import Player
 from src.player.inputs import Inputs
 from src.constants.game import *
 from src.weapons.data.weapon_pickups import WeaponPickUps
+from src.weapons.data.weapon_pickup import WeaponPickUp
+from src.weapons import assaultrifle, revolver, goldenrevolver, sniperrifle
 from src.maps import Map
 
 import time
@@ -51,6 +53,37 @@ def game(game_map: Map):
     # Create list of bullets and pickups
     bullets = sprite.Group()
     weapon_pickups = WeaponPickUps(terrain)
+
+    weapon_pickups.add(
+        WeaponPickUp(
+            sniperrifle.WEAPON,
+            (100, 100),
+            terrain
+        )
+    )
+
+    weapon_pickups.add(
+        WeaponPickUp(
+            revolver.WEAPON,
+            (200, 100),
+            terrain
+        )
+    )
+    weapon_pickups.add(
+        WeaponPickUp(
+            goldenrevolver.WEAPON,
+            (300, 100),
+            terrain
+        )
+    )
+
+    weapon_pickups.add(
+        WeaponPickUp(
+            assaultrifle.WEAPON,
+            (400, 100),
+            terrain
+        )
+    )
 
     prev_time = time.time()
 

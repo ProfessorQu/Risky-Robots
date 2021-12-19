@@ -1,5 +1,7 @@
 import pygame
 
+from src.constants import Direction
+
 class Solid:
     def __init__(self, rect: pygame.Rect):
         """Initialize the solid object
@@ -24,6 +26,22 @@ class Solid:
                     rect = pygame.Rect((x, y), (scale, scale))
                 
                 self.tiles.append(rect)
+
+    def handle_collision(self, player: pygame.Rect, direction: Direction):
+        if direction == Direction.LEFT:
+            player.velocity.x = self.rect.right - player.rect.left
+        if direction == Direction.RIGHT:
+            player.velocity.x = self.rect.left - player.rect.right
+
+        if direction == Direction.UP:
+            player.velocity.y = self.rect.bottom - player.rect.top
+            player.knockback_force.y = 0
+        if direction == Direction.DOWN:
+            player.velocity.y = self.rect.top - player.rect.bottom
+
+            return True
+        
+        return False
 
     def draw(self, surface: pygame.Surface):
         """Draw the solid object

@@ -9,4 +9,4 @@ class BulletData:
     size: Tuple[int, int]
     speed: int
     damage: int
-    knockback: pygame.math.Vector2
+    knockback: int

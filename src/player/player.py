@@ -1,4 +1,5 @@
 import pygame
+from pygame.version import rev
 from src.player.bullet import Bullet
 
 from src.constants import player, Direction
@@ -93,7 +94,7 @@ class Player(pygame.sprite.Sprite):
 
         # Inputs
         self.inputs = inputs
-        
+
         # Knockback direction
         self.knockback_force = pygame.math.Vector2(0, 0)
 
@@ -104,7 +105,7 @@ class Player(pygame.sprite.Sprite):
         self.healthbar = HealthBar(self.rect)
         self.health = player.MAX_HEALTH
 
-    def hit(self, damage: int, knockback_force: int):
+    def hit(self, damage: int, knockback_force: pygame.math.Vector2):
         """Hit the player for damage
 
         Args:
@@ -115,7 +116,8 @@ class Player(pygame.sprite.Sprite):
         # Set the hurt time
         self.hurt_image_time = player.HURT_TIME
 
-        self.knockback_force = knockback_force
+        # Copy knockback force
+        self.knockback_force = pygame.math.Vector2(knockback_force)
 
     def update_inputs(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the inputs of the player
@@ -250,16 +252,21 @@ class Player(pygame.sprite.Sprite):
         return self.weapon.shoot() if Direction.DOWN in inputs else None
 
     def knockback(self, dt: float):
-        """Apply knockback to the player
+        """Apply knockback to the player over time
 
         Args:
             dt (float): the time since the last frame
         """
-        # Apply knockback
-        if self.knockback_force != pygame.math.Vector2(0, 0):
-            self.velocity.x = self.knockback_force.x * dt
-            self.velocity.y = self.knockback_force.y * dt
-            self.knockback_force = pygame.math.Vector2(0, 0)
+        # Apply the knockback force
+        self.velocity += self.knockback_force * dt
+
+        # Reset the knockback force
+        self.knockback_force -= self.knockback_force * player.KNOCKBACK_FRICTION * dt
+        
+        if abs(self.knockback_force.x) < 1:
+            self.knockback_force.x = 0
+        if abs(self.knockback_force.y) < 1:
+            self.knockback_force.y = 0
     
     def gravity(self, dt: float):
         """Apply gravity to the player
@@ -282,16 +289,8 @@ class Player(pygame.sprite.Sprite):
 
         # Go through all collisions
         for (tile, direction) in collisions:
-            if direction == Direction.UP:
-                self.velocity.y = tile.rect.bottom - self.rect.top
-            if direction == Direction.DOWN:
-                self.velocity.y = tile.rect.top - self.rect.bottom
-                grounded = True
-
-            if direction == Direction.LEFT:
-                self.velocity.x = tile.rect.right - self.rect.left
-            if direction == Direction.RIGHT:
-                self.velocity.x = tile.rect.left - self.rect.right
+            if not grounded:
+                grounded = tile.handle_collision(self, direction)
         
         # Set the grounded timer if the player is grounded
         if grounded:
