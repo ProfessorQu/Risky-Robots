@@ -1,6 +1,6 @@
 import pygame
 
-from src.constants import Direction
+from src.terrain.mode import CollideMode
 
 
 class Terrain(list):
@@ -15,18 +15,14 @@ class Terrain(list):
         for tile in self:
             tile.convert()
 
-    def collide(self, other: pygame.sprite.Sprite):
-        grounded = False
+    def collide(self, other: pygame.sprite.Sprite, mode: CollideMode):
+        collisions = []
         for tile in self:
-            if tile.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
-                tile.collide(other, horizontal=True)
-            if tile.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
-                new = tile.collide(other, horizontal=False)
+            collision, direction = tile.collide(other, mode)
+            if collision:
+                collisions.append((direction, tile))
 
-                if new:
-                    grounded = True
-        
-        return grounded
+        return collisions
                 
 
     def draw(self, surface: pygame.Surface):

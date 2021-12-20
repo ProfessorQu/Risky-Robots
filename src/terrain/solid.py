@@ -1,7 +1,8 @@
 import pygame
 
 from src.constants import Direction
-from src.constants import player
+from src.terrain import CollideMode
+
 
 class Solid:
     def __init__(self, rect: pygame.Rect):
@@ -31,17 +32,18 @@ class Solid:
     def convert(self):
         self.image = self.image.convert_alpha()
 
-    def collide(self, other: pygame.sprite.Sprite, horizontal: bool = True):
-        if horizontal:
-            other.velocity.x = 0
-        elif other.velocity.y < 0:
-            other.rect.top = self.rect.bottom
-            other.velocity.y = self.rect.bottom - other.rect.top
-        else:
-            other.rect.bottom = self.rect.top
-            other.velocity.y = self.rect.top - other.rect.bottom
-
-            return True
+    def collide(self, other: pygame.sprite.Sprite, mode: CollideMode):
+        if mode == CollideMode.Predict:
+            if self.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
+                return True, Direction.RIGHT if other.velocity.x > 0 else Direction.LEFT
+            if self.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
+                return True, Direction.DOWN if other.velocity.y > 0 else Direction.UP
+            
+            return False, Direction.NONE
+        elif mode == CollideMode.Current:
+            if self.rect.colliderect(other.rect):
+                return True, Direction.NONE
+            return False, Direction.NONE
 
     def draw(self, surface: pygame.Surface):
         """Draw the solid object

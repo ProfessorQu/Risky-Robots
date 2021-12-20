@@ -3,6 +3,7 @@ import pygame
 from src.constants import game
 from src.terrain import Terrain
 from src.weapons.data.bullet import BulletData
+from src.terrain import CollideMode
 
 from typing import Tuple, List
 
@@ -61,6 +62,8 @@ class Bullet(pygame.sprite.Sprite):
         if (self.rect.x < 0 or self.rect.x > game.WIDTH):
             self.kill()
         if self.rect.y < 0 or self.rect.y > game.HEIGHT:
+            self.kill()
+        if self.terrain.collide(self, CollideMode.Current):
             self.kill()
 
 

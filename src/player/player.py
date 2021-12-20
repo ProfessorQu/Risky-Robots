@@ -4,6 +4,7 @@ from src.player.bullet import Bullet
 from src.constants import player, Direction
 from src.player.weapon import Weapon
 from src.weapons.data.weapon_pickup import WeaponPickUp
+from src.terrain import CollideMode
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
 from src.terrain import Terrain
@@ -12,6 +13,7 @@ from src.weapons import revolver
 from typing import List, Tuple
 import os
 import random
+
 
 
 class Player(pygame.sprite.Sprite):
@@ -283,8 +285,20 @@ class Player(pygame.sprite.Sprite):
         # Check if grounded
         grounded = False
 
-        grounded = self.terrain.collide(self)
-        
+        collisions = self.terrain.collide(self, CollideMode.Predict)
+
+        for (direction, tile) in collisions:
+            if direction in [Direction.RIGHT, Direction.LEFT]:
+                self.velocity.x = 0
+            elif direction == Direction.UP:
+                self.rect.top = tile.rect.bottom
+                self.velocity.y = tile.rect.bottom - self.rect.top
+            else:
+                self.rect.bottom = tile.rect.top
+                self.velocity.y = tile.rect.top - self.rect.bottom
+
+                grounded = True
+
         # Set the grounded timer if the player is grounded
         if grounded:
             self.grounded_timer = player.HANG_TIME

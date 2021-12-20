@@ -4,9 +4,10 @@ from src.terrain import Terrain
 from src.weapons.data.weapon import WeaponData
 from src.constants.weapon_pickup import *
 from src.constants import game
-from src.constants import Direction
+from src.terrain import CollideMode
 
 from typing import Tuple
+
 
 class WeaponPickUp(pygame.sprite.Sprite):
     def __init__(self, weapon_type: WeaponData, pos: Tuple[int, int], terrain: Terrain):
@@ -45,8 +46,9 @@ class WeaponPickUp(pygame.sprite.Sprite):
         self.kill()
 
     def collide(self):
-        """Check if the player collided with the terrain
-        """
+        if self.terrain.collide(self, CollideMode.Current):
+            self.velocity.y = 0
+
         if self.rect.x < 0 or self.rect.x > game.WIDTH:
             self.kill()
         if self.rect.y > game.HEIGHT:
