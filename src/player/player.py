@@ -118,7 +118,7 @@ class Player(pygame.sprite.Sprite):
         self.hurt_image_time = player.HURT_TIME
         
         # Copy knockback force
-        self.knockback_force = pygame.math.Vector2(knockback_force)
+        self.knockback_force = knockback_force
 
     def update_inputs(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the inputs of the player
@@ -378,7 +378,7 @@ class Player(pygame.sprite.Sprite):
         Returns:
             Bullet: the new bullet
         """
-        new_bullet = self.update_inputs(weapon_pickups, dt)
+        new_bullets = self.update_inputs(weapon_pickups, dt)
         
         # Apply knockback
         self.knockback(dt)
@@ -402,7 +402,7 @@ class Player(pygame.sprite.Sprite):
         # Update weapon and healthbar
         self.update_other()
 
-        return new_bullet
+        return new_bullets
 
     def draw(self, screen: pygame.Surface):
         """Draw the player, weapon and healthbar

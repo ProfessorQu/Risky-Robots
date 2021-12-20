@@ -2,14 +2,14 @@ import pygame
 
 from src.constants import game
 from src.terrain import Terrain
-from src.weapons.data.bullet import BulletData
+# from src.weapons.data.bullet import BulletData
 from src.terrain import CollideMode
 
 from typing import Tuple, List
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, bullet_type: BulletData, pos: Tuple[int, int], direction: int, terrain: Terrain):
+    def __init__(self, bullet_type, pos: Tuple[int, int], direction: pygame.math.Vector2, terrain: Terrain):
         """Initialize the bullet
 
         Args:
@@ -29,8 +29,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
         # Set the direction and velocity
-        self.dir = direction
-        self.velocity = pygame.math.Vector2(direction * self.bullet_type.speed, 0)
+        self.velocity = pygame.math.Vector2(direction) * self.bullet_type.speed
 
         # Set the terrain
         self.terrain = terrain
@@ -47,13 +46,12 @@ class Bullet(pygame.sprite.Sprite):
         """
         # Update the position
         self.rect.x += self.velocity.x * dt
+        self.rect.y += self.velocity.y * dt
 
         # Check for hit with players
         for player in players:
             if self.rect.colliderect(player.rect):
-                horizontal_knockback = self.dir * self.bullet_type.knockback.x
-                vertical_knockback = self.bullet_type.knockback.y
-                knockback = pygame.math.Vector2(horizontal_knockback, vertical_knockback)
+                knockback = pygame.Vector2(self.bullet_type.knockback)
                 player.hit(self.bullet_type.damage, knockback)
 
                 self.kill()
@@ -74,5 +72,6 @@ class Bullet(pygame.sprite.Sprite):
             surface (pygame.Surface): the surface to draw the bullet on
         """
         # Draw the bullet
-        image = pygame.transform.flip(self.image, self.dir != 1, False)
+        angle = self.velocity.angle_to(pygame.math.Vector2(1, 0))
+        image = pygame.transform.rotate(self.image, angle)
         surface.blit(image, self.rect)

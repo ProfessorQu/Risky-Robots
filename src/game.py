@@ -7,7 +7,7 @@ from src.player.inputs import Inputs
 from src.constants.game import *
 from src.weapons.data.weapon_pickups import WeaponPickUps
 from src.weapons.data.weapon_pickup import WeaponPickUp
-from src.weapons import assaultrifle, revolver, goldenrevolver, sniperrifle
+from src.weapons import assaultrifle, revolver, goldenrevolver, sniperrifle, shotgun
 from src.terrain import Terrain
 from src.maps import Map
 
@@ -44,6 +44,14 @@ def add_pickups(weapon_pickups: WeaponPickUps, terrain: Terrain):
         WeaponPickUp(
             assaultrifle.WEAPON,
             (400, 100),
+            terrain
+        )
+    )
+
+    weapon_pickups.add(
+        WeaponPickUp(
+            shotgun.WEAPON,
+            (500, 100),
             terrain
         )
     )
@@ -117,10 +125,10 @@ def game(game_map: Map):
 
         # Update players
         for player in players:
-            new_bullet = player.update(weapon_pickups, dt)
+            new_bullets = player.update(weapon_pickups, dt)
 
-            if new_bullet:
-                bullets.add(new_bullet)
+            if new_bullets:
+                bullets.add(new_bullets)
 
             player.draw(SCREEN)
 

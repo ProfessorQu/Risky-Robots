@@ -1,4 +1,4 @@
-from src.weapons import revolver, sniperrifle, assaultrifle, goldenrevolver
+from src.weapons import revolver, assaultrifle, goldenrevolver, sniperrifle
 
 
 GRAVITY = 100

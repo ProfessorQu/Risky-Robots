@@ -1,6 +1,5 @@
 import pygame
 
-from src.player.bullet import Bullet
 from src.weapons.data.weapon import WeaponData
 from src.terrain import Terrain
 
@@ -37,16 +36,7 @@ class Weapon(pygame.sprite.Sprite):
         """
         # Check if the player can shoot
         if self.cooldown <= 0:
-            # Create a bullet
-            bullet_pos = (
-                self.rect.centerx + (self.dir * self.image.get_width() / 2),
-                self.rect.centery - self.image.get_height() / 4
-            )
-            bullet = Bullet(self.weapon_type.bullet, bullet_pos, self.dir, self.terrain)
-            # Reset fire rate
-            self.cooldown = self.weapon_type.cooldown
-
-            return bullet
+            return self.weapon_type.shoot(self)
 
     def update(self, pos: Tuple[int, int], direction: int):
         """Update the weapon's position
