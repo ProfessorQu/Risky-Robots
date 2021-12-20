@@ -11,7 +11,7 @@ BULLET = BulletData(
     size = (25, 25),
     speed = 500,
     damage = 0.5,
-    knockback = 100,
+    knockback = pygame.Vector2(100, 0),
     hit = damage
 )
 

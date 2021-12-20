@@ -10,8 +10,8 @@ BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/rocket.png"),
     size = (25, 25),
     speed = 500,
-    damage = 0,
-    knockback = 500,
+    damage = 2000,
+    knockback = 5,
     hit = explode
 )
 

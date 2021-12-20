@@ -15,10 +15,13 @@ def damage(bullet: Bullet, obj: pygame.sprite.Sprite, players: List, player_hit:
     bullet.kill()
 
 def explode(bullet: Bullet, obj: pygame.sprite.Sprite, players: List, player_hit: bool):
+    collide_pos = pygame.Vector2(bullet.rect.center)
     for player in players:
-        knockback = pygame.Vector2(player.rect.center) - pygame.Vector2(bullet.rect.center)
-        knockback.normalize_ip()
-        knockback *= bullet.bullet_type.knockback
-        player.hit(bullet.bullet_type.damage, knockback)
+        player_pos = pygame.Vector2(player.rect.center)
+        distance = collide_pos.distance_to(player_pos)
+        if distance < 300:
+            knockback = player_pos - collide_pos
+            knockback *= bullet.bullet_type.knockback
+            player.hit((1 / distance) * bullet.bullet_type.damage, knockback)
     
     bullet.kill()
