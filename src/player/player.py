@@ -7,7 +7,7 @@ from src.weapons.data.weapon_pickup import WeaponPickUp
 from src.terrain import CollideMode
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
-from src.terrain import Terrain
+from src.terrain import Terrain, Solid, Spring
 from src.weapons import revolver
 
 from typing import List, Tuple
@@ -288,16 +288,29 @@ class Player(pygame.sprite.Sprite):
         collisions = self.terrain.collide(self, CollideMode.Predict)
 
         for (direction, tile) in collisions:
-            if direction in [Direction.RIGHT, Direction.LEFT]:
-                self.velocity.x = 0
-            elif direction == Direction.UP:
-                self.rect.top = tile.rect.bottom
-                self.velocity.y = tile.rect.bottom - self.rect.top
-            else:
-                self.rect.bottom = tile.rect.top
-                self.velocity.y = tile.rect.top - self.rect.bottom
+            if type(tile) == Solid:
+                if direction in [Direction.RIGHT, Direction.LEFT]:
+                    self.velocity.x = 0
+                elif direction == Direction.UP:
+                    self.rect.top = tile.rect.bottom
+                    self.velocity.y = tile.rect.bottom - self.rect.top
+                elif direction == Direction.DOWN:
+                    self.rect.bottom = tile.rect.top
+                    self.velocity.y = tile.rect.top - self.rect.bottom
 
-                grounded = True
+                    grounded = True
+            
+            if type(tile) == Spring:
+                if direction == Direction.RIGHT and tile.direction == Direction.LEFT:
+                    self.velocity.x *= -player.SPRING_BOUNCINESS
+                elif direction == Direction.LEFT and tile.direction == Direction.RIGHT:
+                    self.velocity.x *= -player.SPRING_BOUNCINESS
+                elif direction == Direction.UP and tile.direction == Direction.DOWN:
+                    self.velocity.y *= -player.SPRING_BOUNCINESS
+                elif direction == Direction.DOWN and tile.direction == Direction.UP:
+                    self.velocity.y *= -player.SPRING_BOUNCINESS
+
+                    grounded = True
 
         # Set the grounded timer if the player is grounded
         if grounded:
