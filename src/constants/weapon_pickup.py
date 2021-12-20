@@ -1,4 +1,4 @@
-from src.weapons import revolver, assaultrifle, goldenrevolver, sniperrifle
+from src.weapons import revolver, assaultrifle, goldenrevolver, sniperrifle, shotgun
 
 
 GRAVITY = 100
@@ -9,5 +9,6 @@ WEAPON_PICKUPS = (
     (revolver.WEAPON, revolver.WEAPON_SPAWN_RATE),
     (sniperrifle.WEAPON, sniperrifle.WEAPON_SPAWN_RATE),
     (assaultrifle.WEAPON, assaultrifle.WEAPON_SPAWN_RATE),
-    (goldenrevolver.WEAPON, goldenrevolver.WEAPON_SPAWN_RATE)
+    (goldenrevolver.WEAPON, goldenrevolver.WEAPON_SPAWN_RATE),
+    (shotgun.WEAPON, shotgun.WEAPON_SPAWN_RATE)
 )

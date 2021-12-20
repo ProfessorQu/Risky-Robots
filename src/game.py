@@ -97,7 +97,7 @@ def game(game_map: Map):
     bullets = sprite.Group()
     weapon_pickups = WeaponPickUps(terrain)
 
-    add_pickups(weapon_pickups, terrain)
+    # add_pickups(weapon_pickups, terrain)
 
     prev_time = time.time()
 

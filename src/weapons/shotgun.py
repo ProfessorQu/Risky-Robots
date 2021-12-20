@@ -36,4 +36,4 @@ WEAPON = WeaponData(
     shoot = shoot
 )
 
-WEAPON_SPAWN_RATE = 0
+WEAPON_SPAWN_RATE = 0.5
