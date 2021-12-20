@@ -1,6 +1,6 @@
 import pygame
 
-from src.terrain import Terrain, Solid
+from src.terrain import Terrain, Solid, Spring
 from src.maps.map import Map
 from src.game import *
 
@@ -21,8 +21,10 @@ MAP1 = Map(
 MAP2 = Map(
     Terrain(
         Solid((-150, 200, 400, 40)), # Left platform
-        Solid((260, 400, 280, 40)), # Middle platform
         Solid((550, 200, 400, 40)), # Right platform
+
+        Spring((260, 400, 280, 175)), # Spring in the middle
+        Solid((260, 575, 280, 40))
     ),
     pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
     ((100, 150), (700, 150))
