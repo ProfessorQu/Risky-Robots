@@ -1,7 +1,7 @@
 import pygame
 
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Callable, Tuple
 
 @dataclass
 class BulletData:
@@ -10,3 +10,4 @@ class BulletData:
     speed: int
     damage: int
     knockback: int
+    hit: Callable

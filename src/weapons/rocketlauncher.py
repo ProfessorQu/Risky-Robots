@@ -2,21 +2,21 @@ import pygame
 
 from src.weapons.data.bullet import BulletData
 from src.weapons.data.weapon import WeaponData
-from src.weapons.functions import one_bullet, damage
+from src.weapons.functions import one_bullet, explode
 
 
 
 BULLET = BulletData(
-    image = pygame.image.load("src/assets/bullets/bullet.png"),
+    image = pygame.image.load("src/assets/bullets/rocket.png"),
     size = (25, 25),
     speed = 500,
-    damage = 10,
-    knockback = pygame.Vector2(500, -100),
-    hit = damage
+    damage = 0,
+    knockback = 500,
+    hit = explode
 )
 
 WEAPON = WeaponData(
-    image = pygame.image.load("src/assets/weapons/revolver.png"),
+    image = pygame.image.load("src/assets/weapons/rocketlauncher.png"),
     size = (50, 50),
     cooldown = 100,
     bullet = BULLET,

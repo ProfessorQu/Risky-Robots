@@ -2,7 +2,7 @@ import pygame
 
 from src.weapons.data.bullet import BulletData
 from src.weapons.data.weapon import WeaponData
-from src.weapons.shoot import one_bullet
+from src.weapons.functions import one_bullet, damage
 
 
 
@@ -11,7 +11,8 @@ BULLET = BulletData(
     size = (25, 25),
     speed = 500,
     damage = 0.5,
-    knockback = 100
+    knockback = 100,
+    hit = damage
 )
 
 WEAPON = WeaponData(

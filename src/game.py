@@ -7,7 +7,7 @@ from src.player.inputs import Inputs
 from src.constants.game import *
 from src.weapons.data.weapon_pickups import WeaponPickUps
 from src.weapons.data.weapon_pickup import WeaponPickUp
-from src.weapons import assaultrifle, revolver, goldenrevolver, sniperrifle, shotgun
+from src.weapons import assaultrifle, revolver, goldenrevolver, sniperrifle, shotgun, rocketlauncher
 from src.terrain import Terrain
 from src.maps import Map
 
@@ -56,6 +56,14 @@ def add_pickups(weapon_pickups: WeaponPickUps, terrain: Terrain):
         )
     )
 
+    weapon_pickups.add(
+        WeaponPickUp(
+            rocketlauncher.WEAPON,
+            (600, 100),
+            terrain
+        )
+    )
+
 def game(game_map: Map):
     # Initialize the game
     pygame.init()
@@ -97,7 +105,7 @@ def game(game_map: Map):
     bullets = sprite.Group()
     weapon_pickups = WeaponPickUps(terrain)
 
-    # add_pickups(weapon_pickups, terrain)
+    add_pickups(weapon_pickups, terrain)
 
     prev_time = time.time()
 

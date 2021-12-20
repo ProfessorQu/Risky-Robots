@@ -1,5 +1,4 @@
 import pygame
-from src.player.bullet import Bullet
 
 from src.constants import player, Direction
 from src.player.weapon import Weapon
@@ -8,6 +7,7 @@ from src.terrain import CollideMode
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
 from src.terrain import Terrain, Solid, Spring
+from src.player.bullet import Bullet
 from src.weapons import revolver
 
 from typing import List, Tuple

@@ -51,19 +51,15 @@ class Bullet(pygame.sprite.Sprite):
         # Check for hit with players
         for player in players:
             if self.rect.colliderect(player.rect):
-                horizontal_knockback = self.bullet_type.knockback.x if self.velocity.x > 0 else -self.bullet_type.knockback.x
-                knockback = pygame.Vector2(horizontal_knockback, self.bullet_type.knockback.y)
-                player.hit(self.bullet_type.damage, knockback)
-
-                self.kill()
+                self.bullet_type.hit(self, player, players, True)
         
         # Check for hit with terrain or out of bounds
         if (self.rect.x < 0 or self.rect.x > game.WIDTH):
-            self.kill()
+            self.bullet_type.hit(self, None, players, False)
         if self.rect.y < 0 or self.rect.y > game.HEIGHT:
-            self.kill()
+            self.bullet_type.hit(self, None, players, False)
         if self.terrain.collide(self, CollideMode.Current):
-            self.kill()
+            self.bullet_type.hit(self, None, players, False)
 
 
     def draw(self, surface: pygame.Surface):
