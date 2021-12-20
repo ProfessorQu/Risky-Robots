@@ -51,7 +51,8 @@ class Bullet(pygame.sprite.Sprite):
         # Check for hit with players
         for player in players:
             if self.rect.colliderect(player.rect):
-                knockback = pygame.Vector2(self.bullet_type.knockback)
+                horizontal_knockback = self.bullet_type.knockback.x if self.velocity.x > 0 else -self.bullet_type.knockback.x
+                knockback = pygame.Vector2(horizontal_knockback, self.bullet_type.knockback.y)
                 player.hit(self.bullet_type.damage, knockback)
 
                 self.kill()
