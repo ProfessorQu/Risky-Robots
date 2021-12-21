@@ -12,4 +12,5 @@ class BulletData:
     speed: int
     damage: int
     knockback: int
+    lifetime: int
     hit: Callable

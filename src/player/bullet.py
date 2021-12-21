@@ -1,6 +1,5 @@
 import pygame
 
-from src.constants import game
 from src.terrain import Terrain
 # from src.weapons.data.bullet import BulletData
 from src.terrain import CollideMode
@@ -40,15 +39,14 @@ class Bullet(pygame.sprite.Sprite):
         self.terrain = terrain
         self.bounds = bounds
 
-    def update(self, dt: float, players: List[pygame.sprite.Sprite]) -> bool:
+        self.lifetime = self.bullet_type.lifetime
+
+    def update(self, dt: float, players: List[pygame.sprite.Sprite]):
         """Update the bullet's position
 
         Args:
             dt (float): the time since the last frame
             players (List[pygame.sprite.Sprite]): the list of players
-
-        Returns:
-            bool: True if the bullet is still alive, False otherwise
         """
         # Update the position
         self.pos += self.velocity * dt
@@ -67,7 +65,11 @@ class Bullet(pygame.sprite.Sprite):
         if self.terrain.collide(self, CollideMode.Current):
             self.bullet_type.hit(self, None, players, False)
         
-
+        print(self.lifetime)
+        # Update the lifetime
+        self.lifetime -= dt
+        if self.lifetime <= 0:
+            self.kill()
 
     def draw(self, surface: pygame.Surface):
         """Draw the bullet
