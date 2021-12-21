@@ -82,8 +82,12 @@ def game(game_map: Map):
     # Get information from the map
     players_pos = game_map.players_pos
     bounds = game_map.bounds
+
     terrain = game_map.terrain
     terrain.convert()
+
+    void = pygame.image.load("src/assets/terrain/void.png")
+    void.fill(VOID_COLOR, special_flags=BLEND_MULT)
 
     running = True
 
@@ -132,7 +136,9 @@ def game(game_map: Map):
         prev_time = now
 
         # Set background color
-        SCREEN.fill((0, 128, 128))
+        SCREEN.fill(BACKGROUND_COLOR)
+
+        SCREEN.blit(void, (0, 0, WIDTH, HEIGHT))
 
         # Draw terrain
         terrain.draw(SCREEN)

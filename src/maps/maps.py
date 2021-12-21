@@ -8,7 +8,7 @@ from src.game import *
 # Map 1
 MAP1 = Map(
     Terrain(
-        Solid((50, 250, 200, 40)), # Left platform
+        Solid((50,  250, 200, 40)), # Left platform
         Solid((260, 400, 280, 40)), # Middle platform
         Solid((550, 250, 200, 40)), # Right platform
 
@@ -22,10 +22,10 @@ MAP1 = Map(
 MAP2 = Map(
     Terrain(
         Solid((-150, 200, 400, 40)), # Left platform
-        Solid((550, 200, 400, 40)), # Right platform
+        Solid(( 550, 200, 400, 40)), # Right platform
 
         Spring((260, 400, 280, 100), Direction.UP), # Spring in the middle
-        Solid((260, 500, 280, 40))
+        Solid(( 260, 500, 280, 40)) # Platform under the spring
     ),
     pygame.Rect(-100, -100, WIDTH + 100, HEIGHT + 100),
     ((100, 150), (700, 150))
