@@ -65,7 +65,6 @@ class Bullet(pygame.sprite.Sprite):
         if self.terrain.collide(self, CollideMode.Current):
             self.bullet_type.hit(self, None, players, False)
         
-        print(self.lifetime)
         # Update the lifetime
         self.lifetime -= dt
         if self.lifetime <= 0:
