@@ -100,7 +100,7 @@ class Player(pygame.sprite.Sprite):
         self.knockback_force = pygame.math.Vector2(0, 0)
 
         # Create the weapon
-        self.weapon = Weapon(revolver.WEAPON, pos, terrain)
+        self.weapon = Weapon(revolver.WEAPON, pos, bounds, terrain)
 
         # Create the healthbar
         self.healthbar = HealthBar(self.rect)

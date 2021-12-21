@@ -8,7 +8,11 @@ from typing import Tuple
 
 
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, weapon_type: WeaponData, pos: Tuple[int, int], terrain: Terrain):
+    def __init__(
+        self, weapon_type: WeaponData,
+        pos: Tuple[int, int],
+        bounds: pygame.Rect, terrain: Terrain
+        ):
         """Initialize the weapon
 
         Args:
@@ -27,6 +31,7 @@ class Weapon(pygame.sprite.Sprite):
 
         # Set the terrain
         self.terrain = terrain
+        self.bounds = bounds
 
     def shoot(self):
         """Shoot a bullet

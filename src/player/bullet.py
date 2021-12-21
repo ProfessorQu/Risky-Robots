@@ -9,7 +9,11 @@ from typing import Tuple, List
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, bullet_type, pos: Tuple[int, int], direction: pygame.math.Vector2, terrain: Terrain):
+    def __init__(
+        self, bullet_type,
+        pos: Tuple[float, float], direction: pygame.math.Vector2,
+        bounds: pygame.Rect, terrain: Terrain
+        ):
         """Initialize the bullet
 
         Args:
@@ -32,8 +36,9 @@ class Bullet(pygame.sprite.Sprite):
         self.image = self.bullet_type.image
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
-        # Set the terrain
+        # Set the terrain and bounds
         self.terrain = terrain
+        self.bounds = bounds
 
     def update(self, dt: float, players: List[pygame.sprite.Sprite]) -> bool:
         """Update the bullet's position
@@ -46,8 +51,8 @@ class Bullet(pygame.sprite.Sprite):
             bool: True if the bullet is still alive, False otherwise
         """
         # Update the position
-        self.pos.x += self.velocity.x * dt
-        self.pos.y += self.velocity.y * dt
+        self.pos += self.velocity * dt
+        self.rect.center = self.pos
 
         # Check for hit with players
         for player in players:
@@ -55,15 +60,13 @@ class Bullet(pygame.sprite.Sprite):
                 self.bullet_type.hit(self, player, players, True)
         
         # Check for hit with terrain or out of bounds
-        if (self.rect.x < 0 or self.rect.x > game.WIDTH):
+        if self.pos.x < self.bounds.left or self.pos.x > self.bounds.right:
             self.bullet_type.hit(self, None, players, False)
-        if self.rect.y < 0 or self.rect.y > game.HEIGHT:
+        if self.pos.y < self.bounds.top or self.pos.y > self.bounds.bottom:
             self.bullet_type.hit(self, None, players, False)
         if self.terrain.collide(self, CollideMode.Current):
             self.bullet_type.hit(self, None, players, False)
         
-        self.rect.x = self.pos.x
-        self.rect.y = self.pos.y
 
 
     def draw(self, surface: pygame.Surface):
