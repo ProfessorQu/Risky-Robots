@@ -2,7 +2,7 @@ import pygame
 
 from src.terrain.mode import CollideMode
 from src.constants import Direction
-from src.terrain.tile import Tile
+from src.terrain.tiles.tile import Tile
 
 from typing import List, Tuple
 

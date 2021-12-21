@@ -1,7 +1,7 @@
 import pygame
 
 from src.terrain.mode import ScaleMode
-from src.terrain.tile import Tile
+from src.terrain.tiles.tile import Tile
 
 
 class Solid(Tile):
