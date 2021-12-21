@@ -20,16 +20,17 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.bullet_type = bullet_type
 
+        # Set the position and velocity
+        self.pos = pygame.Vector2(pos)
+        self.velocity = pygame.Vector2(direction) * self.bullet_type.speed
+        
         # Create the rect
         self.rect = pygame.Rect((0, 0), self.bullet_type.size)
-        self.rect.center = pos
+        self.rect.center = self.pos
         
         # Set the image
         self.image = self.bullet_type.image
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
-
-        # Set the direction and velocity
-        self.velocity = pygame.math.Vector2(direction) * self.bullet_type.speed
 
         # Set the terrain
         self.terrain = terrain
@@ -45,8 +46,8 @@ class Bullet(pygame.sprite.Sprite):
             bool: True if the bullet is still alive, False otherwise
         """
         # Update the position
-        self.rect.x += self.velocity.x * dt
-        self.rect.y += self.velocity.y * dt
+        self.pos.x += self.velocity.x * dt
+        self.pos.y += self.velocity.y * dt
 
         # Check for hit with players
         for player in players:
@@ -60,6 +61,9 @@ class Bullet(pygame.sprite.Sprite):
             self.bullet_type.hit(self, None, players, False)
         if self.terrain.collide(self, CollideMode.Current):
             self.bullet_type.hit(self, None, players, False)
+        
+        self.rect.x = self.pos.x
+        self.rect.y = self.pos.y
 
 
     def draw(self, surface: pygame.Surface):
