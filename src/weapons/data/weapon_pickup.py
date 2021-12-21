@@ -33,6 +33,10 @@ class WeaponPickUp(pygame.sprite.Sprite):
 
         # Set the terrain
         self.terrain = terrain
+
+        # Set the lifetime and flicker alpha
+        self.lifetime = LIFETIME
+        self.flicker_alpha = 0
     
     def pickup(self, player):
         """Pick up the weapon
@@ -43,9 +47,12 @@ class WeaponPickUp(pygame.sprite.Sprite):
         # Add the weapon to the player
         player.weapon.weapon_type = self.weapon_type
         player.weapon.cooldown = self.weapon_type.cooldown
+
         self.kill()
 
     def collide(self):
+        """Collide with the terrain
+        """
         if self.terrain.collide(self, CollideMode.Current):
             self.velocity.y = 0
 
@@ -64,6 +71,17 @@ class WeaponPickUp(pygame.sprite.Sprite):
         self.rect.y += self.velocity.y * dt
         # Check for collision with terrain
         self.collide()
+
+        # Update the lifetime
+        self.lifetime -= dt
+        if self.lifetime <= 0:
+            self.kill()
+
+        # Flicker the weapon
+        if self.lifetime <= FLICKER_START:
+            self.image.set_alpha(self.flicker_alpha)
+
+            self.flicker_alpha = 255 if self.lifetime % FLICKER_INTERVAL < 0.25 else 0
 
     def draw(self, surface):
         """Draw the weapon

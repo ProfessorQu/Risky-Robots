@@ -3,7 +3,7 @@ from src.weapons import revolver, assaultrifle, goldenrevolver, sniperrifle, sho
 
 GRAVITY = 100
 
-SPAWN_RATE = 5
+SPAWN_RATE = 10000
 
 WEAPON_PICKUPS = (
     (revolver.WEAPON, revolver.WEAPON_SPAWN_RATE),
@@ -13,3 +13,7 @@ WEAPON_PICKUPS = (
     (shotgun.WEAPON, shotgun.WEAPON_SPAWN_RATE),
     (rocketlauncher.WEAPON, rocketlauncher.WEAPON_SPAWN_RATE),
 )
+
+LIFETIME = 20
+FLICKER_START = 5
+FLICKER_INTERVAL = 0.5

@@ -1,6 +1,17 @@
 from src.player.bullet import Bullet
 
-def one_bullet(weapon):
+from typing import List
+
+
+def one_bullet(weapon) -> Bullet:
+    """Shoot one bullet
+
+    Args:
+        weapon (Weapon): the weapon to shoot
+
+    Returns:
+        Bullet: the bullet that was shot
+    """
     # Create a bullet
     bullet_pos = (
         weapon.rect.centerx + (weapon.dir * weapon.image.get_width() / 2),
@@ -15,7 +26,15 @@ def one_bullet(weapon):
 
     return bullet
 
-def spread(weapon):
+def spread(weapon) -> List[Bullet]:
+    """Shoot three bullets
+
+    Args:
+        weapon (Weapon): the weapon to shoot
+
+    Returns:
+        List[Bullet]: the bullets that were shot
+    """
     bullets = []
     # Create bullets
     bullet_pos = (

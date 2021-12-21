@@ -232,11 +232,22 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y < self.bounds.top or self.rect.y > self.bounds.bottom:
             self.health = 0
     
-    def check_pickup(self, inputs: List[Direction], weapon_pickups: List[WeaponPickUp]):
+    def check_pickup(self, inputs: List[Direction], weapon_pickups: List[WeaponPickUp]) -> bool:
+        """Check if the player picked up a weapon
+
+        Args:
+            inputs (List[Direction]): the inputs of the player
+            weapon_pickups (List[WeaponPickUp]): the weapon pickups
+
+        Returns:
+            bool: if the player picked up a weapon
+        """
+        # Pick up weapon if colliding with a weapon pickup and inputting shoot
         if Direction.DOWN in inputs:
             for pickup in weapon_pickups:
                 if self.rect.colliderect(pickup.rect):
                     pickup.pickup(self)
+
                     return True
         
         return False
@@ -264,6 +275,7 @@ class Player(pygame.sprite.Sprite):
         # Reset the knockback force
         self.knockback_force -= self.knockback_force * player.KNOCKBACK_FRICTION * dt
         
+        # Limit the knockback force
         if abs(self.knockback_force.x) < 1:
             self.knockback_force.x = 0
         if abs(self.knockback_force.y) < 1:
@@ -288,6 +300,7 @@ class Player(pygame.sprite.Sprite):
         collisions = self.terrain.collide(self, CollideMode.Predict)
 
         for (direction, tile) in collisions:
+            # Collision for solid tiles
             if type(tile) == Solid:
                 if direction in [Direction.RIGHT, Direction.LEFT]:
                     self.velocity.x = 0
@@ -300,6 +313,7 @@ class Player(pygame.sprite.Sprite):
 
                     grounded = True
             
+            # Collision for spring tiles
             if type(tile) == Spring:
                 if direction == Direction.RIGHT and tile.direction == Direction.LEFT:
                     self.velocity.x *= -player.SPRING_BOUNCINESS

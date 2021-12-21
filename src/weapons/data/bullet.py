@@ -5,6 +5,8 @@ from typing import Callable, Tuple
 
 @dataclass
 class BulletData:
+    """Data class for a bullet
+    """
     image: pygame.Surface
     size: Tuple[int, int]
     speed: int

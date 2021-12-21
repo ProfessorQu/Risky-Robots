@@ -17,6 +17,7 @@ class Spring(Tile):
         """
         image = pygame.image.load("src/assets/terrain/spring.png")
 
+        # Rotate the image according to the direction
         if direction == Direction.LEFT:
             image = pygame.transform.rotate(image, 90)
         elif direction == Direction.RIGHT:

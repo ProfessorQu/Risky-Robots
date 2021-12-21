@@ -8,6 +8,8 @@ from dataclasses import dataclass
 
 @dataclass
 class WeaponData:
+    """Data class for a weapon
+    """
     image: pygame.Surface
     size: Tuple[int, int]
     cooldown: int

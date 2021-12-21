@@ -1,6 +1,10 @@
 import pygame
 
 from src.terrain.mode import CollideMode
+from src.constants import Direction
+from src.terrain.tile import Tile
+
+from typing import List, Tuple
 
 
 class Terrain(list):
@@ -15,7 +19,16 @@ class Terrain(list):
         for tile in self:
             tile.convert()
 
-    def collide(self, other: pygame.sprite.Sprite, mode: CollideMode):
+    def collide(self, other: pygame.sprite.Sprite, mode: CollideMode) -> List[Tuple[Direction, Tile]]:
+        """Get all the tiles that collide with the other sprite
+
+        Args:
+            other (pygame.sprite.Sprite): the other sprite
+            mode (CollideMode): the mode to check collisions with
+
+        Returns:
+            List[Tuple[Direction, Tile]]: a list of tuples containing the direction and tile that collided
+        """
         collisions = []
         for tile in self:
             collision, direction = tile.collide(other, mode)

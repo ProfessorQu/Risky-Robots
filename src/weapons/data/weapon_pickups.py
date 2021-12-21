@@ -4,16 +4,27 @@ import random
 from src.constants.weapon_pickup import *
 from src.weapons.data.weapon_pickup import WeaponPickUp
 from src.constants import game
+from src.terrain import Terrain
 
 class WeaponPickUps(pygame.sprite.Group):
-    def __init__(self, terrain):
+    def __init__(self, terrain: Terrain):
+        """Initialize the weapon pickups
+
+        Args:
+            terrain (Terrain): the terrain of the map
+        """
         super().__init__()
 
         self.terrain = terrain
 
         self.spawn_timer = SPAWN_RATE
     
-    def update(self, dt):
+    def update(self, dt: float):
+        """Update the weapon pickups
+
+        Args:
+            dt (float): the time since the last frame
+        """
         if self.spawn_timer > 0:
             self.spawn_timer -= dt
         else:

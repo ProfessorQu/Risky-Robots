@@ -17,6 +17,12 @@ import sys
 
 
 def add_pickups(weapon_pickups: WeaponPickUps, terrain: Terrain):
+    """Add all weapons as pickups to the map
+
+    Args:
+        weapon_pickups (WeaponPickUps): the weapon pickups
+        terrain (Terrain): the terrain of the map
+    """
     weapon_pickups.add(
         WeaponPickUp(
             sniperrifle.WEAPON,

@@ -5,7 +5,6 @@ from src.weapons.data.weapon import WeaponData
 from src.weapons.functions import one_bullet, explode
 
 
-
 BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/rocket.png"),
     size = (25, 25),
