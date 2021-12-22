@@ -115,7 +115,9 @@ def game(game_map: Map):
     bullets = sprite.Group()
     weapon_pickups = WeaponPickUps(terrain)
 
-    # add_pickups(weapon_pickups, terrain)
+    particles = sprite.Group()
+
+    add_pickups(weapon_pickups, terrain)
 
     prev_time = time.time()
 
@@ -154,7 +156,7 @@ def game(game_map: Map):
 
         # Update bullets
         for bullet in bullets:
-            remove = bullet.update(dt, players)
+            remove = bullet.update(dt, players, particles)
 
             if remove:
                 bullets.remove(bullet)
@@ -164,6 +166,10 @@ def game(game_map: Map):
         for weapon_pickup in weapon_pickups:
             weapon_pickup.update(dt)
             weapon_pickup.draw(SCREEN)
+        
+        particles.update()
+        for particle in particles:
+            particle.draw(SCREEN)
         
         weapon_pickups.update(dt)
 

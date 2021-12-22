@@ -41,7 +41,7 @@ class Bullet(pygame.sprite.Sprite):
 
         self.lifetime = self.bullet_type.lifetime
 
-    def update(self, dt: float, players: List[pygame.sprite.Sprite]):
+    def update(self, dt: float, players: List[pygame.sprite.Sprite], particles: pygame.sprite.Group):
         """Update the bullet's position
 
         Args:
@@ -55,18 +55,18 @@ class Bullet(pygame.sprite.Sprite):
         # Check for hit with players
         for player in players:
             if self.rect.colliderect(player.rect):
-                self.bullet_type.hit(self, player, players, True)
+                self.bullet_type.hit(self, player, players, particles, True)
 
         # Check for hit with terrain or out of bounds
         if self.pos.x < self.bounds.left or self.pos.x > self.bounds.right:
-            self.bullet_type.hit(self, None, players, False)
+            self.bullet_type.hit(self, None, players, particles, False)
         if self.pos.y < self.bounds.top or self.pos.y > self.bounds.bottom:
-            self.bullet_type.hit(self, None, players, False)
+            self.bullet_type.hit(self, None, players, particles, False)
 
         collisions = self.terrain.collide(self, CollideMode.Current)
         for directions, tile in collisions:
             if type(tile) == Solid:
-                self.bullet_type.hit(self, None, players, False)
+                self.bullet_type.hit(self, None, players, particles, False)
             elif type(tile) == Mirror:
                 if Direction.UP in directions or Direction.DOWN in directions:
                     self.velocity.y *= -1
