@@ -1,0 +1,27 @@
+Terrain:
+Solid 0, 550, 800, 50
+Solid 0, 0, 800, 50
+Solid 0, 0, 50, 600
+Solid 750, 0, 50, 600
+Spring 350, 350, 50, 50, LEFT, Tile
+Spring 400, 350, 50, 50, RIGHT, Tile
+Spring 350, 330, 100, 50, UP, Tile
+Solid 375, 350, 50, 50
+Spring 350, 500, 50, 50, LEFT, Tile
+Spring 400, 500, 50, 50, RIGHT, Tile
+Solid 375, 500, 50, 50
+Spring 350, 50, 50, 100, LEFT, Tile
+Spring 400, 50, 50, 100, RIGHT, Tile
+Spring 350, 120, 100, 50, DOWN, Tile
+Solid 375, 50, 50, 100
+Solid 50, 300, 150, 50
+Solid 600, 300, 150, 50
+Spring 250, 500, 100, 50, UP
+Spring 450, 500, 100, 50, UP
+
+Bounds:
+-100, -100, 900, 700
+
+Players:
+100, 250
+700, 250
