@@ -63,9 +63,9 @@ class Tile:
                     directions.append(Direction.RIGHT)
                 if other.velocity.x < 0:
                     directions.append(Direction.LEFT)
-                if other.velocity.y > 0:
+                if other.velocity.y > 0 and other.rect.bottom - other.rect.height / 2 < self.rect.top:
                     directions.append(Direction.DOWN)
-                if other.velocity.y < 0:
+                if other.velocity.y < 0 and other.rect.top + other.rect.height / 2 > self.rect.bottom:
                     directions.append(Direction.UP)
                 
                 return True, directions

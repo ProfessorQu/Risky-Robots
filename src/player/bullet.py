@@ -26,11 +26,11 @@ class Bullet(pygame.sprite.Sprite):
         # Set the position and velocity
         self.pos = pygame.Vector2(pos)
         self.velocity = pygame.Vector2(direction) * self.bullet_type.speed
-        
+
         # Create the rect
         self.rect = pygame.Rect((0, 0), self.bullet_type.size)
         self.rect.center = self.pos
-        
+
         # Set the image
         self.image = self.bullet_type.image
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
@@ -56,23 +56,23 @@ class Bullet(pygame.sprite.Sprite):
         for player in players:
             if self.rect.colliderect(player.rect):
                 self.bullet_type.hit(self, player, players, True)
-        
+
         # Check for hit with terrain or out of bounds
         if self.pos.x < self.bounds.left or self.pos.x > self.bounds.right:
             self.bullet_type.hit(self, None, players, False)
         if self.pos.y < self.bounds.top or self.pos.y > self.bounds.bottom:
             self.bullet_type.hit(self, None, players, False)
-        
+
         collisions = self.terrain.collide(self, CollideMode.Current)
         for directions, tile in collisions:
             if type(tile) == Solid:
                 self.bullet_type.hit(self, None, players, False)
             elif type(tile) == Mirror:
-                if Direction.RIGHT in directions or Direction.LEFT in directions:
-                    self.velocity.x *= -1
                 if Direction.UP in directions or Direction.DOWN in directions:
                     self.velocity.y *= -1
-        
+                if Direction.RIGHT in directions or Direction.LEFT in directions:
+                    self.velocity.x *= -1
+
         # Update the lifetime
         self.lifetime -= dt
         if self.lifetime <= 0:
