@@ -64,13 +64,13 @@ class Bullet(pygame.sprite.Sprite):
             self.bullet_type.hit(self, None, players, False)
         
         collisions = self.terrain.collide(self, CollideMode.Current)
-        for direction, tile in collisions:
+        for directions, tile in collisions:
             if type(tile) == Solid:
                 self.bullet_type.hit(self, None, players, False)
             elif type(tile) == Mirror:
-                if direction in [Direction.RIGHT, Direction.LEFT]:
+                if Direction.RIGHT in directions or Direction.LEFT in directions:
                     self.velocity.x *= -1
-                elif direction in [Direction.UP, Direction.DOWN]:
+                if Direction.UP in directions or Direction.DOWN in directions:
                     self.velocity.y *= -1
         
         # Update the lifetime

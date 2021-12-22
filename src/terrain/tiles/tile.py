@@ -3,7 +3,7 @@ import pygame
 from src.constants import Direction
 from src.terrain.mode import CollideMode, ScaleMode
 
-from typing import Tuple
+from typing import List, Tuple
 
 
 class Tile:
@@ -39,7 +39,7 @@ class Tile:
         """
         self.image = self.image.convert_alpha()
 
-    def collide(self, other: pygame.sprite.Sprite, mode: CollideMode) -> Tuple[bool, Direction]:
+    def collide(self, other: pygame.sprite.Sprite, mode: CollideMode) -> Tuple[bool, List[Direction]]:
         """Check if the other sprite collides with this tile
 
         Args:
@@ -58,14 +58,17 @@ class Tile:
             return False, Direction.NONE
         elif mode == CollideMode.Current:
             if self.rect.colliderect(other.rect):
+                directions = []
                 if other.velocity.x > 0:
-                    return True, Direction.RIGHT
-                elif other.velocity.x < 0:
-                    return True, Direction.LEFT
-                elif other.velocity.y > 0:
-                    return True, Direction.DOWN
-                elif other.velocity.y < 0:
-                    return True, Direction.UP
+                    directions.append(Direction.RIGHT)
+                if other.velocity.x < 0:
+                    directions.append(Direction.LEFT)
+                if other.velocity.y > 0:
+                    directions.append(Direction.DOWN)
+                if other.velocity.y < 0:
+                    directions.append(Direction.UP)
+                
+                return True, directions
                     
             return False, Direction.NONE
 
