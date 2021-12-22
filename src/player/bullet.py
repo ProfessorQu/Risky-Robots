@@ -1,8 +1,8 @@
 import pygame
 
-from src.terrain import Terrain
-# from src.weapons.data.bullet import BulletData
+from src.terrain import Terrain, Solid, Mirror
 from src.terrain import CollideMode
+from src.constants import Direction
 
 from typing import Tuple, List
 
@@ -62,8 +62,16 @@ class Bullet(pygame.sprite.Sprite):
             self.bullet_type.hit(self, None, players, False)
         if self.pos.y < self.bounds.top or self.pos.y > self.bounds.bottom:
             self.bullet_type.hit(self, None, players, False)
-        if self.terrain.collide(self, CollideMode.Current):
-            self.bullet_type.hit(self, None, players, False)
+        
+        collisions = self.terrain.collide(self, CollideMode.Current)
+        for direction, tile in collisions:
+            if type(tile) == Solid:
+                self.bullet_type.hit(self, None, players, False)
+            elif type(tile) == Mirror:
+                if direction in [Direction.RIGHT, Direction.LEFT]:
+                    self.velocity.x *= -1
+                elif direction in [Direction.UP, Direction.DOWN]:
+                    self.velocity.y *= -1
         
         # Update the lifetime
         self.lifetime -= dt

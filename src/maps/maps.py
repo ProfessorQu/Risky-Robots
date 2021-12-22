@@ -1,6 +1,6 @@
 import pygame
 
-from src.terrain import Terrain, Solid, Spring
+from src.terrain import Terrain, Solid, Spring, Mirror
 from src.constants import Direction, game
 from src.maps.map import Map
 from src.terrain.mode import ScaleMode
@@ -40,10 +40,10 @@ MAP2 = Map(
 # Map 3
 MAP3 = Map(
     Terrain(
-        Solid((0, 560, game.WIDTH, 40)), # Floor
+        Solid((0, game.HEIGHT - 50, game.WIDTH, 50)), # Floor
 
-        Solid((0, 400, 200, 200)), # Left column
-        Solid((600, 400, 200, 200)), # Right column
+        Mirror((0, 0, 50, game.HEIGHT - 50)), # Left wall
+        Mirror((game.WIDTH - 50, 0, 50, game.HEIGHT - 50)), # Right wall
     ),
     pygame.Rect(-100, -100, game.WIDTH + 100, game.HEIGHT + 100),
     ((200, 350), (700, 350))

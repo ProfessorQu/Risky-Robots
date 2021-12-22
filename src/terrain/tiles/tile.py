@@ -58,7 +58,15 @@ class Tile:
             return False, Direction.NONE
         elif mode == CollideMode.Current:
             if self.rect.colliderect(other.rect):
-                return True, Direction.NONE
+                if other.velocity.x > 0:
+                    return True, Direction.RIGHT
+                elif other.velocity.x < 0:
+                    return True, Direction.LEFT
+                elif other.velocity.y > 0:
+                    return True, Direction.DOWN
+                elif other.velocity.y < 0:
+                    return True, Direction.UP
+                    
             return False, Direction.NONE
 
     def draw(self, surface: pygame.Surface):

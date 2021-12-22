@@ -6,14 +6,13 @@ from src.weapons.data.weapon_pickup import WeaponPickUp
 from src.terrain import CollideMode
 from src.player.healthbar import HealthBar
 from src.player.inputs import Inputs
-from src.terrain import Terrain, Solid, Spring
+from src.terrain import Terrain, Solid, Spring, Mirror
 from src.player.bullet import Bullet
 from src.weapons import revolver
 
 from typing import List, Tuple
 import os
 import random
-
 
 
 class Player(pygame.sprite.Sprite):
@@ -301,7 +300,7 @@ class Player(pygame.sprite.Sprite):
 
         for (direction, tile) in collisions:
             # Collision for solid tiles
-            if type(tile) == Solid:
+            if type(tile) in [Solid, Mirror]:
                 if direction in [Direction.RIGHT, Direction.LEFT]:
                     self.velocity.x = 0
                 elif direction == Direction.UP:
@@ -312,7 +311,7 @@ class Player(pygame.sprite.Sprite):
                     self.velocity.y = tile.rect.top - self.rect.bottom
 
                     grounded = True
-            
+
             # Collision for spring tiles
             if type(tile) == Spring:
                 if direction == Direction.RIGHT and tile.direction == Direction.LEFT:

@@ -11,7 +11,7 @@ BULLET = BulletData(
     speed = 500,
     damage = 2000,
     knockback = 1,
-    lifetime = 1000,
+    lifetime = 10,
     hit = explode
 )
 
