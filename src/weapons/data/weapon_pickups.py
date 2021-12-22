@@ -31,7 +31,7 @@ class WeaponPickUps(pygame.sprite.Group):
             self.spawn_timer = SPAWN_RATE
             pickups, weights = list(zip(*WEAPON_PICKUPS))
             pickup = random.choices(pickups, weights=weights)[0]
-            pos = (random.randint(0, game.WIDTH), 0)
+            pos = (random.randint(100, game.WIDTH - 100), 100)
 
             self.add(WeaponPickUp(pickup, pos, self.terrain))
 

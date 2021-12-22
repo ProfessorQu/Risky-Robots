@@ -6,7 +6,7 @@ from src.constants.direction import Direction
 
 
 class Spring(Tile):
-    def __init__(self, rect: pygame.Rect, direction: Direction):
+    def __init__(self, rect: pygame.Rect, direction: Direction, scale_mode: ScaleMode = ScaleMode.Stretch):
         """Initialize the solid object
 
         Args:
@@ -25,5 +25,5 @@ class Spring(Tile):
         elif direction == Direction.DOWN:
             image = pygame.transform.rotate(image, 180)
             
-        super().__init__(image, rect, ScaleMode.Stretch)
+        super().__init__(image, rect, scale_mode)
         self.direction = direction

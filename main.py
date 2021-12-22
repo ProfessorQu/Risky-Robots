@@ -29,7 +29,7 @@ button_pos = [
 ]
 
 rect = pygame.Rect(0, 0, WIDTH / 3, HEIGHT / 3)
-for i in range(3):
+for i in range(4):
     rect.center = button_pos[i]
     
     buttons.append(Button(i, rect, (200, 200, 200), (100, 100, 100), f"Map {i + 1}", (255, 255, 255)))

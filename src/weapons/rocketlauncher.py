@@ -7,17 +7,17 @@ from src.weapons.functions import one_bullet, explode
 
 BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/rocket.png"),
-    size = (25, 25),
+    size = (20, 20),
     speed = 500,
     damage = 2000,
-    knockback = 5,
+    knockback = 1,
     lifetime = 1000,
     hit = explode
 )
 
 WEAPON = WeaponData(
     image = pygame.image.load("src/assets/weapons/rocketlauncher.png"),
-    size = (50, 50),
+    size = (40, 40),
     cooldown = 100,
     bullet = BULLET,
     shoot = one_bullet

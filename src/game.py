@@ -87,7 +87,7 @@ def game(game_map: Map):
     terrain.convert()
 
     void = pygame.image.load("src/assets/terrain/void.png")
-    void.fill(VOID_COLOR, special_flags=BLEND_MULT)
+    void.fill(VOID_COLOR, special_flags=BLEND_RGBA_MULT)
 
     running = True
 

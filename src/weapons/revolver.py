@@ -7,17 +7,17 @@ from src.weapons.functions import one_bullet, damage
 
 BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/bullet.png"),
-    size = (25, 25),
+    size = (20, 20),
     speed = 500,
     damage = 10,
-    knockback = pygame.Vector2(500, -100),
+    knockback = pygame.Vector2(100, -50),
     lifetime = 1000,
     hit = damage
 )
 
 WEAPON = WeaponData(
     image = pygame.image.load("src/assets/weapons/revolver.png"),
-    size = (50, 50),
+    size = (40, 40),
     cooldown = 100,
     bullet = BULLET,
     shoot = one_bullet
