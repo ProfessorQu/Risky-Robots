@@ -3,15 +3,21 @@ from pygame.locals import *
 
 from src.constants.game import *
 from src.menu.button import Button
-import src.game as game
-from src.maps import MAP1, MAP2, MAP3
+from src.player.inputs import Inputs
+import src.menus.level_select as level_select
 
-from typing import List, Tuple
 
 
 # Initialize the game
 pygame.init()
 pygame.display.set_caption("Game")
+
+# Initialize joysticks
+pygame.joystick.init()
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+
+for joystick in joysticks:
+    joystick.init()
 
 # Create the screen and the clock
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -20,20 +26,45 @@ CLOCK = pygame.time.Clock()
 # Create the buttons
 buttons = []
 button_pos = [
-    (200, 150),
-    (600, 150),
-    (200, 450),
-    (600, 450),
+    (100, 400),
+    (300, 400),
+    (500, 400),
+    (700, 400)
 ]
 
-rect = pygame.Rect(0, 0, WIDTH / 3, HEIGHT / 3)
+button_names = [
+    "Remove",
+    "Add WASD",
+    "Add Arrows",
+    "Add Controller",
+]
+
+inputs = []
+
+rect = pygame.Rect(0, 0, 150, 75)
+path = 'src/assets/menu/player_select/buttons/button.png'
+
 for i in range(4):
     rect.center = button_pos[i]
-    
-    buttons.append(Button(i, rect, (200, 200, 200), (100, 100, 100), f"Map {i + 1}", (255, 255, 255)))
+    name = button_names[i]
+
+    buttons.append(Button(i, path, rect, (0, 0, 128), (128, 128, 128), name, 20, (255, 255, 255)))
+
+rect = pygame.Rect(0, 0, 200, 150)
+rect.center = (WIDTH / 2, HEIGHT / 3)
+
+buttons.append(
+    Button(4, path, rect, (0, 0, 128), (128, 128, 128), "Play", 50, (255, 255, 255))
+)
 
 running = True
 
+click = False
+
+wasd_added = False
+arrows_added = False
+
+controller_id = 0
 
 # Main loop
 while running:
@@ -41,24 +72,51 @@ while running:
     for event in pygame.event.get():
         if event.type == QUIT:
             running = False
-    
-    # Tick
-    CLOCK.tick(FPS)
+        if event.type == MOUSEBUTTONDOWN:
+            click = True
 
     # Draw the screen
     SCREEN.fill((0, 128, 128))
+
 
     # Draw the buttons
     for button in buttons:
         button.draw(SCREEN)
 
-        if button.pressed:
+        if button.pressed and click:
             if button.id == 0:
-                game.game(MAP1, SCREEN, CLOCK)
+                removed = inputs.pop()
+                if removed.is_controller:
+                    controller_id -= 1
+                if removed.jump == pygame.K_w:
+                    wasd_added = False
+                if removed.jump == pygame.K_UP:
+                    arrows_added = False
             elif button.id == 1:
-                game.game(MAP2, SCREEN, CLOCK)
+                if not wasd_added:
+                    inputs.append(
+                        Inputs(False, 0, pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s)
+                    )
+                    wasd_added = True
             elif button.id == 2:
-                game.game(MAP3, SCREEN, CLOCK)
+                if not arrows_added:
+                    inputs.append(
+                        Inputs(False, 0, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN)
+                    )
+                    arrows_added = True
+            elif button.id == 3:
+                inputs.append(
+                    Inputs(True, controller_id, 0, 0, 0, 2)
+                )
+                controller_id += 1
+            elif button.id == 4:
+                level_select.level_select(SCREEN, CLOCK, inputs)
+
+    # Draw the inputs
+    for x, input in enumerate(inputs):
+        input.draw(SCREEN, x)
+
+    click = False
 
     # Update the screen
     pygame.display.update()

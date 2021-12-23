@@ -70,7 +70,7 @@ def add_pickups(weapon_pickups: WeaponPickUps, terrain: Terrain):
     )
 
 
-def setup(game_map: Map) -> Tuple[sprite.Group, sprite.Group, WeaponPickUps, sprite.Group, Terrain, pygame.Surface, List[bool]]:
+def setup(game_map: Map, inputs: List[Inputs]) -> Tuple[sprite.Group, sprite.Group, WeaponPickUps, sprite.Group, Terrain, pygame.Surface, List[bool]]:
     """Setup the game
 
     Args:
@@ -93,26 +93,17 @@ def setup(game_map: Map) -> Tuple[sprite.Group, sprite.Group, WeaponPickUps, spr
 
     # Create the players
     players = sprite.Group()
-    players.add(
-        Player(
-            1,
-            players_pos[0],
-            True,
-            Inputs(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s),
+    for i, input in enumerate(inputs):
+        facing_right = i % 2 == 0
+        player = Player(
+            i + 1,
+            players_pos[i],
+            facing_right,
+            input,
             bounds,
             terrain
         )
-    )
-    players.add(
-        Player(
-            2,
-            players_pos[1],
-            False,
-            Inputs(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN),
-            bounds,
-            terrain
-        )
-    )
+        players.add(player)
 
     # Create list of bullets and pickups
     bullets = sprite.Group()
@@ -120,7 +111,7 @@ def setup(game_map: Map) -> Tuple[sprite.Group, sprite.Group, WeaponPickUps, spr
 
     particles = sprite.Group()
 
-    add_pickups(weapon_pickups, terrain)
+    # add_pickups(weapon_pickups, terrain)
 
     players_dead = [False for player in players]
 
@@ -140,7 +131,7 @@ def calculate_dt(start_time: float) -> float:
     return now - start_time
 
 
-def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock):
+def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs: List[Inputs]):
     """Run the game
 
     Args:
@@ -149,7 +140,7 @@ def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock):
         CLOCK (pygame.time.Clock): the clock
     """
     # Setup the game
-    players, bullets, weapon_pickups, particles, terrain, void, players_dead = setup(game_map)
+    players, bullets, weapon_pickups, particles, terrain, void, players_dead = setup(game_map, inputs)
 
     # Set the start time
     prev_time = time.time()

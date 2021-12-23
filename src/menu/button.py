@@ -2,8 +2,8 @@ import pygame
 
 class Button(pygame.sprite.Sprite):
     def __init__(
-        self, id_: int, rect: pygame.Rect, color: pygame.Color, highlight_color: pygame.Color,
-        text: str, text_color: pygame.Color
+        self, id_: int, image_path: str, rect: pygame.Rect, color: pygame.Color, highlight_color: pygame.Color,
+        text: str, font_size: int, text_color: pygame.Color
         ):
         """Initialize the button
 
@@ -25,7 +25,7 @@ class Button(pygame.sprite.Sprite):
         self.highlight_color = highlight_color
 
         # Create the image
-        self.image = pygame.image.load(f"src/assets/buttons/button{self.id + 1}.png").convert_alpha()
+        self.image = pygame.image.load(image_path).convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.rect.width, self.rect.height))
 
         # Set the text
@@ -33,7 +33,7 @@ class Button(pygame.sprite.Sprite):
         self.text_color = text_color
 
         # Set the font
-        self.font = pygame.font.SysFont("Bauhaus 93", 50)
+        self.font = pygame.font.SysFont("Bauhaus 93", font_size)
 
         # Set the text position
         self.text_pos = (self.rect.centerx - self.font.size(self.text)[0] / 2, self.rect.centery - self.font.size(self.text)[1] / 2)

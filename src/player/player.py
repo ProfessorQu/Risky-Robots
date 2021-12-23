@@ -149,15 +149,15 @@ class Player(pygame.sprite.Sprite):
         # Check if the player shot a bullet
         return self.check_shot(inputs)
 
-    def horizontal_move(self, dt: float, inputs: List[Direction]):
+    def horizontal_move(self, dt: float, inputs: List[bool]):
         """Move the player horizontally
 
         Args:
             dt (float): the time since the last frame
             inputs (List): the inputs of the player
         """
-        left_input = Direction.LEFT in inputs
-        right_input = Direction.RIGHT in inputs
+        left_input = inputs[0]
+        right_input = inputs[1]
         # Move left
         if left_input:
             self.velocity.x -= player.ACCELERATION * dt
@@ -188,7 +188,7 @@ class Player(pygame.sprite.Sprite):
             inputs (List): the inputs of the player
         """
         # Get the jump input
-        jump_input = Direction.UP in inputs
+        jump_input = inputs[2]
         # Check if player can jump
         if jump_input and self.grounded_timer > 0:
             self.is_jumping = True
@@ -242,7 +242,7 @@ class Player(pygame.sprite.Sprite):
             bool: if the player picked up a weapon
         """
         # Pick up weapon if colliding with a weapon pickup and inputting shoot
-        if Direction.DOWN in inputs:
+        if inputs[3]:
             for pickup in weapon_pickups:
                 if self.rect.colliderect(pickup.rect):
                     pickup.pickup(self)
@@ -260,7 +260,7 @@ class Player(pygame.sprite.Sprite):
         Returns:
             Bullet: the bullet that was shot
         """
-        return self.weapon.shoot() if Direction.DOWN in inputs else None
+        return self.weapon.shoot() if inputs[3] else None
 
     def knockback(self, dt: float):
         """Apply knockback to the player over time

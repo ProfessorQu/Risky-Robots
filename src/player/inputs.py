@@ -1,9 +1,13 @@
 import pygame
+
 from src.constants import Direction
 
 
 class Inputs:
-    def __init__(self, left: int, right: int, jump: int, shoot: int):
+    def __init__(
+        self, is_controller: bool, controller_id: int,
+        left: int, right: int, jump: int, shoot: int
+        ):
         """Initialize the inputs
 
         Args:
@@ -17,6 +21,9 @@ class Inputs:
         self.jump = jump
         self.shoot = shoot
 
+        self.is_controller = is_controller
+        self.controller_id = controller_id
+
     def get_inputs(self):
         """Get the inputs from the keyboard
         
@@ -25,17 +32,32 @@ class Inputs:
         """
         inputs = []
 
-        # Get the inputs
-        keys = pygame.key.get_pressed()
+        if self.is_controller:
+            joystick = pygame.joystick.Joystick(self.controller_id)
+            joystick.init()
 
-        # Add the inputs
-        if keys[self.left]:
-            inputs.append(Direction.LEFT)
-        if keys[self.right]:
-            inputs.append(Direction.RIGHT)
-        if keys[self.jump]:
-            inputs.append(Direction.UP)
-        if keys[self.shoot]:
-            inputs.append(Direction.DOWN)
+            inputs.append(joystick.get_axis(0) < -0.5)
+            inputs.append(joystick.get_axis(0) > 0.5)
+            inputs.append(joystick.get_button(self.jump))
+            inputs.append(joystick.get_button(self.shoot))
+        else:
+            keys = pygame.key.get_pressed()
+            inputs.append(keys[self.left])
+            inputs.append(keys[self.right])
+            inputs.append(keys[self.jump])
+            inputs.append(keys[self.shoot])
 
         return inputs
+
+    def draw(self, surface: pygame.Surface, x: int):
+        if self.is_controller:
+            color = (255, 0, 0)
+        elif self.jump == pygame.K_w:
+            color = (0, 255, 0)
+        elif self.jump == pygame.K_UP:
+            color = (0, 0, 255)
+        else:
+            color = (0, 0, 0)
+
+        pygame.draw.rect(surface, color, (x * 50, 550, 50, 50))
+
