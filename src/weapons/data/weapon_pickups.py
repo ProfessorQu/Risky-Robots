@@ -44,4 +44,7 @@ class WeaponPickUps(pygame.sprite.Group):
 
             self.add(WeaponPickUp(pickup, (rect.center), self.terrain))
 
+        for weapon_pickup in self:
+            weapon_pickup.update(dt)
+
 

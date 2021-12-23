@@ -378,9 +378,7 @@ class Player(pygame.sprite.Sprite):
         """Check if the player is dead
         """
         if self.health <= 0:
-            print(f"Player {self.player_id} died!")
-            print(f"Player {1 if self.player_id == 2 else 2} won!")
-            pygame.event.post(pygame.event.Event(pygame.QUIT))
+            self.kill()
 
     def update(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the player

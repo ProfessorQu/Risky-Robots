@@ -6,7 +6,7 @@ from src.menu.button import Button
 import src.game as game
 from src.maps import MAP1, MAP2, MAP3
 
-import time
+from typing import List, Tuple
 
 
 # Initialize the game
@@ -16,8 +16,6 @@ pygame.display.set_caption("Game")
 # Create the screen and the clock
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 CLOCK = pygame.time.Clock()
-
-running = True
 
 # Create the buttons
 buttons = []
@@ -34,7 +32,8 @@ for i in range(4):
     
     buttons.append(Button(i, rect, (200, 200, 200), (100, 100, 100), f"Map {i + 1}", (255, 255, 255)))
 
-prev_time = time.time()
+running = True
+
 
 # Main loop
 while running:
@@ -46,11 +45,6 @@ while running:
     # Tick
     CLOCK.tick(FPS)
 
-    # Calculate delta time
-    now = time.time()
-    dt = now - prev_time
-    prev_time = now
-
     # Draw the screen
     SCREEN.fill((0, 128, 128))
 
@@ -60,13 +54,14 @@ while running:
 
         if button.pressed:
             if button.id == 0:
-                game.game(MAP1)
+                game.game(MAP1, SCREEN, CLOCK)
             elif button.id == 1:
-                game.game(MAP2)
+                game.game(MAP2, SCREEN, CLOCK)
             elif button.id == 2:
-                game.game(MAP3)
+                game.game(MAP3, SCREEN, CLOCK)
 
     # Update the screen
     pygame.display.update()
 
+print("Exiting...")
 pygame.quit()
