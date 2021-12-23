@@ -4,6 +4,7 @@ from src.weapons import revolver, assaultrifle, goldenrevolver, sniperrifle, sho
 GRAVITY = 100
 
 SPAWN_RATE = 10
+SPAWN_HEIGHT = 50
 
 WEAPON_PICKUPS = (
     (revolver.WEAPON, revolver.WEAPON_SPAWN_RATE),

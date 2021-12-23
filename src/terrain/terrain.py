@@ -36,7 +36,6 @@ class Terrain(list):
                 collisions.append((direction, tile))
 
         return collisions
-                
 
     def draw(self, surface: pygame.Surface):
         """Draw each tile in the terrain

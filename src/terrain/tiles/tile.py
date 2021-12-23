@@ -49,23 +49,30 @@ class Tile:
         Returns:
             Tuple[bool, Direction]: a tuple containing if the other sprite collided and the direction of the collision
         """
+        if type(other) == pygame.Rect:
+            rect = other
+            velocity = pygame.Vector2(0, 0)
+        else:
+            rect = other.rect
+            velocity = other.velocity
+
         if mode == CollideMode.Predict:
-            if self.rect.colliderect(other.rect.x + other.velocity.x, other.rect.y, other.rect.width, other.rect.height):
-                return True, Direction.RIGHT if other.velocity.x > 0 else Direction.LEFT
-            if self.rect.colliderect(other.rect.x, other.rect.y + other.velocity.y, other.rect.width, other.rect.height):
-                return True, Direction.DOWN if other.velocity.y > 0 else Direction.UP
+            if self.rect.colliderect(rect.x + velocity.x, rect.y, rect.width, rect.height):
+                return True, Direction.RIGHT if velocity.x > 0 else Direction.LEFT
+            if self.rect.colliderect(rect.x, rect.y + velocity.y, rect.width, rect.height):
+                return True, Direction.DOWN if velocity.y > 0 else Direction.UP
             
             return False, Direction.NONE
         elif mode == CollideMode.Current:
-            if self.rect.colliderect(other.rect):
+            if self.rect.colliderect(rect):
                 directions = []
-                if other.velocity.x > 0:
+                if velocity.x > 0:
                     directions.append(Direction.RIGHT)
-                if other.velocity.x < 0:
+                if velocity.x < 0:
                     directions.append(Direction.LEFT)
-                if other.velocity.y > 0 and other.rect.bottom - other.rect.height / 2 < self.rect.top:
+                if velocity.y > 0 and rect.bottom - rect.height / 2 < self.rect.top:
                     directions.append(Direction.DOWN)
-                if other.velocity.y < 0 and other.rect.top + other.rect.height / 2 > self.rect.bottom:
+                if velocity.y < 0 and rect.top + rect.height / 2 > self.rect.bottom:
                     directions.append(Direction.UP)
                 
                 return True, directions
