@@ -40,14 +40,15 @@ def explode(bullet: Bullet, obj: pygame.sprite.Sprite, players: List, particles:
         distance = collide_pos.distance_to(player_pos)
         if distance < 200:
             knockback = player_pos - collide_pos
-            knockback *= bullet.bullet_type.knockback
+            knockback.normalize_ip()
+            knockback *= (200 - distance) / 200 * bullet.bullet_type.knockback
             player.hit((1 / distance) * bullet.bullet_type.damage, knockback)
 
     for _ in range(particle.NUM_PARTICLES):
         color = (255, random.randint(0, 255), 0)
-        velocity = pygame.Vector2(random.randint(particle.MIN_VELOCITY, particle.MAX_VELOCITY), random.randint(particle.MIN_VELOCITY, particle.MAX_VELOCITY))
-        radius = random.randint(particle.MIN_RADIUS, particle.MAX_RADIUS)
-        lifetime = random.randint(particle.MIN_LIFETIME, particle.MAX_LIFETIME)
+        velocity = pygame.Vector2(random.uniform(particle.MIN_VELOCITY, particle.MAX_VELOCITY), random.uniform(particle.MIN_VELOCITY, particle.MAX_VELOCITY))
+        radius = random.uniform(particle.MIN_RADIUS, particle.MAX_RADIUS)
+        lifetime = random.uniform(particle.MIN_LIFETIME, particle.MAX_LIFETIME)
         particles.add(Particle(collide_pos, velocity, radius, color, lifetime))
 
     bullet.kill()
