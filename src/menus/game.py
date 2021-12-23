@@ -81,6 +81,9 @@ def setup(game_map: Map, inputs: List[Inputs]) -> Tuple[sprite.Group, sprite.Gro
     pygame.init()
     pygame.display.set_caption("Game")
 
+    # Initialize sounds
+    pygame.mixer.init()
+
     # Get information from the map
     players_pos = game_map.players_pos
     bounds = game_map.bounds
@@ -111,7 +114,7 @@ def setup(game_map: Map, inputs: List[Inputs]) -> Tuple[sprite.Group, sprite.Gro
 
     particles = sprite.Group()
 
-    # add_pickups(weapon_pickups, terrain)
+    add_pickups(weapon_pickups, terrain)
 
     players_dead = [False for player in players]
 

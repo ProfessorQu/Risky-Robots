@@ -1,3 +1,4 @@
+import pygame
 from src.player.bullet import Bullet
 
 from typing import List
@@ -12,6 +13,9 @@ def one_bullet(weapon) -> Bullet:
     Returns:
         Bullet: the bullet that was shot
     """
+    # Initialize sounds
+    shoot_sound = pygame.mixer.Sound("src/assets/sounds/shoot.wav")
+
     # Create a bullet
     bullet_pos = (
         weapon.rect.centerx + (weapon.dir * weapon.image.get_width() / 2),
@@ -24,6 +28,9 @@ def one_bullet(weapon) -> Bullet:
     # Reset fire rate
     weapon.cooldown = weapon.weapon_type.cooldown
 
+    # Play sound
+    shoot_sound.play()
+
     return bullet
 
 def spread(weapon) -> List[Bullet]:
@@ -35,6 +42,9 @@ def spread(weapon) -> List[Bullet]:
     Returns:
         List[Bullet]: the bullets that were shot
     """
+    # Initialize sounds
+    shoot_sound = pygame.mixer.Sound("src/assets/sounds/shoot.wav")
+
     bullets = []
     # Create bullets
     bullet_pos = (
@@ -46,5 +56,8 @@ def spread(weapon) -> List[Bullet]:
     bullets.append(Bullet(weapon.weapon_type.bullet, bullet_pos, (weapon.dir, 0.2), weapon.bounds, weapon.terrain))
     # Reset fire rate
     weapon.cooldown = weapon.weapon_type.cooldown
+
+    # Play sound
+    shoot_sound.play()
 
     return bullets

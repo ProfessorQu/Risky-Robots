@@ -79,6 +79,20 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = pos
 
+        # Load jump sound
+        self.jump_sound = pygame.mixer.Sound("src/assets/sounds/jump.wav")
+        self.jump_sound.set_volume(0.2)
+
+        # Load hurt sound
+        self.hurt_sound = pygame.mixer.Sound("src/assets/sounds/hurt.wav")
+        self.hurt_sound.set_volume(0.2)
+
+        # Load pickup sound
+        self.pickup_sound = pygame.mixer.Sound("src/assets/sounds/pickup.wav")
+        self.pickup_sound.set_volume(0.2)
+
+        self.jump_sound_time = 0
+
         # Terrain and bounds
         self.terrain = terrain
         self.bounds = bounds
@@ -118,6 +132,9 @@ class Player(pygame.sprite.Sprite):
         
         # Copy knockback force
         self.knockback_force = knockback_force
+
+        # Play hurt sound
+        self.hurt_sound.play()
 
     def update_inputs(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the inputs of the player
@@ -195,6 +212,10 @@ class Player(pygame.sprite.Sprite):
             self.jump_time_counter = player.JUMP_TIME
             self.velocity.y = player.JUMP_HEIGHT * dt
 
+            if self.jump_sound_time <= 0:
+                self.jump_sound.play()
+                self.jump_sound_time = player.JUMP_SOUND_TIME
+
         # Check if the player is jumping
         if jump_input and self.is_jumping:
             if self.jump_time_counter > 0:
@@ -209,6 +230,7 @@ class Player(pygame.sprite.Sprite):
         
         # Decrease the grounded timer
         self.grounded_timer -= dt
+        self.jump_sound_time -= dt
 
     def limit_speed(self):
         """Limit the speed of the player
@@ -246,6 +268,8 @@ class Player(pygame.sprite.Sprite):
             for pickup in weapon_pickups:
                 if self.rect.colliderect(pickup.rect):
                     pickup.pickup(self)
+
+                    self.pickup_sound.play()
 
                     return True
         
