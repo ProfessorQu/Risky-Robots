@@ -43,7 +43,10 @@ def level_select(SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs: List[
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
-        
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+
         # Tick
         CLOCK.tick(FPS)
 
@@ -64,6 +67,3 @@ def level_select(SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs: List[
 
         # Update the screen
         pygame.display.update()
-
-    print("Exiting...")
-    pygame.quit()

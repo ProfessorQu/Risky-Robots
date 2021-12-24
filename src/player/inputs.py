@@ -24,6 +24,15 @@ class Inputs:
         self.is_controller = is_controller
         self.controller_id = controller_id
 
+        if self.is_controller:
+            self.image = pygame.image.load("src/assets/menu/player_select/inputs/controller.png")
+        elif self.jump == pygame.K_w:
+            self.image = pygame.image.load("src/assets/menu/player_select/inputs/wasd.png")
+        elif self.jump == pygame.K_UP:
+            self.image = pygame.image.load("src/assets/menu/player_select/inputs/arrows.png")
+        
+        self.image = pygame.transform.scale(self.image, (150, 150))
+
     def get_inputs(self):
         """Get the inputs from the keyboard
         
@@ -42,6 +51,7 @@ class Inputs:
             inputs.append(joystick.get_button(self.shoot))
         else:
             keys = pygame.key.get_pressed()
+
             inputs.append(keys[self.left])
             inputs.append(keys[self.right])
             inputs.append(keys[self.jump])
@@ -50,14 +60,11 @@ class Inputs:
         return inputs
 
     def draw(self, surface: pygame.Surface, x: int):
-        if self.is_controller:
-            color = (255, 0, 0)
-        elif self.jump == pygame.K_w:
-            color = (0, 255, 0)
-        elif self.jump == pygame.K_UP:
-            color = (0, 0, 255)
-        else:
-            color = (0, 0, 0)
+        """Draw the inputs
 
-        pygame.draw.rect(surface, color, (x * 50, 550, 50, 50))
+        Args:
+            surface (pygame.Surface): the surface to draw on
+            x (int): the x position to draw the inputs
+        """
+        surface.blit(self.image, (x * 160 + 10, 450))
 

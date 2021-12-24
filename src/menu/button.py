@@ -3,7 +3,7 @@ import pygame
 class Button(pygame.sprite.Sprite):
     def __init__(
         self, id_: int, image_path: str, rect: pygame.Rect, color: pygame.Color, highlight_color: pygame.Color,
-        text: str, font_size: int, text_color: pygame.Color
+        text: str, font_size: int, text_color: pygame.Color, highlight_text_color: pygame.Color = None
         ):
         """Initialize the button
 
@@ -31,6 +31,7 @@ class Button(pygame.sprite.Sprite):
         # Set the text
         self.text = text
         self.text_color = text_color
+        self.highlight_text_color = highlight_text_color
 
         # Set the font
         self.font = pygame.font.SysFont("Bauhaus 93", font_size)
@@ -64,12 +65,15 @@ class Button(pygame.sprite.Sprite):
         """
         # Copy the image
         image = self.image.copy()
+        text_color = self.text_color
         # If the mouse is hovering over the button, change the color
         if self.hover:
             image.fill(self.highlight_color, special_flags=pygame.BLEND_RGBA_MULT)
+            if self.highlight_text_color is not None:
+                text_color = self.highlight_text_color
         else:
             image.fill(self.color, special_flags=pygame.BLEND_RGBA_MULT)
 
         # Draw the image and text
         surface.blit(image, self.rect)
-        surface.blit(self.font.render(self.text, True, self.text_color), self.text_pos)
+        surface.blit(self.font.render(self.text, True, text_color), self.text_pos)
