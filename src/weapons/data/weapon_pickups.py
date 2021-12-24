@@ -45,12 +45,13 @@ class WeaponPickUps(pygame.sprite.Group):
             spawn_location = random.choice(self.spawn_locations)
             spawn_location.y -= pickup.size[1]
 
-            rect = pygame.Rect(spawn_location.x, spawn_location.y, pickup.size[0], pickup.size[1])
+            rect = pygame.Rect(0, 0, pickup.size[0], pickup.size[1])
+            rect.center = spawn_location
 
             tries = 0
             while self.terrain.collide(rect, CollideMode.Current) and tries < 1000:
-                pos_x = random.randint(0, game.WIDTH)
-                rect = pygame.Rect(pos_x, SPAWN_HEIGHT, pickup.size[0], pickup.size[1])
+                spawn_location.x = random.randint(0, game.WIDTH)
+                rect.center = spawn_location
 
                 tries += 1
             
