@@ -42,7 +42,7 @@ button_names = [
 inputs = []
 
 rect = pygame.Rect(0, 0, 175, 50)
-path = 'src/assets/menu/player_select/buttons/button.png'
+path = 'src/assets/menus/player_select/buttons/button.png'
 
 for i in range(4):
     rect.center = button_pos[i]

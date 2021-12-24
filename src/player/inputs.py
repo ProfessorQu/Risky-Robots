@@ -25,11 +25,11 @@ class Inputs:
         self.controller_id = controller_id
 
         if self.is_controller:
-            self.image = pygame.image.load("src/assets/menu/player_select/inputs/controller.png")
+            self.image = pygame.image.load("src/assets/menus/player_select/inputs/controller.png")
         elif self.jump == pygame.K_w:
-            self.image = pygame.image.load("src/assets/menu/player_select/inputs/wasd.png")
+            self.image = pygame.image.load("src/assets/menus/player_select/inputs/wasd.png")
         elif self.jump == pygame.K_UP:
-            self.image = pygame.image.load("src/assets/menu/player_select/inputs/arrows.png")
+            self.image = pygame.image.load("src/assets/menus/player_select/inputs/arrows.png")
         
         self.image = pygame.transform.scale(self.image, (150, 150))
 

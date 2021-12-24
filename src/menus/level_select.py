@@ -32,7 +32,7 @@ def level_select(SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs: List[
     for i in range(4):
         rect.center = button_pos[i]
         
-        path = f"src/assets/menu/level_select/buttons/button{i + 1}.png"
+        path = f"src/assets/menus/level_select/buttons/button{i + 1}.png"
         buttons.append(Button(i, path, rect, (200, 200, 200), (100, 100, 100), f"Map {i + 1}", 50, (255, 255, 255)))
 
     running = True
