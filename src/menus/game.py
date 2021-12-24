@@ -114,11 +114,11 @@ def setup(game_map: Map, inputs: List[Inputs]) -> Tuple[sprite.Group, sprite.Gro
 
     particles = sprite.Group()
 
-    # add_pickups(weapon_pickups, terrain)
+    # Add pickups to the map
+    if ADD_PICKUPS:
+        add_pickups(weapon_pickups, terrain)
 
-    players_dead = [False for player in players]
-
-    return players, bullets, weapon_pickups, particles, terrain, void, players_dead
+    return players, bullets, weapon_pickups, particles, terrain, void
 
 
 def calculate_dt(start_time: float) -> float:
@@ -143,7 +143,11 @@ def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs
         CLOCK (pygame.time.Clock): the clock
     """
     # Setup the game
-    players, bullets, weapon_pickups, particles, terrain, void, players_dead = setup(game_map, inputs)
+    players, bullets, weapon_pickups, particles, terrain, void = setup(game_map, inputs)
+
+    # Set exit time
+    exit_time = 0
+    should_exit = False
 
     # Set the start time
     prev_time = time.time()
@@ -152,18 +156,18 @@ def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs
 
     # Main loop
     while running:
-        # Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
         # Tick
         CLOCK.tick(FPS)
 
         # Calculate delta time
         dt = calculate_dt(prev_time)
         prev_time = time.time()
-
+        
+        # Handle events
+        for event in pygame.event.get():
+            if running:
+                running, should_exit = update_events(event, running, should_exit)
+        
         # Set background color
         SCREEN.fill(BACKGROUND_COLOR)
         SCREEN.blit(void, (0, 0, WIDTH, HEIGHT))
@@ -179,19 +183,10 @@ def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs
                 bullets.add(new_bullets)
 
             player.draw(SCREEN)
-
-            if player.health <= 0:
-                players_dead[player.player_id - 1] = True
         
-        # Check if all players but one are dead
-        finished = sum(players_dead) == len(players_dead) - 1
-
-        if finished:
-            for player in players:
-                if not players_dead[player.player_id - 1]:
-                    print(f"Player {player.player_id} won!")
-
-            running = False
+        # Update finished
+        if running:
+            running = is_finished(players)
         
         # Update bullets
         update_bullets(SCREEN, bullets, players, particles, dt)
@@ -199,8 +194,57 @@ def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs
         # Update weapon pickups and particles
         update_misc(SCREEN, particles, weapon_pickups, dt)
         
+        # Update exit time
+        if running:
+            exit_time, running = update_exit(SCREEN, should_exit, exit_time, dt)
+
         # Update the screen
         pygame.display.update()
+
+
+def update_events(event: pygame.event, running: bool, should_exit: bool) -> Tuple[bool, bool]:
+    """Update the events
+
+    Args:
+        event (pygame.event): the event
+
+    Returns:
+        Tuple[bool, bool]: the running and should_exit
+    """
+    if event.type == pygame.QUIT:
+        running = False
+    elif event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+            should_exit = True
+    elif event.type == pygame.KEYUP:
+        if event.key == pygame.K_ESCAPE:
+            should_exit = False
+    
+    return running, should_exit
+
+
+def is_finished(players: List[Player]) -> bool:
+    """Update the finished
+
+    Args:
+        players (List[Player]): the players
+
+    Returns:
+        bool: if there is one player remaining
+    """
+    players_list = list(players)
+    # Stop the game if all players are dead
+    if len(players_list) == 1: # One player left: the winner
+        # Get the winner
+        winner = list(players)[0]
+        print(f"Player {winner.player_id} wins!")
+        
+        return False
+    elif not players_list: # If there are no players: it's a draw
+        print("It's a draw!")
+        return False
+    
+    return True
 
 
 def update_bullets(SCREEN: pygame.Surface, bullets: sprite.Group, players: sprite.Group, particles: sprite.Group, dt: float):
@@ -243,3 +287,35 @@ def update_misc(SCREEN: pygame.Surface, particles: sprite.Group, weapon_pickups:
     for weapon_pickup in weapon_pickups:
         weapon_pickup.draw(SCREEN)
 
+
+def update_exit(SCREEN: pygame.Surface, should_exit: bool, exit_time: float, dt: float) -> bool:
+    """Update the exit
+
+    Args:
+        SCREEN (pygame.Surface): the screen
+        should_exit (bool): whether the game should exit
+        exit_time (float): the time the game exited
+        dt (float): the delta time
+
+    Returns:
+        bool: whether the game should exit
+    """
+    # Check if the player wants to exit
+    if should_exit:
+        # Set exit time
+        exit_time += dt
+
+        # Set color and width
+        color = (255, 0, 0)
+        width = (exit_time / EXIT_TIME) * WIDTH
+
+        # Draw exit line
+        pygame.draw.rect(SCREEN, color, (0, 0, width, 30))
+
+        # If the exit time is over, exit
+        if exit_time > EXIT_TIME:
+            return exit_time, False
+        
+        return exit_time, True
+    else:
+        return 0, True
