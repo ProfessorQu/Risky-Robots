@@ -114,7 +114,7 @@ def setup(game_map: Map, inputs: List[Inputs]) -> Tuple[sprite.Group, sprite.Gro
 
     particles = sprite.Group()
 
-    add_pickups(weapon_pickups, terrain)
+    # add_pickups(weapon_pickups, terrain)
 
     players_dead = [False for player in players]
 

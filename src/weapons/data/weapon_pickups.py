@@ -15,9 +15,18 @@ class WeaponPickUps(pygame.sprite.Group):
         """
         super().__init__()
 
+        # Set the terrain
         self.terrain = terrain
 
+        # Set the spawn timer
         self.spawn_timer = SPAWN_RATE
+
+        # Set the weapon pickup spawn locations
+        self.spawn_locations = []
+        for tile in terrain:
+            for x in range(tile.rect.width):
+                spawn_location = pygame.Vector2(tile.rect.left + x, tile.rect.top)
+                self.spawn_locations.append(spawn_location)
     
     def update(self, dt: float):
         """Update the weapon pickups
@@ -32,17 +41,23 @@ class WeaponPickUps(pygame.sprite.Group):
             pickups, weights = list(zip(*WEAPON_PICKUPS))
             pickup = random.choices(pickups, weights=weights)[0]
             pos_x = random.randint(0, game.WIDTH)
+            
+            spawn_location = random.choice(self.spawn_locations)
+            spawn_location.y -= pickup.size[1]
 
-            rect = pygame.Rect(pos_x, SPAWN_HEIGHT, pickup.size[0], pickup.size[1])
+            rect = pygame.Rect(spawn_location.x, spawn_location.y, pickup.size[0], pickup.size[1])
 
             tries = 0
-            while self.terrain.collide(rect, CollideMode.Current) and tries < 100:
+            while self.terrain.collide(rect, CollideMode.Current) and tries < 1000:
                 pos_x = random.randint(0, game.WIDTH)
                 rect = pygame.Rect(pos_x, SPAWN_HEIGHT, pickup.size[0], pickup.size[1])
 
                 tries += 1
+            
+            if tries == 1000:
+                return
 
-            self.add(WeaponPickUp(pickup, (rect.center), self.terrain))
+            self.add(WeaponPickUp(pickup, spawn_location, self.terrain))
 
         for weapon_pickup in self:
             weapon_pickup.update(dt)
