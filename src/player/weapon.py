@@ -32,6 +32,9 @@ class Weapon(pygame.sprite.Sprite):
         # Set the terrain
         self.terrain = terrain
         self.bounds = bounds
+        
+        # Initialize sounds
+        self.shoot_sound = pygame.mixer.Sound("src/assets/sounds/shoot.wav")
 
     def shoot(self):
         """Shoot a bullet
@@ -41,6 +44,9 @@ class Weapon(pygame.sprite.Sprite):
         """
         # Check if the player can shoot
         if self.cooldown <= 0:
+            # Play sound
+            self.shoot_sound.play()
+
             return self.weapon_type.shoot(self)
 
     def update(self, pos: Tuple[int, int], direction: int):

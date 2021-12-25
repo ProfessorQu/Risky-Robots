@@ -7,6 +7,8 @@ from src.player.inputs import Inputs
 import src.menus.level_select as level_select
 
 
+# Initialize sound mixer
+pygame.mixer.pre_init(44100, -16, 2, 2048)
 
 # Initialize the game
 pygame.init()

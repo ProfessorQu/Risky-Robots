@@ -296,7 +296,8 @@ class Player(pygame.sprite.Sprite):
         Returns:
             Bullet: the bullet that was shot
         """
-        return self.weapon.shoot() if inputs[3] else None
+        if inputs[3]:
+            return self.weapon.shoot()
 
 
     def knockback(self, dt: float):
