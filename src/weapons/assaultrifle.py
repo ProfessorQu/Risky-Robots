@@ -9,7 +9,7 @@ BULLET = BulletData(
     image = pygame.image.load("src/assets/bullets/bullet.png"),
     size = (20, 20),
     speed = 500,
-    damage = 1,
+    damage = 2.5,
     knockback = pygame.Vector2(40, 0),
     lifetime = 5,
     hit = damage
@@ -22,5 +22,3 @@ WEAPON = WeaponData(
     bullet = BULLET,
     shoot = one_bullet
 )
-
-WEAPON_SPAWN_RATE = 0.5

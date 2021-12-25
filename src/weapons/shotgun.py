@@ -22,5 +22,3 @@ WEAPON = WeaponData(
     bullet = BULLET,
     shoot = spread
 )
-
-WEAPON_SPAWN_RATE = 0.5

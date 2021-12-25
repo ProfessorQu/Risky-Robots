@@ -22,52 +22,12 @@ def add_pickups(weapon_pickups: WeaponPickUps, terrain: Terrain):
         weapon_pickups (WeaponPickUps): the weapon pickups
         terrain (Terrain): the terrain of the map
     """
-    weapon_pickups.add(
-        WeaponPickUp(
-            sniperrifle.WEAPON,
-            (100, 100),
-            terrain
-        )
-    )
-
-    weapon_pickups.add(
-        WeaponPickUp(
-            revolver.WEAPON,
-            (200, 100),
-            terrain
-        )
-    )
-    weapon_pickups.add(
-        WeaponPickUp(
-            goldenrevolver.WEAPON,
-            (300, 100),
-            terrain
-        )
-    )
-
-    weapon_pickups.add(
-        WeaponPickUp(
-            assaultrifle.WEAPON,
-            (400, 100),
-            terrain
-        )
-    )
-
-    weapon_pickups.add(
-        WeaponPickUp(
-            shotgun.WEAPON,
-            (500, 100),
-            terrain
-        )
-    )
-
-    weapon_pickups.add(
-        WeaponPickUp(
-            rocketlauncher.WEAPON,
-            (600, 100),
-            terrain
-        )
-    )
+    weapon_pickups.spawn_new_pickup(sniperrifle.WEAPON)
+    weapon_pickups.spawn_new_pickup(shotgun.WEAPON)
+    weapon_pickups.spawn_new_pickup(rocketlauncher.WEAPON)
+    weapon_pickups.spawn_new_pickup(goldenrevolver.WEAPON)
+    weapon_pickups.spawn_new_pickup(assaultrifle.WEAPON)
+    weapon_pickups.spawn_new_pickup(revolver.WEAPON)
 
 
 def setup(game_map: Map, inputs: List[Inputs]) -> Tuple[sprite.Group, sprite.Group, WeaponPickUps, sprite.Group, Terrain, pygame.Surface, List[bool]]:

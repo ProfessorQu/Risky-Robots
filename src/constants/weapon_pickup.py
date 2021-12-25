@@ -7,12 +7,12 @@ SPAWN_RATE = 10
 SPAWN_HEIGHT = 50
 
 WEAPON_PICKUPS = (
-    (revolver.WEAPON, revolver.WEAPON_SPAWN_RATE),
-    (sniperrifle.WEAPON, sniperrifle.WEAPON_SPAWN_RATE),
-    (assaultrifle.WEAPON, assaultrifle.WEAPON_SPAWN_RATE),
-    (goldenrevolver.WEAPON, goldenrevolver.WEAPON_SPAWN_RATE),
-    (shotgun.WEAPON, shotgun.WEAPON_SPAWN_RATE),
-    (rocketlauncher.WEAPON, rocketlauncher.WEAPON_SPAWN_RATE),
+    (revolver.WEAPON,       0),
+    (sniperrifle.WEAPON,    1),
+    (assaultrifle.WEAPON,   1),
+    (goldenrevolver.WEAPON, 0.05),
+    (shotgun.WEAPON,        1),
+    (rocketlauncher.WEAPON, 0.25),
 )
 
 LIFETIME = 20
