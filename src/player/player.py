@@ -82,6 +82,8 @@ class Player(pygame.sprite.Sprite):
         # Load jump sound
         self.jump_sound = pygame.mixer.Sound("src/assets/sounds/jump.wav")
         self.jump_sound.set_volume(0.2)
+        
+        self.jump_sound_time = 0
 
         # Load hurt sound
         self.hurt_sound = pygame.mixer.Sound("src/assets/sounds/hurt.wav")
@@ -91,7 +93,9 @@ class Player(pygame.sprite.Sprite):
         self.pickup_sound = pygame.mixer.Sound("src/assets/sounds/pickup.wav")
         self.pickup_sound.set_volume(0.2)
 
-        self.jump_sound_time = 0
+        # Load landing sound
+        self.landing_sound = pygame.mixer.Sound("src/assets/sounds/landing.wav")
+        self.landing_sound.set_volume(0.2)
 
         # Terrain and bounds
         self.terrain = terrain
@@ -119,6 +123,7 @@ class Player(pygame.sprite.Sprite):
         self.healthbar = HealthBar(self.rect)
         self.health = player.MAX_HEALTH
 
+
     def hit(self, damage: int, knockback_force: pygame.math.Vector2):
         """Hit the player for damage
 
@@ -135,6 +140,7 @@ class Player(pygame.sprite.Sprite):
 
         # Play hurt sound
         self.hurt_sound.play()
+
 
     def update_inputs(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the inputs of the player
@@ -166,6 +172,7 @@ class Player(pygame.sprite.Sprite):
         # Check if the player shot a bullet
         return self.check_shot(inputs)
 
+
     def horizontal_move(self, dt: float, inputs: List[bool]):
         """Move the player horizontally
 
@@ -196,6 +203,7 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.x = 0
 
             self.state = "idle"
+
 
     def jump(self, dt: float, inputs: List[Direction]):
         """Check if the player should jump
@@ -232,6 +240,7 @@ class Player(pygame.sprite.Sprite):
         self.grounded_timer -= dt
         self.jump_sound_time -= dt
 
+
     def limit_speed(self):
         """Limit the speed of the player
         """
@@ -245,6 +254,7 @@ class Player(pygame.sprite.Sprite):
         elif self.velocity.y < 0:
             self.state = "jumping"
 
+
     def out_of_bounds(self):
         """Check if the player is out of bounds
         """
@@ -253,6 +263,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y < self.bounds.top or self.rect.y > self.bounds.bottom:
             self.health = 0
     
+
     def check_pickup(self, inputs: List[Direction], weapon_pickups: List[WeaponPickUp]) -> bool:
         """Check if the player picked up a weapon
 
@@ -275,6 +286,7 @@ class Player(pygame.sprite.Sprite):
         
         return False
 
+
     def check_shot(self, inputs: List[Direction]) -> Bullet:
         """Check if the player shot a bullet
 
@@ -285,6 +297,7 @@ class Player(pygame.sprite.Sprite):
             Bullet: the bullet that was shot
         """
         return self.weapon.shoot() if inputs[3] else None
+
 
     def knockback(self, dt: float):
         """Apply knockback to the player over time
@@ -304,6 +317,7 @@ class Player(pygame.sprite.Sprite):
         if abs(self.knockback_force.y) < 1:
             self.knockback_force.y = 0
     
+
     def gravity(self, dt: float):
         """Apply gravity to the player
 
@@ -314,6 +328,7 @@ class Player(pygame.sprite.Sprite):
         gravity = player.GRAVITY * dt if self.velocity.y < 0 else player.GRAVITY_FALL * dt
         self.velocity.y += gravity
     
+
     def collide(self):
         """Check if the player collided with the terrain
         """
@@ -351,7 +366,11 @@ class Player(pygame.sprite.Sprite):
 
         # Set the grounded timer if the player is grounded
         if grounded:
+            if self.grounded_timer < 0:
+                self.landing_sound.play()
+
             self.grounded_timer = player.HANG_TIME
+
 
     def update_other(self):
         """Update the weapon and the healthbar
@@ -367,6 +386,7 @@ class Player(pygame.sprite.Sprite):
 
         # Update the healthbar
         self.healthbar.update(self.rect.center)
+
 
     def update_animation(self, dt: float):
         """Update the animation of the player
@@ -398,11 +418,13 @@ class Player(pygame.sprite.Sprite):
             self.image = self.hurt
             self.hurt_image_time -= dt
 
+
     def check_health(self):
         """Check if the player is dead
         """
         if self.health <= 0:
             self.kill()
+
 
     def update(self, weapon_pickups: List[WeaponPickUp], dt: float) -> Bullet:
         """Update the player
@@ -438,6 +460,7 @@ class Player(pygame.sprite.Sprite):
         self.update_other()
 
         return new_bullets
+
 
     def draw(self, screen: pygame.Surface):
         """Draw the player, weapon and healthbar
