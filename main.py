@@ -53,13 +53,23 @@ for i in range(4):
 
     buttons.append(Button(i, path, rect, (150, 150, 150), (100, 100, 100), name, 25, (255, 255, 255)))
 
-rect = pygame.Rect(0, 0, 200, 150)
-rect.center = (WIDTH / 2, HEIGHT / 3)
+rect = pygame.Rect(0, 0, 200, 100)
+rect.center = (WIDTH / 2, HEIGHT / 2)
 
 buttons.append(
     Button(4, path, rect, (150, 150, 150), (100, 100, 100), "Play", 75, (255, 255, 255))
 )
 
+# Create text for the title
+title_font = pygame.font.SysFont("Impact", 100)
+title_text = title_font.render("Risky Robots", True, (0, 64, 64))
+title_rect = title_text.get_rect()
+title_rect.center = (WIDTH / 2, HEIGHT / 4)
+shadow_text = title_font.render("Risky Robots", True, (0, 0, 0))
+shadow_rect = shadow_text.get_rect()
+shadow_rect.center = (WIDTH / 2.01, HEIGHT / 4.1)
+
+# Initialize a few variables
 click = False
 
 wasd_added = False
@@ -122,6 +132,10 @@ while running:
             # Play button
             if len(inputs) >= 2 and button.id == 4:
                 level_select.level_select(SCREEN, CLOCK, inputs)
+
+    # Draw the text
+    SCREEN.blit(shadow_text, shadow_rect)
+    SCREEN.blit(title_text, title_rect)
 
     # Draw the inputs
     for x, input in enumerate(inputs):

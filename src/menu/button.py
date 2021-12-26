@@ -34,7 +34,8 @@ class Button(pygame.sprite.Sprite):
         self.highlight_text_color = highlight_text_color
 
         # Set the font
-        self.font = pygame.font.SysFont("Bauhaus 93", font_size)
+        # self.font = pygame.font.SysFont("Bauhaus 93", font_size)
+        self.font = pygame.font.SysFont("Impact", font_size)
 
         # Set the text position
         self.text_pos = (self.rect.centerx - self.font.size(self.text)[0] / 2, self.rect.centery - self.font.size(self.text)[1] / 2)
