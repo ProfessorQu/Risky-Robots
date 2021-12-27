@@ -1,19 +1,34 @@
 Terrain:
+# ----- BASIC TERRAIN ----- #
+# Floor
 Mirror 0, 550, 800, 50
+# Ceiling
 Mirror 0, 0, 800, 50
+
+# Left Wall
 Mirror 0, 0, 50, 600
+# Right Wall
 Mirror 750, 0, 50, 600
+
+# ----- PLATFORMS ----- #
+# Left lower platform
 Mirror 200, 400, 150, 50
+# Left higher platform
 Mirror 0, 250, 200, 50
+
+# Right lower platform
 Mirror 450, 400, 150, 50
+# Right higher platform
 Mirror 600, 250, 200, 50
+
+# Middle
 Mirror 350, 250, 100, 200
 
 Bounds:
 -100, -100, 900, 700
 
 Players:
-250, 350
-550, 350
-350, 350
-450, 350
+100, 500
+700, 500
+100, 200
+700, 200

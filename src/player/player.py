@@ -87,7 +87,7 @@ class Player(pygame.sprite.Sprite):
 
         # Load hurt sound
         self.hurt_sound = pygame.mixer.Sound("src/assets/sounds/hurt.wav")
-        self.hurt_sound.set_volume(0.2)
+        self.hurt_sound.set_volume(0.1)
 
         # Load pickup sound
         self.pickup_sound = pygame.mixer.Sound("src/assets/sounds/pickup.wav")
@@ -96,6 +96,10 @@ class Player(pygame.sprite.Sprite):
         # Load landing sound
         self.landing_sound = pygame.mixer.Sound("src/assets/sounds/landing.wav")
         self.landing_sound.set_volume(0.2)
+
+        # Load spring sound
+        self.spring_sound = pygame.mixer.Sound("src/assets/sounds/spring.wav")
+        self.spring_sound.set_volume(0.2)
 
         # Terrain and bounds
         self.terrain = terrain
@@ -335,6 +339,7 @@ class Player(pygame.sprite.Sprite):
         """
         # Check if grounded
         grounded = False
+        is_spring = False
 
         collisions = self.terrain.collide(self, CollideMode.Predict)
 
@@ -356,18 +361,24 @@ class Player(pygame.sprite.Sprite):
             if type(tile) == Spring:
                 if direction == Direction.RIGHT and tile.direction == Direction.LEFT:
                     self.velocity.x *= -player.SPRING_BOUNCINESS
+                    is_spring = True
                 elif direction == Direction.LEFT and tile.direction == Direction.RIGHT:
                     self.velocity.x *= -player.SPRING_BOUNCINESS
+                    is_spring = True
                 elif direction == Direction.UP and tile.direction == Direction.DOWN:
                     self.velocity.y *= -player.SPRING_BOUNCINESS
+                    is_spring = True
                 elif direction == Direction.DOWN and tile.direction == Direction.UP:
                     self.velocity.y *= -player.SPRING_BOUNCINESS
+                    is_spring = True
 
                     grounded = True
 
         # Set the grounded timer if the player is grounded
         if grounded:
-            if self.grounded_timer < 0:
+            if is_spring:
+                self.spring_sound.play()
+            elif self.grounded_timer < 0:
                 self.landing_sound.play()
 
             self.grounded_timer = player.HANG_TIME

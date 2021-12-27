@@ -8,3 +8,6 @@ MAP2 = get_map_from_file("src/maps/maps/map2.txt")
 
 # Map 3
 MAP3 = get_map_from_file("src/maps/maps/map3.txt")
+
+# Map 4
+MAP4 = get_map_from_file("src/maps/maps/map4.txt")

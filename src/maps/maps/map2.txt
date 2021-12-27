@@ -1,23 +1,52 @@
 Terrain:
+
+# ----- BASIC TERRAIN ----- #
+# Floor
 Solid 0, 550, 800, 50
+# Ceiling
 Solid 0, 0, 800, 50
+
+# Left Wall
 Solid 0, 0, 50, 600
+# Right Wall
 Solid 750, 0, 50, 600
-Spring 350, 350, 50, 50, LEFT, Tile
-Spring 400, 350, 50, 50, RIGHT, Tile
-Spring 350, 330, 100, 50, UP, Tile
-Solid 375, 350, 50, 50
-Spring 350, 500, 50, 50, LEFT, Tile
-Spring 400, 500, 50, 50, RIGHT, Tile
-Solid 375, 500, 50, 50
-Spring 350, 50, 50, 100, LEFT, Tile
-Spring 400, 50, 50, 100, RIGHT, Tile
-Spring 350, 120, 100, 50, DOWN, Tile
-Solid 375, 50, 50, 100
+
+# Left platform
 Solid 50, 300, 150, 50
+# Right platform
 Solid 600, 300, 150, 50
+# Left spring
 Spring 250, 500, 100, 50, UP
+# Right spring
 Spring 450, 500, 100, 50, UP
+
+# ----- BOTTOM OF PILLAR ----- #
+# Top Left spring
+Spring 350, 350, 50, 50, LEFT, Tile
+# Top Right spring
+Spring 400, 350, 50, 50, RIGHT, Tile
+# Top spring
+Spring 350, 330, 100, 50, UP, Tile
+# Top
+Solid 375, 350, 50, 50
+
+# Bottom Left spring
+Spring 350, 500, 50, 50, LEFT, Tile
+# Bottom right spring
+Spring 400, 500, 50, 50, RIGHT, Tile
+# Bottom
+Solid 375, 500, 50, 50
+
+# ----- TOP OF PILLAR ----- #
+# Top left spring
+Spring 350, 50, 50, 100, LEFT, Tile
+# Top right spring
+Spring 400, 50, 50, 100, RIGHT, Tile
+# Bottom spring
+Spring 350, 120, 100, 50, DOWN, Tile
+# Middle
+Solid 375, 50, 50, 100
+
 
 Bounds:
 -100, -100, 900, 700

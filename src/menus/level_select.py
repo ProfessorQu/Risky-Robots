@@ -5,7 +5,7 @@ from src.constants.game import *
 from src.menu.button import Button
 from src.player.inputs import Inputs
 import src.menus.game as game
-from src.maps import MAP1, MAP2, MAP3
+from src.maps import MAP1, MAP2, MAP3, MAP4
 
 from typing import List
 
@@ -28,12 +28,19 @@ def level_select(SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs: List[
         (600, 450),
     ]
 
+    button_names = [
+        "Normal",
+        "Spring Palaza",
+        "Mirror Maze",
+        "Crazy Map",
+    ]
+
     rect = pygame.Rect(0, 0, WIDTH / 3, HEIGHT / 3)
     for i in range(4):
         rect.center = button_pos[i]
         
         path = f"src/assets/menus/level_select/buttons/button{i + 1}.png"
-        buttons.append(Button(i, path, rect, (200, 200, 200), (100, 100, 100), f"Map {i + 1}", 50, (255, 255, 255)))
+        buttons.append(Button(i, path, rect, (200, 200, 200), (100, 100, 100), button_names[i], 40, (255, 255, 255)))
 
     running = True
 
@@ -61,6 +68,8 @@ def level_select(SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs: List[
                     game.game(MAP2, SCREEN, CLOCK, inputs)
                 elif button.id == 2:
                     game.game(MAP3, SCREEN, CLOCK, inputs)
+                elif button.id == 3:
+                    game.game(MAP4, SCREEN, CLOCK, inputs)
 
         # Update the screen
         pygame.display.update()

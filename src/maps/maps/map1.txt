@@ -1,12 +1,27 @@
 Terrain:
+# ----- BASIC TERRAIN ----- #
+# Floor
 Solid 0, 550, 800, 50
+# Ceiling
 Solid 0, 0, 800, 50
+
+# Left Wall
 Solid 0, 0, 50, 600
+# Right Wall
 Solid 750, 0, 50, 600
+
+# ----- PLATFORMS ----- #
+# Left lower platform
 Solid 200, 400, 150, 50
+# Left higher platform
 Solid 0, 250, 200, 50
+
+# Right lower platform
 Solid 450, 400, 150, 50
+# Right higher platform
 Solid 600, 250, 200, 50
+
+# Middle
 Solid 350, 250, 100, 200
 
 Bounds:
@@ -15,5 +30,5 @@ Bounds:
 Players:
 100, 500
 700, 500
-300, 500
-500, 500
+100, 200
+700, 200

@@ -1,0 +1,45 @@
+Terrain:
+# ----- BASIC ----- #
+# Floor
+Solid 0, 550, 800, 50
+# Ceiling
+Solid 0, 0, 800, 50
+# Left Wall
+Solid 0, 0, 50, 600
+# Right Wall
+Solid 750, 0, 50, 600
+
+# ----- SPRINGS ----- #
+# Left spring
+Spring 50, 500, 100, 50, UP
+# Right spring
+Spring 650, 500, 100, 50, UP
+
+# ----- MIRRORS ----- #
+# Left mirror
+Mirror 200, 350, 50, 100
+# Right mirror
+Mirror 550, 350, 50, 100
+# Mirror platform
+Mirror 200, 300, 400, 50
+# Middle mirror pillar
+Mirror 350, 50, 100, 200
+
+# ----- PLATFORMS ----- #
+# Top left platform
+Solid 50, 150, 150, 50
+# Top right platform
+Solid 600, 150, 150, 50
+
+# Middle platform
+Solid 300, 450, 200, 50
+
+
+Bounds:
+-100, -100, 900, 700
+
+Players:
+200, 500
+600, 500
+100, 100
+700, 100

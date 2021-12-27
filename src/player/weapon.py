@@ -35,6 +35,7 @@ class Weapon(pygame.sprite.Sprite):
         
         # Initialize sounds
         self.shoot_sound = pygame.mixer.Sound("src/assets/sounds/shoot.wav")
+        self.shoot_sound.set_volume(0.1)
 
     def shoot(self):
         """Shoot a bullet
