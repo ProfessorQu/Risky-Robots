@@ -122,12 +122,12 @@ def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs
         # Calculate delta time
         dt = calculate_dt(prev_time)
         prev_time = time.time()
-        
+
         # Handle events
         for event in pygame.event.get():
             if running:
                 running, should_exit = update_events(event, running, should_exit)
-        
+
         # Set background color
         SCREEN.fill(BACKGROUND_COLOR)
         SCREEN.blit(void, (0, 0, WIDTH, HEIGHT))
@@ -137,23 +137,21 @@ def game(game_map: Map, SCREEN: pygame.Surface, CLOCK: pygame.time.Clock, inputs
 
         # Update players
         for player in players:
-            new_bullets = player.update(weapon_pickups, dt)
-
-            if new_bullets:
+            if new_bullets := player.update(weapon_pickups, dt):
                 bullets.add(new_bullets)
 
             player.draw(SCREEN)
-        
+
         # Update finished
         if running:
             running = is_finished(players)
-        
+
         # Update bullets
         update_bullets(SCREEN, bullets, players, particles, dt)
 
         # Update weapon pickups and particles
         update_misc(SCREEN, particles, weapon_pickups, dt)
-        
+
         # Update exit time
         if running:
             exit_time, running = update_exit(SCREEN, should_exit, exit_time, dt)
